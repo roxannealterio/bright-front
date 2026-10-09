@@ -1,0 +1,1668 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#F1EEE8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.classList.add("js")</script>
+<title>Brand, Websites and Marketing for Small Business | Brightfront Studio</title>
+<meta name="description" content="Brisbane marketing studio for small businesses: branding, websites, social media, Google and Meta ads, signage and billboards. Fixed prices, first draft in days.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@85..125,400..900&family=Fraunces:ital,opsz,wght@1,9..144,300..500&family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   Brightfront Studio, 2026. Cream on ink: the wordmark's own
+   colourway, with cream slabs used as the light that lands on it.
+   ============================================================ */
+:root{
+  /* neutral palette, taken from Alter You: warm off-white, bone, sage, soft charcoal */
+  --paper:#F1EEE8; --bone:#E9E3D9; --white:#FBFAF7;
+  --deep:#2E3029;            /* text and dark slabs */
+  --sage:#7E846D;            /* the one accent */
+  --cream:#F3F0E9;           /* type on anything dark */
+  --surface:#F1EEE8; --raise:#FBFAF7;
+  --ink:#2E3029; --muted:#64665C; --soft:#8E8F84;
+  --line:rgba(46,48,41,.15); --edge:rgba(46,48,41,.15);
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --sans:"Schibsted Grotesk","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --serif:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --wrap:1240px; --pad:clamp(20px,5vw,56px);
+  /* tokens the project planner expects */
+  --coal:#2E3029; --paperc:#F1EEE8; --forest:#2E3029;
+  --shell:var(--white); --sand:var(--bone); --card:var(--white); --taupe:#9A9A8E; --bronze:#6E7460;
+  --dark:var(--deep); --on-dark:var(--cream); --on-dark-muted:#B9BAB0; --dark-line:rgba(243,240,233,.2);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--paper)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img{max-width:100%;display:block}
+:focus-visible{outline:2px solid var(--sage);outline-offset:3px}
+h1,h2,h3{margin:0;font-family:var(--display);font-weight:800;line-height:.95;letter-spacing:-.035em}
+em.it{font:italic 400 1.02em/1 "Fraunces",Georgia,serif;font-variation-settings:"opsz" 120;letter-spacing:-.015em;padding-right:.04em}
+p{margin:0}
+.wrap{max-width:var(--wrap);margin:0 auto;padding-inline:var(--pad)}
+.skip{position:absolute;left:-9999px}
+.skip:focus{left:16px;top:16px;background:var(--deep);color:var(--cream);padding:10px 16px;z-index:200;border-radius:6px}
+
+/* ---------- slabs ---------- */
+.slab{padding:clamp(60px,7.5vw,96px) 0}
+/* Where two slabs of the same colour meet there is no edge to see, so their two
+   paddings read as one dead band. Collapse the join to a single gap. */
+/* On a phone the clamp floor means every section carries 72px top and bottom,
+   which adds up to more than a screen of empty space across the page. */
+@media (max-width:640px){.slab{padding-block:54px}}
+.slab-ink + .slab-ink,.slab-bone + .slab-bone{padding-top:0}
+.slab-ink + .slab-ink > .wrap{border-top:1px solid var(--line);padding-top:clamp(56px,7vw,96px)}
+.slab-ink{background:var(--deep);color:var(--cream);--surface:var(--deep);--raise:#393C33;--ink:var(--cream);--muted:#B9BAB0;--soft:#9B9C92;--line:rgba(243,240,233,.18);--edge:rgba(243,240,233,.18)}
+.slab-bone{background:var(--bone);--surface:var(--bone);--raise:var(--white)}
+.slab-sage{background:var(--sage);color:var(--cream);--surface:var(--sage);--ink:var(--cream);--muted:#DCDCD2;--soft:#C9CABE;--line:rgba(243,240,233,.3);--edge:rgba(243,240,233,.3)}
+
+/* ---------- small pieces ---------- */
+.mark{display:inline-flex;align-items:center;gap:9px;font-size:14px;font-weight:500;color:var(--muted);margin-bottom:26px}
+.mark svg{flex:none}
+.btn{display:inline-flex;align-items:center;gap:10px;min-height:54px;padding:0 24px;border-radius:999px;border:1.5px solid var(--sage);background:var(--sage);color:var(--cream);font:600 16px/1 var(--sans);text-decoration:none;cursor:pointer;transition:background .18s,color .18s,border-color .18s}
+.btn i{width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.7}
+.btn:hover{background:#6E7460;border-color:#6E7460}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--edge)}
+.btn-ghost:hover{background:rgba(46,48,41,.06);border-color:var(--ink)}
+.slab-ink .btn,.slab-sage .btn{background:var(--cream);color:var(--deep);border-color:var(--cream)}
+.slab-ink .btn:hover,.slab-sage .btn:hover{background:#fff;border-color:#fff}
+.slab-ink .btn-ghost,.slab-sage .btn-ghost{background:transparent;color:var(--cream);border-color:rgba(243,240,233,.4)}
+.slab-ink .btn-ghost:hover,.slab-sage .btn-ghost:hover{background:rgba(243,240,233,.1);border-color:var(--cream)}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+@media (max-width:520px){.btns{flex-direction:column;align-items:stretch}.btns .btn{justify-content:center}}
+
+/* ---------- header ---------- */
+/* announcement bar: scrolls away, the header stays */
+.anno{background:var(--sage);color:var(--cream);font-size:14px;font-weight:500;letter-spacing:.01em}
+.anno-in{display:flex;align-items:center;justify-content:center;gap:12px;min-height:42px;padding:9px 0;text-align:center}
+.anno a{color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:7px;border-bottom:1px solid rgba(243,240,233,.45);padding-bottom:1px}
+.anno a:hover{border-bottom-color:var(--cream)}
+.anno .dot{width:7px;height:7px;border-radius:50%;background:var(--cream);flex:none;animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+@media (prefers-reduced-motion:reduce){.anno .dot{animation:none}}
+.anno-x{position:absolute;right:var(--pad);top:50%;transform:translateY(-50%);width:28px;height:28px;display:grid;place-items:center;border:0;background:none;color:inherit;opacity:.6;cursor:pointer;font:400 17px/1 var(--sans)}
+.anno-x:hover{opacity:1}
+.anno .wrap{position:relative}
+@media (max-width:640px){.anno{font-size:13px}.anno-in{padding-right:30px;padding-left:4px}.anno .dot{display:none}}
+
+/* ---------- header ---------- */
+.head{position:sticky;top:0;z-index:50;background:var(--deep);color:var(--cream);border-bottom:1px solid rgba(243,240,233,.14);transition:box-shadow .2s}
+.head.stuck{box-shadow:0 1px 0 rgba(46,48,41,.18),0 8px 26px rgba(46,48,41,.14)}
+.head-in{display:flex;align-items:center;justify-content:space-between;height:80px;gap:20px}
+@media (max-width:640px){.head-in{height:62px}}
+.logo{display:inline-flex;align-items:center;min-height:44px;text-decoration:none;color:var(--ink)}
+.logo svg{height:31px;width:auto;aspect-ratio:6010/1440;display:block}
+.head .logo{color:var(--cream)}
+.head .logo svg{height:22px;aspect-ratio:5925/940}
+@media (max-width:640px){.head .logo svg{height:19px}}
+.nav{display:flex;align-items:center;gap:30px;font-size:15px;font-weight:500}
+.nav a{text-decoration:none;color:var(--on-dark-muted);padding-block:10px}
+.nav a:hover{color:var(--cream)}
+.nav .btn{min-height:46px;padding:0 20px;font-size:15px}
+.menu-btn{display:none;align-items:center;gap:8px;min-height:44px;padding:0 16px;border:1.5px solid var(--dark-line);border-radius:999px;background:none;font:600 15px var(--sans);color:var(--cream);cursor:pointer}
+@media (max-width:900px){
+  .menu-btn{display:inline-flex}
+  .nav{position:absolute;top:80px;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:var(--deep);border-bottom:1px solid var(--dark-line);padding:6px var(--pad) 22px;display:none}
+  .nav.open{display:flex}
+  .nav a{padding:16px 0;border-bottom:1px solid var(--dark-line);color:var(--cream);font-size:17px}
+  .nav .btn{margin-top:18px;justify-content:center}
+}
+@media (max-width:640px){.nav{top:62px}}
+/* the CTA has to carry on the dark bar, so it inverts there */
+.head .nav .btn{background:var(--cream);border-color:var(--cream);color:var(--deep)}
+.head .nav .btn:hover{background:#fff;border-color:#fff}
+.head .nav .btn i{background:var(--sage);opacity:1}
+
+/* ---------- hero ---------- */
+.hero{padding:clamp(26px,7vw,96px) 0 clamp(40px,5vw,64px)}
+.hero h1{font-size:clamp(58px,12.6vw,186px);letter-spacing:-.05em;line-height:.86}
+.hero h1 .ln{display:block;overflow:hidden;padding-bottom:.06em;margin-bottom:-.06em}
+.js .hero h1 .ln>span{display:block;transform:translateY(103%);animation:rise .9s cubic-bezier(.22,.8,.18,1) forwards}
+.js .hero h1 .ln:nth-child(2)>span{animation-delay:.07s}
+.js .hero h1 .ln:nth-child(3)>span{animation-delay:.14s}
+@keyframes rise{to{transform:none}}
+.js .hero-foot{opacity:0;animation:fade .7s .35s ease forwards}
+@keyframes fade{to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.js .hero h1 .ln>span{transform:none;animation:none}.js .hero-foot{opacity:1;animation:none}}
+.hero-foot{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:32px 48px;align-items:end;margin-top:clamp(28px,4vw,48px)}
+@media (max-width:860px){.hero-foot{grid-template-columns:1fr;align-items:start}}
+.hero-foot p{font-size:clamp(17px,1.5vw,20px);line-height:1.5;color:var(--muted);max-width:46ch}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border-block:1px solid var(--line);margin-top:clamp(40px,6vw,72px)}
+.facts div{background:var(--surface);padding:22px clamp(14px,2vw,24px)}
+.facts b{display:block;font-family:var(--display);font-weight:700;font-size:clamp(17px,1.7vw,22px);letter-spacing:-.025em}
+.facts small{display:block;color:var(--soft);font-size:14px;margin-top:5px}
+/* on a phone the three facts swipe sideways instead of stacking into a wall of text */
+@media (max-width:760px){
+  .facts{display:flex;gap:10px;background:none;border:0;overflow-x:auto;
+    scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;
+    margin-inline:calc(var(--pad) * -1);padding:0 var(--pad) 4px;
+    scroll-padding-inline:var(--pad)}
+  .facts::-webkit-scrollbar{display:none}
+  .facts div{flex:0 0 73%;scroll-snap-align:start;background:var(--raise);
+    border:1px solid var(--line);border-radius:6px;padding:20px 18px 22px;min-height:118px}
+  .facts b{font-size:18px}
+  .facts small{font-size:13.5px;margin-top:7px}
+}
+
+/* ---------- ticker: the cream band ---------- */
+.ticker{background:var(--sage);color:var(--cream);overflow:hidden;padding:18px 0}
+.ticker-row{display:flex;width:max-content;animation:slide 38s linear infinite}
+.ticker-row span{font-family:var(--display);font-weight:800;font-size:clamp(28px,4.4vw,56px);letter-spacing:-.035em;padding-inline:.35em;display:flex;align-items:center;gap:.4em;white-space:nowrap}
+.ticker-row span::after{content:"";width:.17em;height:.17em;border-radius:50%;background:currentColor;opacity:.5}
+@keyframes slide{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.ticker-row{animation:none}}
+
+.belief{font-family:var(--display);font-weight:500;font-size:clamp(24px,3.1vw,44px);line-height:1.2;letter-spacing:-.025em;max-width:30ch}
+.belief em.it{font-size:1.06em}
+
+.pains{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border-block:1px solid var(--line)}
+@media (max-width:860px){.pains{grid-template-columns:1fr}}
+.pains div{background:var(--surface);padding:clamp(26px,3vw,38px)}
+.pains b{display:block;font-family:var(--display);font-weight:600;font-size:clamp(19px,1.9vw,24px);line-height:1.25;letter-spacing:-.02em;max-width:22ch}
+.pains p{color:var(--muted);font-size:16px;line-height:1.55;margin-top:12px}
+
+/* ---------- section heads ---------- */
+.shead{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:24px 64px;align-items:end;margin-bottom:clamp(36px,5vw,64px)}
+@media (max-width:860px){.shead{grid-template-columns:1fr}}
+.shead h2{font-size:clamp(38px,6vw,78px)}
+.shead p{color:var(--muted);font-size:17px;max-width:46ch}
+
+/* ---------- work ---------- */
+.work-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(12px,1.6vw,20px)}
+@media (min-width:1100px){.work-bleed{max-width:none;padding-inline:clamp(20px,3vw,40px)}}
+.tile{grid-column:span 6;margin:0}
+.only-m{display:none}
+.tile.wide{grid-column:span 7}.tile.narrow{grid-column:span 5}.tile.full{grid-column:span 6}
+.tile.full img{aspect-ratio:13/10}
+.tile.port{grid-column:span 6}
+.tile.port img{aspect-ratio:4/5}
+@media (max-width:820px){.tile,.tile.wide,.tile.narrow,.tile.full,.tile.port{grid-column:span 12}}
+.tile .shot{overflow:hidden;border-radius:4px;background:#393C33}
+.tile img{width:100%;height:100%;object-fit:cover;aspect-ratio:16/10}
+.tile figcaption{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;padding-top:14px;font-size:15px}
+.tile figcaption b{font-weight:600}
+.tile figcaption span{color:var(--soft);font-size:13px;line-height:1.4}
+.note{margin-top:28px;font-size:15px;color:var(--soft);max-width:60ch}
+.note a{display:inline-block;min-height:40px;line-height:40px}
+
+/* ---------- services accordion ---------- */
+.svc{border-top:1px solid var(--line)}
+.svc:last-of-type{border-bottom:1px solid var(--line)}
+.svc summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:center;padding:clamp(22px,2.6vw,34px) 0}
+.svc summary::-webkit-details-marker{display:none}
+.svc h3{font-size:clamp(26px,3.6vw,46px);font-weight:700;letter-spacing:-.03em}
+.svc .plus{position:relative;width:38px;height:38px;border:1.5px solid var(--edge);border-radius:50%;flex:none}
+.svc .plus::before,.svc .plus::after{content:"";position:absolute;top:50%;left:50%;width:13px;height:1.5px;background:currentColor;transform:translate(-50%,-50%);transition:transform .25s}
+.svc .plus::after{transform:translate(-50%,-50%) rotate(90deg)}
+.svc[open] .plus::after{transform:translate(-50%,-50%) rotate(0)}
+.svc-body{display:block;padding:0 0 clamp(26px,3vw,38px);max-width:860px}
+@media (max-width:760px){.svc-body{grid-template-columns:1fr}}
+.svc-body .svc-lede{color:var(--muted);font-size:17px;line-height:1.6;margin:0 0 16px}
+.svc-body ul{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:8px;align-content:start}
+.svc-body li{border:1px solid var(--edge);border-radius:999px;padding:7px 14px;font-size:14px;color:var(--muted)}
+.svc-body .more{display:inline-flex;align-items:center;min-height:44px;gap:8px;margin-top:6px;font-weight:600;font-size:15px;text-underline-offset:4px}
+
+/* ---------- monthly plans ---------- */
+.plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:900px){.plans{grid-template-columns:1fr}}
+.plan{display:flex;flex-direction:column;border:1px solid var(--edge);border-radius:6px;
+  padding:clamp(24px,2.6vw,34px);background:var(--raise)}
+.plan.plan-main{background:var(--cream);color:var(--deep);border-color:var(--cream)}
+.plan .tag{font:500 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+.plan.plan-main .tag{color:#64665C}
+.plan h3{font-size:clamp(23px,2.2vw,30px);font-weight:700;margin:14px 0 8px}
+.plan .who{color:var(--muted);font-size:15px;line-height:1.5;min-height:4.5em}
+@media (max-width:900px){.plan .who{min-height:0}}
+.plan.plan-main .who{color:#5A5C52}
+.plan .cost{font-family:var(--display);font-weight:800;font-size:clamp(30px,3.4vw,44px);
+  letter-spacing:-.04em;margin:20px 0 2px}
+.plan .per{font-size:14px;color:var(--muted)}
+.plan.plan-main .per{color:#64665C}
+.plan ul{list-style:none;margin:22px 0 0;padding:20px 0 0;border-top:1px solid var(--edge);
+  display:flex;flex-direction:column;gap:10px;font-size:15px;color:var(--muted)}
+.plan.plan-main ul{border-top-color:rgba(46,48,41,.18);color:#5A5C52}
+.plan li{display:grid;grid-template-columns:16px 1fr;gap:10px;align-items:start;line-height:1.45}
+.plan li::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;
+  opacity:.45;margin-top:.45em}
+.plan .btn{width:100%;justify-content:center;margin-top:auto}
+.plan ul{margin-bottom:24px}
+.plan-note{color:var(--muted);font-size:15px;margin-top:26px;max-width:62ch}
+
+/* ---------- price builder ---------- */
+.build{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:clamp(24px,3vw,40px);align-items:start}
+@media (max-width:900px){.build{grid-template-columns:1fr}}
+.picks{display:flex;flex-direction:column;gap:2px}
+.pick{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:16px;align-items:center;padding:20px 4px;border-bottom:1px solid var(--line);cursor:pointer}
+.pick:first-child{border-top:1px solid var(--line)}
+.pick input{position:absolute;opacity:0;pointer-events:none}
+.pick .sw{width:52px;height:30px;border-radius:999px;background:rgba(247,243,236,.22);position:relative;transition:background .2s;flex:none}
+.pick .sw::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:var(--cream);transition:transform .22s cubic-bezier(.2,.8,.2,1)}
+.pick input:checked + .sw{background:var(--cream)}
+.pick input:checked + .sw::after{transform:translateX(22px);background:var(--deep)}
+.pick input:focus-visible + .sw{outline:2px solid var(--cream);outline-offset:3px}
+.pick b{font-family:var(--display);font-weight:600;font-size:clamp(18px,2vw,24px);letter-spacing:-.025em}
+.pick small{display:block;color:var(--muted);font-size:14px;margin-top:3px}
+.pick .from{font-size:14px;color:var(--muted);white-space:nowrap}
+.quote{border:1px solid var(--edge);border-radius:6px;padding:clamp(24px,3vw,34px);position:sticky;top:100px;background:var(--raise)}
+@media (max-width:900px){.quote{position:static}}
+.quote .lab{font-size:14px;color:var(--muted)}
+.quote .total{font-family:var(--display);font-weight:800;font-size:clamp(46px,6.5vw,76px);letter-spacing:-.045em;line-height:1;margin:6px 0 2px}
+.quote .sub{font-size:15px;color:var(--muted);min-height:1.4em}
+.quote ul{list-style:none;margin:22px 0 0;padding:20px 0 0;border-top:1px solid var(--edge);display:flex;flex-direction:column;gap:11px;font-size:15px}
+.quote li{display:flex;justify-content:space-between;gap:16px}
+.quote li span{color:var(--muted)}
+.quote .btn{width:100%;justify-content:center;margin-top:24px}
+.quote .fine{font-size:13px;color:var(--soft);margin-top:14px;line-height:1.5;max-width:68ch}
+
+/* ---------- process ---------- */
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+@media (max-width:900px){.steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.steps{grid-template-columns:1fr}}
+.steps div{background:var(--surface);padding:clamp(24px,2.6vw,34px)}
+.steps em{font-style:normal;font-family:var(--display);font-weight:700;font-size:14px;color:var(--soft)}
+.steps h3{font-size:clamp(21px,2.1vw,27px);font-weight:700;margin:16px 0 10px}
+.steps p{color:var(--muted);font-size:16px;line-height:1.55}
+
+/* ---------- eyebrow label ---------- */
+.eyebrow{font:500 13px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--soft);margin:0 0 clamp(18px,2.2vw,30px)}
+
+/* ---------- philosophy ---------- */
+.phil{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:26px clamp(40px,6vw,88px);align-items:start}
+@media (max-width:860px){.phil{grid-template-columns:1fr}}
+.phil h2{font-size:clamp(34px,4.7vw,66px);line-height:1.04;font-weight:500}
+.phil h2 em.it{font-size:1.07em}
+.phil p{color:var(--muted);font-size:clamp(16px,1.25vw,18px);line-height:1.65;max-width:48ch}
+.phil p + p{margin-top:17px}
+
+/* ---------- capability lines ---------- */
+.caps{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;color:var(--muted);font-size:15px;line-height:1.75;align-content:start}
+.caps li::after{content:"·";padding:0 .5em;opacity:.5}
+.caps li:last-child::after{content:""}
+.svc-body ul.caps{gap:0}
+.svc-body ul.caps li{border:none;border-radius:0;padding:0;font-size:16px;color:var(--muted)}
+
+/* ---------- approach ---------- */
+.appr{border-top:1px solid var(--line)}
+.appr .row{display:grid;grid-template-columns:clamp(74px,8vw,138px) minmax(0,.85fr) minmax(0,1.25fr);gap:10px clamp(20px,3vw,52px);align-items:baseline;padding:clamp(22px,2.6vw,36px) 0;border-bottom:1px solid var(--line)}
+.appr .n{font-family:var(--display);font-weight:800;font-size:clamp(32px,4.4vw,62px);letter-spacing:-.045em;line-height:.85;color:var(--soft);opacity:.45}
+.appr h3{font-size:clamp(21px,2.2vw,30px);font-weight:700}
+.appr p{color:var(--muted);font-size:16px;line-height:1.6;max-width:52ch}
+@media (max-width:760px){.appr .row{grid-template-columns:clamp(62px,14vw,84px) minmax(0,1fr)}.appr p{grid-column:2/-1}}
+
+/* ---------- motion ----------
+   Everything here is opt-in via the .js class and switched off entirely for anyone
+   who has asked their device to reduce motion. Nothing is hidden without JS. */
+@media (prefers-reduced-motion:no-preference){
+  .js .rv{opacity:0;transform:translateY(18px);
+          transition:opacity .42s cubic-bezier(.22,.9,.2,1),transform .42s cubic-bezier(.22,.9,.2,1)}
+  .js .rv.in{opacity:1;transform:none}
+  /* the image slides up behind a mask, the way a print reveals */
+  .js .tile .shot{clip-path:inset(0 0 101% 0);transition:clip-path .5s cubic-bezier(.22,.9,.2,1)}
+  .js .tile.in .shot{clip-path:inset(0 0 0 0)}
+  .js .tile img{transform:scale(1.04);transition:transform .8s cubic-bezier(.22,.9,.2,1)}
+  .js .tile.in img{transform:none}
+  .js .appr .row .n{transition:color .5s ease,opacity .5s ease}
+  .js .appr .row.in .n{color:var(--ink);opacity:.28}
+}
+/* pain icons */
+.pains svg{display:block;margin-bottom:18px;color:var(--soft)}
+
+/* second line of a statement heading, set apart */
+.phil h2 .l2{display:block;color:var(--muted)}
+
+/* a project block inside Work */
+.proj + .proj{margin-top:clamp(44px,5vw,72px);padding-top:clamp(36px,4vw,56px);border-top:1px solid var(--line)}
+.proj-head{display:flex;justify-content:space-between;gap:16px;align-items:baseline;flex-wrap:wrap;
+  margin:0 0 clamp(18px,2vw,26px)}
+.proj-head h3{font-size:clamp(24px,2.6vw,34px);font-weight:700}
+.proj-head span{color:var(--soft);font-size:14px}
+
+/* work as a swipeable row on phones, the way the reference sites do it */
+@media (max-width:820px){
+  .work-grid{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;
+    margin-inline:calc(var(--pad) * -1);padding-inline:var(--pad);padding-bottom:4px;
+    /* without this, snapping ignores the padding and parks the first card flush
+       against the screen edge, out of line with the text above it */
+    scroll-padding-inline:var(--pad)}
+  .work-grid::-webkit-scrollbar{display:none}
+  .work-grid{align-items:flex-start}
+  /* every card the same height so the captions line up, and each card as wide as its
+     own image needs, so nothing gets cropped */
+  .tile,.tile.wide,.tile.narrow,.tile.full,.tile.port{flex:0 0 auto;scroll-snap-align:start;max-width:none}
+  .tile img,.tile.full img,.tile.port img,.tile.wide img,.tile.narrow img{height:auto;width:100%;max-width:none;aspect-ratio:4/5;object-fit:cover}
+  .only-d{display:none}
+  .only-m{display:block}
+  .tile,.tile.wide,.tile.narrow,.tile.full,.tile.port{width:min(84vw,380px)}
+  .tile figcaption{flex-direction:column;gap:2px}
+  .tile figcaption span{font-size:12px}
+  /* horizontally offscreen cards never intersect the viewport, so the masked
+     reveal would leave them blank. Plain and visible on phones instead. */
+  .js .tile .shot{clip-path:none}
+  .js .tile img{transform:none}
+  .swipe{display:flex;align-items:center;gap:8px;margin-top:16px;font-size:14px;color:var(--soft)}
+}
+@media (min-width:821px){.swipe{display:none}}
+.swipe-facts{margin-top:12px}
+@media (min-width:761px){.swipe-facts{display:none}}
+
+/* free guides */
+.reads{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);
+  border-block:1px solid var(--line)}
+@media (max-width:820px){.reads{grid-template-columns:1fr}}
+.reads a{display:flex;flex-direction:column;gap:9px;background:var(--surface);
+  padding:clamp(24px,2.6vw,34px);text-decoration:none;transition:background .2s}
+.reads a:hover{background:var(--raise)}
+.reads em{font-style:normal;font-family:var(--display);font-weight:700;font-size:13px;color:var(--soft)}
+.reads b{font-family:var(--display);font-weight:700;font-size:clamp(19px,1.9vw,24px);
+  letter-spacing:-.025em;line-height:1.15}
+.reads span{color:var(--muted);font-size:15px;line-height:1.55}
+
+/* numbered services */
+.svc h3 .num{font-style:normal;font-size:.42em;font-weight:600;color:var(--soft);
+  letter-spacing:0;margin-right:.9em;vertical-align:.42em;font-variant-numeric:tabular-nums}
+
+/* link arrows that step forward on hover */
+.more .arw{margin-left:2px;transition:transform .25s cubic-bezier(.22,.8,.18,1)}
+.more:hover .arw{transform:translateX(4px)}
+
+
+/* ---------- faq ---------- */
+.faq{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(28px,5vw,80px)}
+@media (max-width:860px){.faq{grid-template-columns:1fr}}
+.faq h2{font-size:clamp(38px,5.4vw,66px)}
+.faq-list details{border-bottom:1px solid var(--line)}
+.faq-list details:first-child{border-top:1px solid var(--line)}
+.faq-list summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:24px;align-items:center;padding:22px 0;font-weight:600;font-size:18px}
+.faq-list summary::-webkit-details-marker{display:none}
+.faq-list .plus{position:relative;width:30px;height:30px;border:1.5px solid var(--edge);border-radius:50%;flex:none}
+.faq-list .plus::before,.faq-list .plus::after{content:"";position:absolute;top:50%;left:50%;width:11px;height:1.5px;background:currentColor;transform:translate(-50%,-50%);transition:transform .25s}
+.faq-list .plus::after{transform:translate(-50%,-50%) rotate(90deg)}
+.faq-list details[open] .plus::after{transform:translate(-50%,-50%) rotate(0)}
+.faq-list p{color:var(--muted);padding:0 48px 24px 0;max-width:62ch;line-height:1.6}
+
+/* ---------- closing ---------- */
+.close-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:clamp(36px,4vw,52px)}
+@media (max-width:860px){.close-grid{grid-template-columns:1fr}}
+.pathcard{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:8px;padding:26px;border:1px solid var(--line);border-radius:6px;transition:background .2s,border-color .2s}
+.pathcard:hover{border-color:rgba(243,240,233,.55);background:rgba(243,240,233,.08)}
+.pathcard:focus-visible{outline:2px solid var(--coal);outline-offset:3px}
+.pathcard.main{background:var(--cream);color:var(--deep);border-color:var(--cream)}
+.pathcard.main:hover{background:#fff}
+.pathcard b{font-family:var(--display);font-weight:700;font-size:clamp(20px,2vw,26px);letter-spacing:-.025em}
+.pathcard span{font-size:15px;color:var(--muted)}
+.pathcard.main span{color:#64665C}
+
+/* ---------- footer ---------- */
+.foot{background:var(--deep);color:var(--cream);padding:clamp(56px,7vw,88px) 0 32px;--muted:#B9BAB0;--soft:#9B9C92;--line:rgba(243,240,233,.18)}
+.foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:32px}
+@media (max-width:860px){.foot-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.foot-grid{grid-template-columns:1fr}}
+.foot h4{margin:0 0 14px;font:600 13px var(--sans);color:var(--soft)}
+.foot a{color:#CBCCC2;text-decoration:none;font-size:15px;line-height:2}
+.foot-grid a{display:inline-block;min-height:40px;line-height:40px}
+.foot-grid br{display:none}
+.foot-grid > div{display:flex;flex-direction:column;align-items:flex-start}
+.foot a:hover{color:var(--cream)}
+.foot .blurb{color:var(--muted);font-size:15px;line-height:1.6;max-width:30ch}
+.foot .logo{color:var(--cream)}
+.foot .logo svg{height:34px}
+.wordmark{margin:clamp(48px,7vw,88px) 0 0;color:var(--cream)}
+.wordmark svg{width:100%;height:auto;aspect-ratio:6010/1440;display:block}
+.foot-legal{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px;padding-top:22px;border-top:1px solid var(--line);font-size:13px;color:var(--soft)}
+.foot-legal a{font-size:13px}
+
+/* planner form bits */
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:15px;color:var(--muted)}
+.field input,.field select,.field textarea{font:inherit;font-size:18px;color:var(--ink);background:transparent;border:none;border-bottom:1.5px solid var(--line);padding:8px 0;border-radius:0;width:100%;min-width:0}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-bottom-color:var(--ink)}
+.field textarea{resize:vertical}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px}
+@media (max-width:600px){.two{grid-template-columns:minmax(0,1fr)}}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+/* ================= planner ================= */
+.pl{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:clamp(0px,2vw,28px);background:rgba(28,24,22,.5);backdrop-filter:blur(6px)}
+.pl[hidden]{display:none}
+.pl-panel{background:var(--paper);width:min(900px,100%);height:min(900px,100%);border-radius:clamp(0px,2vw,28px);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.3);animation:plIn .5s cubic-bezier(.2,.75,.15,1)}
+@keyframes plIn{from{opacity:0;transform:translateY(24px) scale(.98)}to{opacity:1;transform:none}}
+@media (max-width:640px){.pl{padding:0}.pl-panel{border-radius:0;height:100%}}
+.pl-top{display:flex;align-items:center;gap:18px;padding:18px clamp(20px,4vw,40px);border-bottom:1px solid var(--line)}
+.pl-brand{display:flex;align-items:center;gap:9px;font:800 19px var(--sans);letter-spacing:-0.03em;white-space:nowrap}
+.pl-brand i{color:var(--taupe);font-size:15px}
+.pl-progress{flex:1;height:4px;background:var(--sand);border-radius:4px;overflow:hidden}
+.pl-progress span{display:block;height:100%;width:0;background:var(--ink);border-radius:4px;transition:width .5s cubic-bezier(.2,.75,.15,1)}
+.pl-count{font-size:14px;color:var(--soft);white-space:nowrap}
+.pl-close{background:none;border:1px solid var(--line);width:40px;height:40px;border-radius:50%;cursor:pointer;display:grid;place-items:center;color:var(--ink);flex-shrink:0}
+.pl-close:hover{background:var(--sand)}
+@media (max-width:520px){.pl-brand{display:none}}
+.pl-form{flex:1;overflow-y:auto;overscroll-behavior:contain}
+.pl-step{padding:clamp(28px,5vw,52px) clamp(20px,6vw,64px) 40px;max-width:760px;margin:0 auto}
+.pl-step.enter{animation:stepIn .5s cubic-bezier(.2,.75,.15,1)}
+.pl-step.enter-back{animation:stepBack .5s cubic-bezier(.2,.75,.15,1)}
+@keyframes stepIn{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
+@keyframes stepBack{from{opacity:0;transform:translateX(-28px)}to{opacity:1;transform:none}}
+.pl-step h2{font-size:clamp(32px,4.4vw,48px);line-height:1.04;letter-spacing:-0.02em}
+.pl-sub{color:var(--muted);margin:10px 0 30px;font-size:17px;max-width:54ch}
+.pl-group{margin-top:30px}
+.pl-group > .q{font-weight:500;margin-bottom:12px;display:block}
+.pl-group > .q small{font-weight:400;color:var(--soft);margin-left:6px}
+.pl-foot{display:flex;align-items:center;gap:14px;padding:16px clamp(20px,4vw,40px);border-top:1px solid var(--line);background:var(--paper)}
+.pl-foot .btn{min-height:48px}
+.pl-foot[hidden]{display:none}
+.pl-err{flex:1;font-size:15px;color:#A33A2A;text-align:center}
+:root[data-theme="dark"] .pl-err{color:#F09A86}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .pl-err{color:#F09A86}}
+.pl-foot .spacer{flex:1}
+.pl .field{margin-top:22px}
+.pl .two{margin-top:0}
+.pl .two .field{margin-top:22px}
+.pl textarea{min-height:84px}
+
+/* option cards */
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.opt{position:relative;display:block;cursor:pointer}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .box{display:flex;flex-direction:column;gap:4px;height:100%;border:1px solid var(--line);border-radius:16px;padding:18px 44px 18px 18px;background:var(--card);transition:border-color .2s,background .2s,transform .2s}
+.opt:hover .box{border-color:var(--taupe)}
+.opt input:checked + .box{border-color:var(--ink);background:var(--sand);box-shadow:inset 0 0 0 1px var(--ink)}
+.opt input:focus-visible + .box{outline:2px solid var(--bronze);outline-offset:2px}
+.opt b{font:400 21px/1.2 var(--serif)}
+.opt span.d{font-size:14px;color:var(--muted)}
+.opt .tick{position:absolute;top:14px;right:14px;width:22px;height:22px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;background:var(--paper);transition:background .2s}
+.opt input:checked ~ .tick{background:var(--ink);border-color:var(--ink)}
+.opt .tick svg{opacity:0}
+.opt input:checked ~ .tick svg{opacity:1}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative;cursor:pointer}
+.chip input{position:absolute;opacity:0;pointer-events:none}
+.chip span{display:inline-flex;align-items:center;min-height:42px;padding:0 16px;border:1px solid var(--line);border-radius:999px;background:var(--card);font-size:15px;transition:background .2s,border-color .2s,color .2s}
+.chip:hover span{border-color:var(--taupe)}
+.chip input:checked + span{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip input:focus-visible + span{outline:2px solid var(--bronze);outline-offset:2px}
+
+/* style cards */
+.styles{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.styles .box{gap:10px}
+.sw{display:flex;gap:6px}
+.sw i{width:26px;height:26px;border-radius:50%;border:1px solid rgba(0,0,0,.08)}
+.styles .sample{font-size:26px;line-height:1}
+
+/* colours */
+.colours{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.colour{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:999px;padding:6px 8px 6px 6px;background:var(--card)}
+.colour label{width:34px;height:34px;border-radius:50%;overflow:hidden;position:relative;cursor:pointer;border:1px solid rgba(0,0,0,.1);flex-shrink:0}
+.colour input[type=color]{position:absolute;inset:-8px;width:calc(100% + 16px);height:calc(100% + 16px);border:none;padding:0;cursor:pointer;background:none}
+.colour input[type=text]{width:84px;border:none;background:transparent;font:inherit;font-size:15px;color:var(--ink);text-transform:uppercase}
+.colour input[type=text]:focus{outline:none}
+.colour button{background:none;border:none;cursor:pointer;color:var(--soft);width:28px;height:28px;border-radius:50%;display:grid;place-items:center}
+.colour button:hover{background:var(--sand);color:var(--ink)}
+.add-btn{background:none;border:1px dashed var(--taupe);border-radius:999px;min-height:48px;padding:0 18px;cursor:pointer;font:inherit;font-size:15px;color:var(--ink)}
+.add-btn:hover{background:var(--sand)}
+.check-row{display:flex;gap:10px;align-items:center;margin-top:14px;font-size:15px;color:var(--muted);cursor:pointer}
+.check-row input{width:18px;height:18px;accent-color:var(--ink)}
+
+/* inspiration links */
+.inspo-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:10px;align-items:end;margin-bottom:10px}
+.inspo-row input{font:inherit;font-size:16px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;width:100%;min-width:0}
+.inspo-row input:focus{outline:none;border-color:var(--bronze)}
+.inspo-row button{background:none;border:1px solid var(--line);border-radius:50%;width:44px;height:44px;cursor:pointer;color:var(--soft)}
+@media (max-width:560px){.inspo-row{grid-template-columns:minmax(0,1fr) auto}.inspo-row input:nth-child(2){grid-column:1;grid-row:2}}
+
+.svc-row{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,.8fr) auto;gap:8px 10px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.svc-row input{font:inherit;font-size:16px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;width:100%;min-width:0}
+.svc-row input:focus{outline:none;border-color:var(--bronze)}
+.svc-row .svc-detail{grid-column:1 / 3}
+.svc-row button{background:none;border:1px solid var(--line);border-radius:50%;width:44px;height:44px;cursor:pointer;color:var(--soft)}
+/* uploads */
+.drop{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;border:1.5px dashed var(--taupe);border-radius:18px;padding:28px 20px;background:var(--card);cursor:pointer;transition:background .2s,border-color .2s}
+.drop:hover,.drop.over{background:var(--sand);border-color:var(--ink)}
+.drop b{font:400 22px var(--serif)}
+.drop small{color:var(--soft);font-size:14px}
+.drop svg{margin-bottom:6px}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-top:12px}
+.thumb{position:relative;aspect-ratio:1;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--card);display:flex;align-items:center;justify-content:center;animation:pop .35s cubic-bezier(.2,.75,.15,1)}
+@keyframes pop{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:none}}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.thumb .doc{font-size:12px;color:var(--muted);padding:10px;text-align:center;word-break:break-word}
+.thumb button{position:absolute;top:6px;right:6px;width:28px;height:28px;border-radius:50%;border:none;background:rgba(28,24,22,.75);color:#fff;cursor:pointer;display:grid;place-items:center}
+.file-note{font-size:14px;color:var(--soft);margin-top:10px}
+
+/* call slots */
+.slots{display:flex;flex-direction:column;gap:8px}
+.slot-day{display:grid;grid-template-columns:130px 1fr;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--line)}
+.slot-day:last-child{border-bottom:none}
+.slot-day b{font-weight:500}
+.slot-day .chips{gap:6px}
+@media (max-width:480px){.slot-day{grid-template-columns:1fr;gap:6px}}
+
+/* toggle */
+.toggle-card{display:flex;gap:14px;align-items:flex-start;border:1px solid var(--line);border-radius:16px;padding:18px;background:var(--card);cursor:pointer;margin-top:28px}
+.toggle-card input{width:20px;height:20px;margin-top:2px;accent-color:var(--ink)}
+.toggle-card b{font:400 21px var(--serif);display:block}
+.toggle-card span{color:var(--muted);font-size:15px}
+
+/* sending + done */
+.pl-center{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:16px;padding:40px 24px}
+.pl-center h2{font-size:clamp(34px,5vw,54px)}
+.pl-center p{color:var(--muted);max-width:46ch;margin:0 auto}
+.done-mark{width:84px;height:84px;border-radius:50%;background:var(--ink);display:grid;place-items:center;animation:pop .6s cubic-bezier(.2,.75,.15,1)}
+.done-mark path{stroke-dasharray:40;stroke-dashoffset:40;animation:draw .6s .3s ease forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.next-steps{list-style:none;margin:14px auto 6px;padding:0;text-align:left;max-width:440px;display:flex;flex-direction:column;gap:14px}
+.next-steps li{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start;color:var(--muted)}
+.next-steps li span{width:34px;height:34px;border-radius:50%;background:var(--sand);display:grid;place-items:center;font:500 16px var(--serif);color:var(--ink)}
+.next-steps li b{color:var(--ink);font-weight:500;display:block}
+.bigspin{width:46px;height:46px;border-radius:50%;border:3px solid var(--sand);border-top-color:var(--ink);animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){
+  .pl-panel,.pl-step.enter,.pl-step.enter-back,.thumb,.done-mark{animation:none}
+  .done-mark path{animation:none;stroke-dashoffset:0}
+  .bigspin{animation-duration:3s}
+  .path:hover{transform:none}
+}
+
+
+/* ============ after-panel extras ============ */
+.c-sub{margin:0;font-size:clamp(11px,1.15vw,15px);line-height:1.55;color:#4A5A50;max-width:34ch}
+.c-foot{flex:0 0 auto;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #DCD3C3;background:#EFE8DC}
+.c-foot div{padding:clamp(7px,1.15vw,15px) clamp(12px,2vw,26px);border-right:1px solid #DCD3C3;display:flex;flex-direction:column;gap:2px;min-width:0}
+.c-foot div:last-child{border-right:none}
+.c-foot b{font-family:var(--serif);font-weight:500;font-size:clamp(11px,1.15vw,16px);letter-spacing:-0.01em}
+.c-foot span{font-size:clamp(9px,.95vw,13px);color:#4A5A50;line-height:1.4}
+
+
+/* ---------- booking: day strip, times, confirmation ----------------------
+   These were written in the JS but never styled, so every element fell back to
+   browser defaults: the day cards ran together as "Fri9Oct", the times piled up
+   in one undifferentiated block, and the confirmation label sat inline with the
+   time it was labelling. */
+.bk-days{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;padding:2px 0 8px;margin-top:4px}
+.bk-days::-webkit-scrollbar{display:none}
+.bk-day{flex:0 0 auto;scroll-snap-align:start;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:1px;min-width:74px;min-height:86px;
+  padding:10px 8px;border:1px solid var(--line);border-radius:12px;background:var(--card);
+  color:var(--ink);font:500 13px/1.25 var(--sans);cursor:pointer;
+  transition:background .18s,border-color .18s,color .18s}
+.bk-day small{display:block;font-size:12px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.bk-day b{display:block;font-size:24px;font-weight:800;line-height:1.1;letter-spacing:-.02em}
+.bk-day:hover:not(:disabled){border-color:var(--ink)}
+.bk-day.on{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.bk-day.on small{color:rgba(243,240,233,.72)}
+.bk-day:disabled{opacity:.38;cursor:not-allowed}
+.bk-day:focus-visible{outline:2px solid var(--bronze);outline-offset:2px}
+
+.bk-times{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));
+  gap:8px;margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
+.bk-time{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:48px;padding:6px 10px;border:1px solid var(--line);border-radius:999px;
+  background:var(--card);color:var(--ink);font:500 15px/1.2 var(--sans);cursor:pointer;
+  transition:background .18s,border-color .18s,color .18s}
+.bk-time small{font-size:11px;color:var(--muted);margin-top:2px}
+.bk-time:hover:not(:disabled){border-color:var(--ink)}
+.bk-time.on{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.bk-time.on small{color:rgba(243,240,233,.72)}
+.bk-time:disabled{opacity:.34;cursor:not-allowed;text-decoration:line-through}
+.bk-time:focus-visible{outline:2px solid var(--bronze);outline-offset:2px}
+
+.bk-chosen{display:flex;align-items:center;gap:10px;margin:18px 0 0;padding:14px 16px;
+  border-radius:10px;background:var(--sand);font-size:15px;color:var(--ink)}
+.bk-chosen svg{flex:none;color:var(--bronze)}
+.bk-chosen b{font-weight:600}
+
+.bk-done{margin:4px 0 30px;padding:22px;border:1px solid var(--line);border-radius:12px;
+  background:var(--card);text-align:center}
+.bk-done small{display:block;font-size:13px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:6px}
+.bk-done b{display:block;font-size:clamp(19px,2.4vw,23px);font-weight:800;
+  letter-spacing:-.02em;line-height:1.25;margin-bottom:18px}
+/* the page already has a .row for the how-it-works grid; this one is two buttons */
+.bk-done .row,.pl-center .row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;
+  align-items:stretch;padding:0;border:0;grid-template-columns:none}
+.bk-done .row .btn{flex:1 1 180px;justify-content:center}
+@media (max-width:420px){.bk-done .row .btn{flex:1 1 100%}}
+/* the second calendar button is the secondary one; .btn-line had no rule, so both
+   rendered as the solid sage button */
+.bk-done .btn-line,.pl-center .btn-line{background:transparent;border:1.5px solid var(--edge);color:var(--ink)}
+.bk-done .btn-line:hover,.pl-center .btn-line:hover{background:rgba(46,48,41,.06);border-color:var(--ink)}
+
+/* planner skin for the rebuild */
+.pl-brand{font-family:var(--display);letter-spacing:-.04em}
+.pl-step h2{font-family:var(--display);font-weight:800;letter-spacing:-.035em}
+.drop b,.toggle-card b,.bk-day b,.bk-done b,.next-steps li span,.pl-center h2{font-family:var(--display)!important}
+</style>
+<!-- seo -->
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://brightfrontstudio.com/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Brightfront Studio">
+<meta property="og:locale" content="en_AU">
+<meta property="og:url" content="https://brightfrontstudio.com/">
+<meta property="og:title" content="Brand, Websites and Marketing for Small Business | Brightfront Studio">
+<meta property="og:description" content="Brisbane marketing studio for small businesses: branding, websites, social media, Google and Meta ads, signage and billboards. Fixed prices, first draft in days.">
+<meta property="og:image" content="https://brightfrontstudio.com/img/social/home.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Brand, Websites and Marketing for Small Business | Brightfront Studio">
+<meta name="twitter:description" content="Brisbane marketing studio for small businesses: branding, websites, social media, Google and Meta ads, signage and billboards. Fixed prices, first draft in days.">
+<meta name="geo.region" content="AU-QLD">
+<meta name="geo.placename" content="Brisbane">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"ProfessionalService","@id":"https://brightfrontstudio.com/#studio","name":"Brightfront Studio","alternateName":"Brightfront","url":"https://brightfrontstudio.com/","logo":"https://brightfrontstudio.com/icon-512.png","image":"https://brightfrontstudio.com/img/social/home.jpg","email":"info@brightfrontstudio.com","description":"Marketing studio in Brisbane, Australia for small businesses: branding, websites, social media, Google and Meta ads, signage and billboards. Fixed prices, first draft in days, and everything in the client's name.","address":{"@type":"PostalAddress","addressLocality":"Brisbane","addressRegion":"QLD","addressCountry":"AU"},"areaServed":[{"@type":"City","name":"Brisbane"},{"@type":"Country","name":"Australia"},{"@type":"Place","name":"Worldwide"}],"identifier":{"@type":"PropertyValue","propertyID":"ABN","value":"80 241 124 181"},"priceRange":"$450 to $3,500 AUD","knowsAbout":["Branding","Logo design","Web design","Small business websites","Social media management","Google Ads","Meta Ads","Billboard and signage design","Print design","Real estate marketing","Expression of interest forms","Property e-brochures","Shopify themes","Local SEO"],"hasOfferCatalog":{"@type":"OfferCatalog","name":"Services","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Branding","description":"Logo, colours, type and a brand guide for small businesses.","provider":{"@id":"https://brightfrontstudio.com/#studio"}},"priceCurrency":"AUD","price":"1200","url":"https://brightfrontstudio.com/branding.html"},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Websites","description":"Custom websites for small businesses, written for you and yours to keep.","provider":{"@id":"https://brightfrontstudio.com/#studio"}},"priceCurrency":"AUD","price":"1500","url":"https://brightfrontstudio.com/#pricing"},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Social media management","description":"A month of posts designed, written and scheduled in your brand.","provider":{"@id":"https://brightfrontstudio.com/#studio"}},"priceCurrency":"AUD","price":"750","priceSpecification":{"@type":"UnitPriceSpecification","price":"750","priceCurrency":"AUD","unitText":"MONTH"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Google and Meta ads","description":"Campaign setup, landing pages, management and monthly reporting.","provider":{"@id":"https://brightfrontstudio.com/#studio"}},"priceCurrency":"AUD","price":"600","priceSpecification":{"@type":"UnitPriceSpecification","price":"600","priceCurrency":"AUD","unitText":"MONTH"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Signage, print and billboards","description":"Print-ready artwork for signage, billboards, menus, flyers and brochures.","provider":{"@id":"https://brightfrontstudio.com/#studio"}},"priceCurrency":"AUD","price":"450"},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Real estate marketing","description":"Agency websites, expression of interest forms and property e-brochures.","provider":{"@id":"https://brightfrontstudio.com/#studio"}},"priceCurrency":"AUD","url":"https://brightfrontstudio.com/real-estate-websites.html"}]}},{"@type":"WebSite","@id":"https://brightfrontstudio.com/#site","url":"https://brightfrontstudio.com/","name":"Brightfront Studio","publisher":{"@id":"https://brightfrontstudio.com/#studio"},"inLanguage":"en-AU"},{"@type":"WebPage","@id":"https://brightfrontstudio.com/#page","url":"https://brightfrontstudio.com/","name":"Brand, Websites and Marketing for Small Business | Brightfront Studio","description":"Brisbane marketing studio for small businesses: branding, websites, social media, Google and Meta ads, signage and billboards. Fixed prices, first draft in days.","isPartOf":{"@id":"https://brightfrontstudio.com/#site"},"about":{"@id":"https://brightfrontstudio.com/#studio"},"inLanguage":"en-AU","primaryImageOfPage":"https://brightfrontstudio.com/img/social/home.jpg"},{"@type":"FAQPage","@id":"https://brightfrontstudio.com/#faq","mainEntity":[{"@type":"Question","name":"Do I own everything?","acceptedAnswer":{"@type":"Answer","text":"Yes, all of it. Domain, designs, words, photos, ad accounts, all in your name. If you walk away it all goes with you."}},{"@type":"Question","name":"What if I don't like the first draft?","acceptedAnswer":{"@type":"Answer","text":"Tell us what's not working and we'll change it. If the whole direction's wrong, we start again once and don't charge you for it."}},{"@type":"Question","name":"Does my business need a rebrand?","acceptedAnswer":{"@type":"Answer","text":"Often not. If people already recognise your logo, a refresh of the site and how you present it costs less and does more. We'll tell you that on the first call even though it's the smaller job."}},{"@type":"Question","name":"Can't you just do a logo?","acceptedAnswer":{"@type":"Answer","text":"We can, and sometimes that really is all it takes. Just know a new logo won't fix a website that's five years behind it. People notice that sort of thing."}},{"@type":"Question","name":"What if I don't know what I need yet?","acceptedAnswer":{"@type":"Answer","text":"That's what the strategy session is for. Ninety minutes, $350, and you walk away with the plan whether or not you hire us to build it. The first fifteen-minute call is still free, so ask us anything there first."}},{"@type":"Question","name":"Do you offer payment plans?","acceptedAnswer":{"@type":"Answer","text":"Half to start, half the day you go live. Bigger jobs can be split monthly. Ask on the call."}},{"@type":"Question","name":"Are you only in Brisbane?","acceptedAnswer":{"@type":"Answer","text":"We're in Brisbane and happy to meet up. Most of the work happens over email and video calls though, so it doesn't much matter where you are."}}]}]}</script>
+<!-- /seo -->
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="bf" viewBox="0 0 6010 1440" fill="currentColor"><g transform="translate(0 760) scale(1 -1)"><path transform="translate(0.0 0)" d="M81.81573474407196 0V687.4156116247177H606.2847898006439Q661.4730121787165 687.4156116247177 706.139625772624 665.9795343279839Q750.8062393665314 644.54345703125 776.9366061091423 606.54345703125Q803.0669728517532 568.54345703125 803.0669728517532 518.0869140625Q803.0669728517532 473.10888671875 787.132242679596 441.10888671875Q771.1975125074387 409.10888671875 744.4641006093427 389.2392578125Q717.7306887112468 369.36962890625 685.0673273801804 359.45654296875V355.45654296875Q723.194158571107 347.45654296875 753.8806499923978 326.5869140625Q784.5671414136887 305.71728515625 802.501871585846 270.945556640625Q820.4366017580032 236.173828125 820.4366017580032 185.7392578125Q820.4366017580032 126.63037109375 792.1648775935173 85.173828125Q763.8931534290314 43.71728515625 716.1867034435272 21.858642578125Q668.4802534580231 0 609.5455319881439 0ZM278.6747726202011 142.8885555267334H547.032702922821Q578.8101485663271 142.8885555267334 598.8786750283647 160.7558987682516Q618.9472014904022 178.6232420097698 618.9472014904022 215.5808659250086Q618.9472014904022 235.14680409431458 610.2698528902692 250.6778625524961Q601.5925042901362 266.2089210106776 584.8191345505174 274.79813089737524Q568.0457648108987 283.3873407840729 544.0377542972565 283.3873407840729H278.6747726202011ZM278.6747726202011 415.25188624858856H530.2474623918533Q553.2672459189321 415.25188624858856 569.0336617978526 423.856740295887Q584.8000776767731 432.4615943431854 593.3531739115715 448.02764073160824Q601.9062701463699 463.5936871200311 601.9062701463699 484.63922703266144Q601.9062701463699 514.7109869718552 582.398275799611 532.0645781755447Q562.8902814528522 549.4181693792343 533.1145656108856 549.4181693792343H278.6747726202011Z"/>
+<path transform="translate(833.0 0)" d="M64.25490021705627 0V527.4156116247177H209.79824686050415L222.21116423606873 440.41136825084686H230.322408080101Q244.62911558151245 471.07111179828644 267.06966733932495 493.512400329113Q289.51021909713745 515.9536888599396 319.04306906461716 527.9563787579536Q348.57591903209686 539.9590686559677 382.63770401477814 539.9590686559677Q402.25147354602814 539.9590686559677 419.4030892252922 536.9712335467339Q436.5547049045563 533.9833984375 450.1595923900604 528.6087268590927V383.7680490016937H372.7082780599594Q338.5978161096573 383.7680490016937 314.06692361831665 373.2332880496979Q289.536031126976 362.698527097702 273.9151437282562 343.87022483348846Q258.29425632953644 325.0419225692749 250.71816873550415 300.17094653844833Q243.14208114147186 275.29997050762177 243.14208114147186 246.03541505336761V0Z"/>
+<path transform="translate(1258.0 0)" d="M64.25490021705627 599.7334158420563V724.4156116247177H243.14208114147186V599.7334158420563ZM64.25490021705627 0V527.4156116247177H243.14208114147186V0Z"/>
+<path transform="translate(1531.0 0)" d="M155.2953895330429 -202.4759578704834Q116.52753245830536 -202.4759578704834 83.0053316950798 -187.8942550420761Q49.48313093185425 -173.31255221366882 29.187463581562042 -144.95256251096725Q8.891796231269836 -116.59257280826569 8.891796231269836 -76.52809357643127Q8.891796231269836 -35.348103761672974 36.223010778427124 -4.98867791891098Q63.55422532558441 25.370747923851013 105.45460724830627 40.17763268947601Q75.3688383102417 55.818434953689575 60.55365711450577 80.32443380355835Q45.738475918769836 104.83043265342712 45.738475918769836 133.81652534008026Q45.738475918769836 176.2997465133667 75.56313210725784 206.15609151124954Q105.38778829574585 236.01243650913239 152.89690577983856 243.46898818016052Q113.49790441989899 264.96647119522095 88.56508523225784 298.1408544778824Q63.6322660446167 331.3152377605438 63.6322660446167 370.791849732399Q63.6322660446167 434.1959111690521 100.8783597946167 471.12425154447556Q138.1244535446167 508.052591919899 205.5420560836792 523.7341017723083Q272.9596586227417 539.4156116247177 362.9345964193344 539.4156116247177Q395.4989070892334 539.4156116247177 424.068806886673 536.7429664134979Q452.63870668411255 534.0703212022781 477.5915788412094 528.662455201149Q525.2772186994553 552.5944998264313 545.9292223453522 579.0809834599495Q566.5812259912491 605.5674670934677 568.3525592088699 622.5805838108063H731.1373000144958Q730.8086024522781 582.9042299985886 714.5739455223083 555.3607729673386Q698.3392885923386 527.8173159360886 668.4147745370865 510.4246956706047Q638.4902604818344 493.03207540512085 596.4940911531448 483.61646378040314Q627.7216215133667 462.27385890483856 644.8149210214615 433.27077370882034Q661.9082205295563 404.2676885128021 661.9082205295563 368.98766791820526Q661.9082205295563 309.5287765264511 629.5924289822578 272.0691483616829Q597.2766374349594 234.60952019691467 539.3839880824089 217.07632142305374Q481.4913387298584 199.5431226491928 403.80035388469696 199.5431226491928H286.498250246048Q255.80372834205627 199.5431226491928 241.19421821832657 190.59353333711624Q226.58470809459686 181.64394402503967 226.58470809459686 166.28822243213654Q226.58470809459686 151.31603705883026 239.97945874929428 141.3664477467537Q253.3742094039917 131.41685843467712 287.6303564310074 131.41685843467712H562.8451452255249Q645.367085814476 131.41685843467712 686.9700375795364 86.2179085612297Q728.5729893445969 41.01895868778229 728.5729893445969 -28.8903226852417Q728.5729893445969 -81.51183784008026 700.1753177046776 -120.45044082403183Q671.7776460647583 -159.3890438079834 624.8295637369156 -180.9325008392334Q577.8814814090729 -202.4759578704834 521.237203001976 -202.4759578704834ZM242.76234078407288 -99.01816809177399H491.940388917923Q507.78046810626984 -99.01816809177399 520.5931279659271 -92.78989660739899Q533.4057878255844 -86.56162512302399 540.9262534976006 -74.50465607643127Q548.4467191696167 -62.44768702983856 548.4467191696167 -46.79029190540314Q548.4467191696167 -22.420662999153137 532.161478638649 -9.091965436935425Q515.8762381076813 4.236732125282288 492.9631521701813 4.236732125282288H244.40582859516144Q220.5066499710083 4.236732125282288 204.39271187782288 -8.84765625Q188.27877378463745 -21.932044625282288 188.27877378463745 -45.918137311935425Q188.27877378463745 -69.90422999858856 203.83574283123016 -84.46119904518127Q219.39271187782288 -99.01816809177399 242.76234078407288 -99.01816809177399ZM363.14934718608856 299.8487198352814Q420.5004127025604 299.8487198352814 452.0407598018646 316.2154350876808Q483.5811069011688 332.58215034008026 483.5811069011688 369.37894105911255Q483.5811069011688 406.17573177814484 452.0407598018646 422.642873108387Q420.5004127025604 439.11001443862915 363.14934718608856 439.11001443862915Q306.79829037189484 439.11001443862915 274.9101228117943 422.642873108387Q243.02195525169373 406.17573177814484 243.02195525169373 369.37894105911255Q243.02195525169373 344.57441341876984 257.1936369538307 329.03426533937454Q271.3653186559677 313.49411725997925 298.2430550456047 306.6714185476303Q325.1207914352417 299.8487198352814 363.14934718608856 299.8487198352814Z"/>
+<path transform="translate(2226.0 0)" d="M64.25490021705627 0V724.4156116247177H243.14208114147186V463.5121896266937H250.53335428237915Q275.06175887584686 490.5651099681854 305.98413956165314 507.15857803821564Q336.9065202474594 523.7520461082458 371.8198168873787 531.5838288664818Q406.733113527298 539.4156116247177 442.0590994358063 539.4156116247177Q513.273152589798 539.4156116247177 561.1710175275803 516.0005638599396Q609.0688824653625 492.58551609516144 633.511336505413 445.37189304828644Q657.9537905454636 398.15827000141144 657.9537905454636 326.6646350622177V0H478.9387642145157V301.7465064525604Q478.9387642145157 327.30575704574585 471.9526758790016 346.68832540512085Q464.96658754348755 366.07089376449585 451.70356380939484 378.751271545887Q438.4405400753021 391.43164932727814 418.94538074731827 397.8146216869354Q399.4502214193344 404.1975940465927 374.0164678096771 404.1975940465927Q337.4444463253021 404.1975940465927 307.826273560524 388.8119361400604Q278.20810079574585 373.42627823352814 260.67509096860886 346.5354177951813Q243.14208114147186 319.6445573568344 243.14208114147186 284.36803901195526V0Z"/>
+<path transform="translate(2912.0 0)" d="M306.06031143665314 -12Q244.34183168411255 -12 202.26721328496933 3.132269024848938Q160.1925948858261 18.264538049697876 138.8429855108261 53.489151775836945Q117.49337613582611 88.71376550197601 117.49337613582611 148.60339057445526V403.74609375H23.895374059677124V527.4156116247177H123.93063199520111L159.70668816566467 683.7814359664917H296.3805570602417V527.4156116247177H431.14508044719696V403.74609375H296.3805570602417V184.14084577560425Q296.3805570602417 148.8603776693344 310.941212952137 130.26494777202606Q325.5018688440323 111.66951787471771 369.2837088108063 111.66951787471771H431.14508044719696V5.806884765625Q417.3520942926407 0.9347301721572876 394.2906420826912 -3.2730756402015686Q371.2291898727417 -7.480881452560425 347.42034763097763 -9.740440726280212Q323.61150538921356 -12 306.06031143665314 -12Z"/>
+<path transform="translate(3347.0 0)" d="M112.21286451816559 0V403.74609375H10.7392578125V527.4156116247177H112.21286451816559V559.9272112846375Q112.21286451816559 619.9030092954636 135.19940334558487 658.796248614788Q158.18594217300415 697.6894879341125 201.3501688838005 716.6325101852417Q244.51439559459686 735.5755324363708 304.0053536891937 735.5755324363708Q323.7790266275406 735.5755324363708 347.21822690963745 733.3038039207458Q370.6574271917343 731.0320754051208 393.21617645025253 727.2603468894958Q415.77492570877075 723.4886183738708 432.8989404439926 718.2877662181854V611.9060145616531H372.1132959127426Q326.4646985530853 611.9060145616531 308.78237199783325 599.7607843279839Q291.1000454425812 587.6155540943146 291.1000454425812 558.6139875650406V527.4156116247177H432.8989404439926V403.74609375H291.1000454425812V0Z"/>
+<path transform="translate(3758.0 0)" d="M64.25490021705627 0V527.4156116247177H209.79824686050415L222.21116423606873 440.41136825084686H230.322408080101Q244.62911558151245 471.07111179828644 267.06966733932495 493.512400329113Q289.51021909713745 515.9536888599396 319.04306906461716 527.9563787579536Q348.57591903209686 539.9590686559677 382.63770401477814 539.9590686559677Q402.25147354602814 539.9590686559677 419.4030892252922 536.9712335467339Q436.5547049045563 533.9833984375 450.1595923900604 528.6087268590927V383.7680490016937H372.7082780599594Q338.5978161096573 383.7680490016937 314.06692361831665 373.2332880496979Q289.536031126976 362.698527097702 273.9151437282562 343.87022483348846Q258.29425632953644 325.0419225692749 250.71816873550415 300.17094653844833Q243.14208114147186 275.29997050762177 243.14208114147186 246.03541505336761V0Z"/>
+<path transform="translate(4183.0 0)" d="M369.9728248119354 -12Q269.4343435764313 -12 195.5928373336792 18.53650337457657Q121.75133109092712 49.07300674915314 81.36831659078598 110.31344747543335Q40.985302090644836 171.55388820171356 40.985302090644836 263.8721545934677Q40.985302090644836 356.7991478443146 81.36831659078598 417.9308617115021Q121.75133109092712 479.0625755786896 195.5928373336792 509.23909360170364Q269.4343435764313 539.4156116247177 369.9728248119354 539.4156116247177Q470.63915145397186 539.4156116247177 544.4928269386292 509.23909360170364Q618.3465024232864 479.0625755786896 658.7295169234276 417.9308617115021Q699.1125314235687 356.7991478443146 699.1125314235687 263.8721545934677Q699.1125314235687 171.55388820171356 658.7295169234276 110.31344747543335Q618.3465024232864 49.07300674915314 544.4928269386292 18.53650337457657Q470.63915145397186 -12 369.9728248119354 -12ZM369.9728248119354 111.66951787471771Q419.01528787612915 111.66951787471771 451.38085502386093 128.82168871164322Q483.7464221715927 145.97385954856873 499.53899562358856 177.3927075266838Q515.3315690755844 208.8115555047989 515.3315690755844 251.36419689655304V276.2279284000397Q515.3315690755844 319.10926735401154 499.53899562358856 350.4398584961891Q483.7464221715927 381.7704496383667 451.38085502386093 398.75827169418335Q419.01528787612915 415.74609375 369.9728248119354 415.74609375Q320.9303617477417 415.74609375 288.6408865451813 398.75827169418335Q256.35141134262085 381.7704496383667 240.558837890625 350.4398584961891Q224.76626443862915 319.10926735401154 224.76626443862915 276.2279284000397V251.36419689655304Q224.76626443862915 208.8115555047989 240.558837890625 177.3927075266838Q256.35141134262085 145.97385954856873 288.6408865451813 128.82168871164322Q320.9303617477417 111.66951787471771 369.9728248119354 111.66951787471771Z"/>
+<path transform="translate(4889.0 0)" d="M64.25490021705627 0V527.4156116247177H209.79824686050415L222.21116423606873 443.05945122241974H230.65110564231873Q256.2447887659073 477.3592064380646 290.08142960071564 498.48783510923386Q323.918070435524 519.6164637804031 362.99823719263077 529.5160377025604Q402.07840394973755 539.4156116247177 442.0590994358063 539.4156116247177Q513.273152589798 539.4156116247177 561.1710175275803 516.0005638599396Q609.0688824653625 492.58551609516144 633.511336505413 445.37189304828644Q657.9537905454636 398.15827000141144 657.9537905454636 326.6646350622177V0H478.9387642145157V301.7465064525604Q478.9387642145157 327.30575704574585 471.9526758790016 346.68832540512085Q464.96658754348755 366.07089376449585 451.70356380939484 378.751271545887Q438.4405400753021 391.43164932727814 418.94538074731827 397.8146216869354Q399.4502214193344 404.1975940465927 374.0164678096771 404.1975940465927Q337.4444463253021 404.1975940465927 307.826273560524 388.8119361400604Q278.20810079574585 373.42627823352814 260.67509096860886 346.5354177951813Q243.14208114147186 319.6445573568344 243.14208114147186 284.36803901195526V0Z"/>
+<path transform="translate(5575.0 0)" d="M306.06031143665314 -12Q244.34183168411255 -12 202.26721328496933 3.132269024848938Q160.1925948858261 18.264538049697876 138.8429855108261 53.489151775836945Q117.49337613582611 88.71376550197601 117.49337613582611 148.60339057445526V403.74609375H23.895374059677124V527.4156116247177H123.93063199520111L159.70668816566467 683.7814359664917H296.3805570602417V527.4156116247177H431.14508044719696V403.74609375H296.3805570602417V184.14084577560425Q296.3805570602417 148.8603776693344 310.941212952137 130.26494777202606Q325.5018688440323 111.66951787471771 369.2837088108063 111.66951787471771H431.14508044719696V5.806884765625Q417.3520942926407 0.9347301721572876 394.2906420826912 -3.2730756402015686Q371.2291898727417 -7.480881452560425 347.42034763097763 -9.740440726280212Q323.61150538921356 -12 306.06031143665314 -12Z"/><g transform="translate(4183.0 0)"><path d="M 370.0 403.6 L 245.1 319.7 L 333.7 319.7 L 333.7 123.8 L 406.4 123.8 L 406.4 319.7 L 495.0 319.7 Z"/></g></g><g transform="translate(66.2 1225) scale(0.195 -0.195)"><path transform="translate(0.0 0)" d="M81.3509521484375 0V686H442.10772705078125Q515.1890258789062 686 563.2432250976562 660.2432250976562Q611.2974243164062 634.4864501953125 635.3245239257812 587.94580078125Q659.3516235351562 541.4051513671875 659.3516235351562 479.3238525390625Q659.3516235351562 410.3780517578125 628.135498046875 359.12127685546875Q596.9193725585938 307.864501953125 540.135498046875 283.810302734375L683.3516235351562 0H561.2960815429688L431.40447998046875 264.72900390625H192.8658447265625V0ZM192.8658447265625 358.89227294921875H432.59417724609375Q486.72900390625 358.89227294921875 516.5260925292969 391.05419921875Q546.3231811523438 423.21612548828125 546.3231811523438 479.56707763671875Q546.3231811523438 514.9993286132812 533.3502807617188 539.4451293945312Q520.3773803710938 563.8909301757812 495.1883544921875 577.1070556640625Q469.99932861328125 590.3231811523438 432.59417724609375 590.3231811523438H192.8658447265625Z"/>
+<path transform="translate(1625.4 0)" d="M81.3509521484375 0V686H612.7025756835938V590.3231811523438H192.8658447265625V398.7032470703125H568.7025756835938V303.02642822265625H192.8658447265625V95.67681884765625H618.7025756835938V0Z"/>
+<path transform="translate(3202.8 0)" d="M81.3509521484375 0V686H444.89227294921875Q501.5948486328125 686 544.8516235351562 665.3648376464844Q588.1083984375 644.7296752929688 612.3787231445312 607.0945129394531Q636.6490478515625 569.4593505859375 636.6490478515625 518.4593505859375Q636.6490478515625 479.4593505859375 622.135498046875 447.0945129394531Q607.6219482421875 414.72967529296875 582.4867858886719 392.8648376464844Q557.3516235351562 371 525.1083984375 360V356Q562.135498046875 348 591.7706604003906 326.3512878417969Q621.4058227539062 304.70257568359375 638.5274353027344 270.20257568359375Q655.6490478515625 235.70257568359375 655.6490478515625 188.027099609375Q655.6490478515625 122.5677490234375 627.5138854980469 80.93258666992188Q599.3787231445312 39.29742431640625 552.0003356933594 19.648712158203125Q504.6219482421875 0 444.89227294921875 0ZM192.8658447265625 95.67681884765625H435.918701171875Q482.2696533203125 95.67681884765625 511.6883544921875 120.24423217773438Q541.1070556640625 144.8116455078125 541.1070556640625 200.1083984375Q541.1070556640625 233.4593505859375 528.647705078125 256.8916015625Q516.1883544921875 280.3238525390625 491.256103515625 292.4319152832031Q466.3238525390625 304.53997802734375 428.4051513671875 304.53997802734375H192.8658447265625ZM192.8658447265625 398.7032470703125H418.918701171875Q451.10772705078125 398.7032470703125 474.1615905761719 411.0409851074219Q497.2154541015625 423.37872314453125 509.6612548828125 445.1758117675781Q522.1070556640625 466.972900390625 522.1070556640625 494.3509521484375Q522.1070556640625 543.4586791992188 495.6883544921875 566.8909301757812Q469.2696533203125 590.3231811523438 426.4051513671875 590.3231811523438H192.8658447265625Z"/>
+<path transform="translate(4808.3 0)" d="M81.3509521484375 0V686H442.10772705078125Q515.1890258789062 686 563.2432250976562 660.2432250976562Q611.2974243164062 634.4864501953125 635.3245239257812 587.94580078125Q659.3516235351562 541.4051513671875 659.3516235351562 479.3238525390625Q659.3516235351562 410.3780517578125 628.135498046875 359.12127685546875Q596.9193725585938 307.864501953125 540.135498046875 283.810302734375L683.3516235351562 0H561.2960815429688L431.40447998046875 264.72900390625H192.8658447265625V0ZM192.8658447265625 358.89227294921875H432.59417724609375Q486.72900390625 358.89227294921875 516.5260925292969 391.05419921875Q546.3231811523438 423.21612548828125 546.3231811523438 479.56707763671875Q546.3231811523438 514.9993286132812 533.3502807617188 539.4451293945312Q520.3773803710938 563.8909301757812 495.1883544921875 577.1070556640625Q469.99932861328125 590.3231811523438 432.59417724609375 590.3231811523438H192.8658447265625Z"/>
+<path transform="translate(6433.7 0)" d="M6.21612548828125 0 275.4051513671875 686H418.48779296875L688.43359375 0H567.6212768554688L506.5406494140625 158.647705078125H181.8387451171875L121.0013427734375 0ZM217.73101806640625 253.5677490234375H469.8916015625L393.35162353515625 454.89093017578125Q389.5948486328125 464.40447998046875 383.9732360839844 480.0260925292969Q378.35162353515625 495.647705078125 371.86517333984375 514.7557678222656Q365.37872314453125 533.8638305664062 358.7706604003906 553.593505859375Q352.16259765625 573.3231811523438 346.6761474609375 589.2960815429688H340.94647216796875Q334.7032470703125 569.539306640625 325.8384094238281 543.539306640625Q316.97357177734375 517.539306640625 308.48712158203125 493.6880187988281Q300.00067138671875 469.83673095703125 294.27099609375 454.89093017578125Z"/>
+<path transform="translate(8032.1 0)" d="M81.3509521484375 0V686H188.56842041015625L502.48577880859375 256.1910400390625Q507.72900390625 249.94781494140625 515.2154541015625 238.83975219726562Q522.701904296875 227.731689453125 529.6748046875 216.7587890625Q536.647705078125 205.785888671875 540.1070556640625 198.56976318359375H544.8638305664062Q544.8638305664062 213.54266357421875 544.8638305664062 227.7587890625Q544.8638305664062 241.97491455078125 544.8638305664062 256.1910400390625V686H652.5948486328125V0H549.0528564453125L232.189697265625 435.48443603515625Q224.43292236328125 446.7547607421875 212.35195922851562 465.5924987792969Q200.27099609375 484.43023681640625 193.8387451171875 494.34893798828125H189.08197021484375Q189.08197021484375 479.88958740234375 189.08197021484375 465.2950744628906Q189.08197021484375 450.7005615234375 189.08197021484375 435.48443603515625V0Z"/>
+<path transform="translate(9669.5 0)" d="M81.3509521484375 0V686H346.37872314453125Q452.32452392578125 686 527.2974243164062 649.4864501953125Q602.2703247070312 612.972900390625 642.5135498046875 537.472900390625Q682.7567749023438 461.972900390625 682.7567749023438 343Q682.7567749023438 225.27032470703125 642.5135498046875 149.27032470703125Q602.2703247070312 73.27032470703125 527.2974243164062 36.635162353515625Q452.32452392578125 0 346.37872314453125 0ZM192.8658447265625 95.67681884765625H345.40582275390625Q398.027099609375 95.67681884765625 439.2835388183594 109.79843139648438Q480.53997802734375 123.9200439453125 509.0667419433594 152.75778198242188Q537.593505859375 181.59552001953125 552.539306640625 226.2574462890625Q567.485107421875 270.91937255859375 567.485107421875 331.75677490234375V352.5135498046875Q567.485107421875 414.83740234375 552.539306640625 459.6209411621094Q537.593505859375 504.40447998046875 509.1883544921875 533.2422180175781Q480.783203125 562.0799560546875 439.5267639160156 576.2015686035156Q398.27032470703125 590.3231811523438 345.40582275390625 590.3231811523438H192.8658447265625Z"/>
+<path transform="translate(11304.0 0)" d="M87.70257568359375 0V115.59552001953125H199.37939453125V0Z"/>
+<path transform="translate(13603.8 0)" d="M81.3509521484375 0V686H444.89227294921875Q501.5948486328125 686 544.8516235351562 665.3648376464844Q588.1083984375 644.7296752929688 612.3787231445312 607.0945129394531Q636.6490478515625 569.4593505859375 636.6490478515625 518.4593505859375Q636.6490478515625 479.4593505859375 622.135498046875 447.0945129394531Q607.6219482421875 414.72967529296875 582.4867858886719 392.8648376464844Q557.3516235351562 371 525.1083984375 360V356Q562.135498046875 348 591.7706604003906 326.3512878417969Q621.4058227539062 304.70257568359375 638.5274353027344 270.20257568359375Q655.6490478515625 235.70257568359375 655.6490478515625 188.027099609375Q655.6490478515625 122.5677490234375 627.5138854980469 80.93258666992188Q599.3787231445312 39.29742431640625 552.0003356933594 19.648712158203125Q504.6219482421875 0 444.89227294921875 0ZM192.8658447265625 95.67681884765625H435.918701171875Q482.2696533203125 95.67681884765625 511.6883544921875 120.24423217773438Q541.1070556640625 144.8116455078125 541.1070556640625 200.1083984375Q541.1070556640625 233.4593505859375 528.647705078125 256.8916015625Q516.1883544921875 280.3238525390625 491.256103515625 292.4319152832031Q466.3238525390625 304.53997802734375 428.4051513671875 304.53997802734375H192.8658447265625ZM192.8658447265625 398.7032470703125H418.918701171875Q451.10772705078125 398.7032470703125 474.1615905761719 411.0409851074219Q497.2154541015625 423.37872314453125 509.6612548828125 445.1758117675781Q522.1070556640625 466.972900390625 522.1070556640625 494.3509521484375Q522.1070556640625 543.4586791992188 495.6883544921875 566.8909301757812Q469.2696533203125 590.3231811523438 426.4051513671875 590.3231811523438H192.8658447265625Z"/>
+<path transform="translate(15209.2 0)" d="M362.4593505859375 -12Q273.918701171875 -12 210.13482666015625 16.5135498046875Q146.3509521484375 45.027099609375 112.33740234375 105.0135498046875Q78.3238525390625 165 78.3238525390625 256.918701171875V686H190.08197021484375V253.6219482421875Q190.08197021484375 169.02777099609375 235.2303466796875 126.09552001953125Q280.37872314453125 83.16326904296875 362.4593505859375 83.16326904296875Q445.2696533203125 83.16326904296875 491.7828674316406 126.09552001953125Q538.2960815429688 169.02777099609375 538.2960815429688 253.6219482421875V686H649.5677490234375V256.918701171875Q649.5677490234375 165 615.05419921875 105.0135498046875Q580.5406494140625 45.027099609375 516.3919372558594 16.5135498046875Q452.24322509765625 -12 362.4593505859375 -12Z"/>
+<path transform="translate(16840.7 0)" d="M81.3509521484375 0V686H192.8658447265625V0Z"/>
+<path transform="translate(18018.1 0)" d="M81.3509521484375 0V686H192.8658447265625V97.19036865234375H535.406494140625V0Z"/>
+<path transform="translate(19473.5 0)" d="M81.3509521484375 0V686H346.37872314453125Q452.32452392578125 686 527.2974243164062 649.4864501953125Q602.2703247070312 612.972900390625 642.5135498046875 537.472900390625Q682.7567749023438 461.972900390625 682.7567749023438 343Q682.7567749023438 225.27032470703125 642.5135498046875 149.27032470703125Q602.2703247070312 73.27032470703125 527.2974243164062 36.635162353515625Q452.32452392578125 0 346.37872314453125 0ZM192.8658447265625 95.67681884765625H345.40582275390625Q398.027099609375 95.67681884765625 439.2835388183594 109.79843139648438Q480.53997802734375 123.9200439453125 509.0667419433594 152.75778198242188Q537.593505859375 181.59552001953125 552.539306640625 226.2574462890625Q567.485107421875 270.91937255859375 567.485107421875 331.75677490234375V352.5135498046875Q567.485107421875 414.83740234375 552.539306640625 459.6209411621094Q537.593505859375 504.40447998046875 509.1883544921875 533.2422180175781Q480.783203125 562.0799560546875 439.5267639160156 576.2015686035156Q398.27032470703125 590.3231811523438 345.40582275390625 590.3231811523438H192.8658447265625Z"/>
+<path transform="translate(21107.9 0)" d="M87.70257568359375 0V115.59552001953125H199.37939453125V0Z"/>
+<path transform="translate(23407.8 0)" d="M391.64837646484375 -12Q229 -12 141.72967529296875 74.22967529296875Q54.4593505859375 160.4593505859375 54.4593505859375 343Q54.4593505859375 462.5406494140625 95.22967529296875 541.1622619628906Q136 619.7838745117188 214.13516235351562 658.8919372558594Q292.27032470703125 698 403.72967529296875 698Q471.4322509765625 698 528.94580078125 682.8783874511719Q586.4593505859375 667.7567749023438 629.5 637.2567749023438Q672.5406494140625 606.7567749023438 696.2029113769531 560.7567749023438Q719.8651733398438 514.7567749023438 719.8651733398438 452H605.56640625Q605.56640625 490.83740234375 590.093505859375 519.3777160644531Q574.62060546875 547.9180297851562 547.1748046875 566.7557678222656Q519.72900390625 585.593505859375 483.56707763671875 594.3367309570312Q447.4051513671875 603.0799560546875 406.27032470703125 603.0799560546875Q348.83807373046875 603.0799560546875 304.5409851074219 588.2151184082031Q260.243896484375 573.3502807617188 230.19003295898438 542.3909301757812Q200.13616943359375 511.43157958984375 184.93359375 464.3912658691406Q169.73101806640625 417.3509521484375 169.73101806640625 353V332Q169.73101806640625 244.43292236328125 195.52810668945312 189.27099609375Q221.3251953125 134.10906982421875 271.8384094238281 108.51455688476562Q322.35162353515625 82.9200439453125 395.24322509765625 82.9200439453125Q463.72900390625 82.9200439453125 511.0260925292969 102.8658447265625Q558.3231811523438 122.8116455078125 583.3367309570312 162.41937255859375Q608.3502807617188 202.027099609375 608.3502807617188 260.783203125V270.701904296875H377.18902587890625V364.1083984375H720.1083984375V0H638.5399780273438L628.0264282226562 81.59417724609375Q599.72900390625 49.16192626953125 564.0264282226562 28.44580078125Q528.3238525390625 7.72967529296875 485.4996643066406 -2.135162353515625Q442.67547607421875 -12 391.64837646484375 -12Z"/>
+<path transform="translate(25106.2 0)" d="M81.3509521484375 0V686H442.10772705078125Q515.1890258789062 686 563.2432250976562 660.2432250976562Q611.2974243164062 634.4864501953125 635.3245239257812 587.94580078125Q659.3516235351562 541.4051513671875 659.3516235351562 479.3238525390625Q659.3516235351562 410.3780517578125 628.135498046875 359.12127685546875Q596.9193725585938 307.864501953125 540.135498046875 283.810302734375L683.3516235351562 0H561.2960815429688L431.40447998046875 264.72900390625H192.8658447265625V0ZM192.8658447265625 358.89227294921875H432.59417724609375Q486.72900390625 358.89227294921875 516.5260925292969 391.05419921875Q546.3231811523438 423.21612548828125 546.3231811523438 479.56707763671875Q546.3231811523438 514.9993286132812 533.3502807617188 539.4451293945312Q520.3773803710938 563.8909301757812 495.1883544921875 577.1070556640625Q469.99932861328125 590.3231811523438 432.59417724609375 590.3231811523438H192.8658447265625Z"/>
+<path transform="translate(26731.6 0)" d="M392.4593505859375 -12Q285.70257568359375 -12 208.31063842773438 26.864837646484375Q130.918701171875 65.72967529296875 89.66192626953125 144.72967529296875Q48.4051513671875 223.72967529296875 48.4051513671875 343Q48.4051513671875 463.27032470703125 89.66192626953125 541.7703247070312Q130.918701171875 620.2703247070312 208.31063842773438 659.1351623535156Q285.70257568359375 698 392.4593505859375 698Q500.21612548828125 698 577.2296752929688 659.1351623535156Q654.2432250976562 620.2703247070312 695.5 541.7703247070312Q736.7567749023438 463.27032470703125 736.7567749023438 343Q736.7567749023438 223.72967529296875 695.5 144.72967529296875Q654.2432250976562 65.72967529296875 577.2296752929688 26.864837646484375Q500.21612548828125 -12 392.4593505859375 -12ZM392.4593505859375 82.9200439453125Q446.8916015625 82.9200439453125 489.4319152832031 98.16326904296875Q531.9722290039062 113.406494140625 561.5260925292969 144.3658447265625Q591.0799560546875 175.3251953125 606.6609191894531 221.98712158203125Q622.2418823242188 268.6490478515625 622.2418823242188 331.4864501953125V353Q622.2418823242188 416.59417724609375 606.6609191894531 463.6344909667969Q591.0799560546875 510.6748046875 561.5260925292969 541.6341552734375Q531.9722290039062 572.593505859375 489.4319152832031 587.8367309570312Q446.8916015625 603.0799560546875 392.4593505859375 603.0799560546875Q338.027099609375 603.0799560546875 295.6083984375 587.8367309570312Q253.189697265625 572.593505859375 223.63583374023438 541.6341552734375Q194.08197021484375 510.6748046875 178.87939453125 463.6344909667969Q163.67681884765625 416.59417724609375 163.67681884765625 353V331.4864501953125Q163.67681884765625 268.6490478515625 178.87939453125 221.98712158203125Q194.08197021484375 175.3251953125 223.63583374023438 144.3658447265625Q253.189697265625 113.406494140625 295.6083984375 98.16326904296875Q338.027099609375 82.9200439453125 392.4593505859375 82.9200439453125Z"/>
+<path transform="translate(28420.1 0)" d="M199.64837646484375 0 11.21612548828125 686H129.75811767578125L246.59552001953125 233.56842041015625Q249.8387451171875 222.59552001953125 253.69003295898438 203.63616943359375Q257.54132080078125 184.67681884765625 261.51422119140625 164.09585571289062Q265.48712158203125 143.514892578125 268.216796875 127.29876708984375H274.189697265625Q276.6761474609375 140.0284423828125 278.7842102050781 155.12295532226562Q280.89227294921875 170.21746826171875 283.7571105957031 185.31198120117188Q286.6219482421875 200.406494140625 289.1083984375 213.12261962890625Q291.5948486328125 225.8387451171875 293.081298828125 233.56842041015625L401.4322509765625 686H545.3258666992188L653.9200439453125 233.56842041015625Q657.1632690429688 222.59552001953125 660.8929443359375 203.63616943359375Q664.6226196289062 184.67681884765625 668.4739074707031 164.09585571289062Q672.3251953125 143.514892578125 674.8116455078125 127.29876708984375H680.7845458984375Q683.27099609375 139.27166748046875 686.2574462890625 153.98779296875Q689.243896484375 168.70391845703125 692.3519592285156 183.4200439453125Q695.4600219726562 198.13616943359375 698.7032470703125 211.23068237304688Q701.9464721679688 224.3251953125 704.189697265625 233.56842041015625L821.2703247070312 686H926.7310180664062L737.5419921875 0H606.7838745117188L491.89227294921875 458.2696533203125Q488.6490478515625 472.756103515625 484.7842102050781 492.47222900390625Q480.91937255859375 512.1883544921875 477.689697265625 532.3909301757812Q474.46002197265625 552.593505859375 471.97357177734375 568.0528564453125H467.00067138671875Q465.27099609375 552.0799560546875 462.04132080078125 531.12060546875Q458.8116455078125 510.1612548828125 455.08197021484375 490.701904296875Q451.352294921875 471.2425537109375 448.10906982421875 458.2696533203125L334.9471435546875 0Z"/>
+<path transform="translate(30261.5 0)" d="M87.70257568359375 0V115.59552001953125H199.37939453125V0Z"/></g></symbol><symbol id="bfw" viewBox="0 24 5925 940" fill="currentColor"><g transform="translate(-82.0 760) scale(1 -1)"><path transform="translate(0.0 0)" d="M81.81573474407196 0V687.4156116247177H606.2847898006439Q661.4730121787165 687.4156116247177 706.139625772624 665.9795343279839Q750.8062393665314 644.54345703125 776.9366061091423 606.54345703125Q803.0669728517532 568.54345703125 803.0669728517532 518.0869140625Q803.0669728517532 473.10888671875 787.132242679596 441.10888671875Q771.1975125074387 409.10888671875 744.4641006093427 389.2392578125Q717.7306887112468 369.36962890625 685.0673273801804 359.45654296875V355.45654296875Q723.194158571107 347.45654296875 753.8806499923978 326.5869140625Q784.5671414136887 305.71728515625 802.501871585846 270.945556640625Q820.4366017580032 236.173828125 820.4366017580032 185.7392578125Q820.4366017580032 126.63037109375 792.1648775935173 85.173828125Q763.8931534290314 43.71728515625 716.1867034435272 21.858642578125Q668.4802534580231 0 609.5455319881439 0ZM278.6747726202011 142.8885555267334H547.032702922821Q578.8101485663271 142.8885555267334 598.8786750283647 160.7558987682516Q618.9472014904022 178.6232420097698 618.9472014904022 215.5808659250086Q618.9472014904022 235.14680409431458 610.2698528902692 250.6778625524961Q601.5925042901362 266.2089210106776 584.8191345505174 274.79813089737524Q568.0457648108987 283.3873407840729 544.0377542972565 283.3873407840729H278.6747726202011ZM278.6747726202011 415.25188624858856H530.2474623918533Q553.2672459189321 415.25188624858856 569.0336617978526 423.856740295887Q584.8000776767731 432.4615943431854 593.3531739115715 448.02764073160824Q601.9062701463699 463.5936871200311 601.9062701463699 484.63922703266144Q601.9062701463699 514.7109869718552 582.398275799611 532.0645781755447Q562.8902814528522 549.4181693792343 533.1145656108856 549.4181693792343H278.6747726202011Z"/>
+<path transform="translate(833.0 0)" d="M64.25490021705627 0V527.4156116247177H209.79824686050415L222.21116423606873 440.41136825084686H230.322408080101Q244.62911558151245 471.07111179828644 267.06966733932495 493.512400329113Q289.51021909713745 515.9536888599396 319.04306906461716 527.9563787579536Q348.57591903209686 539.9590686559677 382.63770401477814 539.9590686559677Q402.25147354602814 539.9590686559677 419.4030892252922 536.9712335467339Q436.5547049045563 533.9833984375 450.1595923900604 528.6087268590927V383.7680490016937H372.7082780599594Q338.5978161096573 383.7680490016937 314.06692361831665 373.2332880496979Q289.536031126976 362.698527097702 273.9151437282562 343.87022483348846Q258.29425632953644 325.0419225692749 250.71816873550415 300.17094653844833Q243.14208114147186 275.29997050762177 243.14208114147186 246.03541505336761V0Z"/>
+<path transform="translate(1258.0 0)" d="M64.25490021705627 599.7334158420563V724.4156116247177H243.14208114147186V599.7334158420563ZM64.25490021705627 0V527.4156116247177H243.14208114147186V0Z"/>
+<path transform="translate(1531.0 0)" d="M155.2953895330429 -202.4759578704834Q116.52753245830536 -202.4759578704834 83.0053316950798 -187.8942550420761Q49.48313093185425 -173.31255221366882 29.187463581562042 -144.95256251096725Q8.891796231269836 -116.59257280826569 8.891796231269836 -76.52809357643127Q8.891796231269836 -35.348103761672974 36.223010778427124 -4.98867791891098Q63.55422532558441 25.370747923851013 105.45460724830627 40.17763268947601Q75.3688383102417 55.818434953689575 60.55365711450577 80.32443380355835Q45.738475918769836 104.83043265342712 45.738475918769836 133.81652534008026Q45.738475918769836 176.2997465133667 75.56313210725784 206.15609151124954Q105.38778829574585 236.01243650913239 152.89690577983856 243.46898818016052Q113.49790441989899 264.96647119522095 88.56508523225784 298.1408544778824Q63.6322660446167 331.3152377605438 63.6322660446167 370.791849732399Q63.6322660446167 434.1959111690521 100.8783597946167 471.12425154447556Q138.1244535446167 508.052591919899 205.5420560836792 523.7341017723083Q272.9596586227417 539.4156116247177 362.9345964193344 539.4156116247177Q395.4989070892334 539.4156116247177 424.068806886673 536.7429664134979Q452.63870668411255 534.0703212022781 477.5915788412094 528.662455201149Q525.2772186994553 552.5944998264313 545.9292223453522 579.0809834599495Q566.5812259912491 605.5674670934677 568.3525592088699 622.5805838108063H731.1373000144958Q730.8086024522781 582.9042299985886 714.5739455223083 555.3607729673386Q698.3392885923386 527.8173159360886 668.4147745370865 510.4246956706047Q638.4902604818344 493.03207540512085 596.4940911531448 483.61646378040314Q627.7216215133667 462.27385890483856 644.8149210214615 433.27077370882034Q661.9082205295563 404.2676885128021 661.9082205295563 368.98766791820526Q661.9082205295563 309.5287765264511 629.5924289822578 272.0691483616829Q597.2766374349594 234.60952019691467 539.3839880824089 217.07632142305374Q481.4913387298584 199.5431226491928 403.80035388469696 199.5431226491928H286.498250246048Q255.80372834205627 199.5431226491928 241.19421821832657 190.59353333711624Q226.58470809459686 181.64394402503967 226.58470809459686 166.28822243213654Q226.58470809459686 151.31603705883026 239.97945874929428 141.3664477467537Q253.3742094039917 131.41685843467712 287.6303564310074 131.41685843467712H562.8451452255249Q645.367085814476 131.41685843467712 686.9700375795364 86.2179085612297Q728.5729893445969 41.01895868778229 728.5729893445969 -28.8903226852417Q728.5729893445969 -81.51183784008026 700.1753177046776 -120.45044082403183Q671.7776460647583 -159.3890438079834 624.8295637369156 -180.9325008392334Q577.8814814090729 -202.4759578704834 521.237203001976 -202.4759578704834ZM242.76234078407288 -99.01816809177399H491.940388917923Q507.78046810626984 -99.01816809177399 520.5931279659271 -92.78989660739899Q533.4057878255844 -86.56162512302399 540.9262534976006 -74.50465607643127Q548.4467191696167 -62.44768702983856 548.4467191696167 -46.79029190540314Q548.4467191696167 -22.420662999153137 532.161478638649 -9.091965436935425Q515.8762381076813 4.236732125282288 492.9631521701813 4.236732125282288H244.40582859516144Q220.5066499710083 4.236732125282288 204.39271187782288 -8.84765625Q188.27877378463745 -21.932044625282288 188.27877378463745 -45.918137311935425Q188.27877378463745 -69.90422999858856 203.83574283123016 -84.46119904518127Q219.39271187782288 -99.01816809177399 242.76234078407288 -99.01816809177399ZM363.14934718608856 299.8487198352814Q420.5004127025604 299.8487198352814 452.0407598018646 316.2154350876808Q483.5811069011688 332.58215034008026 483.5811069011688 369.37894105911255Q483.5811069011688 406.17573177814484 452.0407598018646 422.642873108387Q420.5004127025604 439.11001443862915 363.14934718608856 439.11001443862915Q306.79829037189484 439.11001443862915 274.9101228117943 422.642873108387Q243.02195525169373 406.17573177814484 243.02195525169373 369.37894105911255Q243.02195525169373 344.57441341876984 257.1936369538307 329.03426533937454Q271.3653186559677 313.49411725997925 298.2430550456047 306.6714185476303Q325.1207914352417 299.8487198352814 363.14934718608856 299.8487198352814Z"/>
+<path transform="translate(2226.0 0)" d="M64.25490021705627 0V724.4156116247177H243.14208114147186V463.5121896266937H250.53335428237915Q275.06175887584686 490.5651099681854 305.98413956165314 507.15857803821564Q336.9065202474594 523.7520461082458 371.8198168873787 531.5838288664818Q406.733113527298 539.4156116247177 442.0590994358063 539.4156116247177Q513.273152589798 539.4156116247177 561.1710175275803 516.0005638599396Q609.0688824653625 492.58551609516144 633.511336505413 445.37189304828644Q657.9537905454636 398.15827000141144 657.9537905454636 326.6646350622177V0H478.9387642145157V301.7465064525604Q478.9387642145157 327.30575704574585 471.9526758790016 346.68832540512085Q464.96658754348755 366.07089376449585 451.70356380939484 378.751271545887Q438.4405400753021 391.43164932727814 418.94538074731827 397.8146216869354Q399.4502214193344 404.1975940465927 374.0164678096771 404.1975940465927Q337.4444463253021 404.1975940465927 307.826273560524 388.8119361400604Q278.20810079574585 373.42627823352814 260.67509096860886 346.5354177951813Q243.14208114147186 319.6445573568344 243.14208114147186 284.36803901195526V0Z"/>
+<path transform="translate(2912.0 0)" d="M306.06031143665314 -12Q244.34183168411255 -12 202.26721328496933 3.132269024848938Q160.1925948858261 18.264538049697876 138.8429855108261 53.489151775836945Q117.49337613582611 88.71376550197601 117.49337613582611 148.60339057445526V403.74609375H23.895374059677124V527.4156116247177H123.93063199520111L159.70668816566467 683.7814359664917H296.3805570602417V527.4156116247177H431.14508044719696V403.74609375H296.3805570602417V184.14084577560425Q296.3805570602417 148.8603776693344 310.941212952137 130.26494777202606Q325.5018688440323 111.66951787471771 369.2837088108063 111.66951787471771H431.14508044719696V5.806884765625Q417.3520942926407 0.9347301721572876 394.2906420826912 -3.2730756402015686Q371.2291898727417 -7.480881452560425 347.42034763097763 -9.740440726280212Q323.61150538921356 -12 306.06031143665314 -12Z"/>
+<path transform="translate(3347.0 0)" d="M112.21286451816559 0V403.74609375H10.7392578125V527.4156116247177H112.21286451816559V559.9272112846375Q112.21286451816559 619.9030092954636 135.19940334558487 658.796248614788Q158.18594217300415 697.6894879341125 201.3501688838005 716.6325101852417Q244.51439559459686 735.5755324363708 304.0053536891937 735.5755324363708Q323.7790266275406 735.5755324363708 347.21822690963745 733.3038039207458Q370.6574271917343 731.0320754051208 393.21617645025253 727.2603468894958Q415.77492570877075 723.4886183738708 432.8989404439926 718.2877662181854V611.9060145616531H372.1132959127426Q326.4646985530853 611.9060145616531 308.78237199783325 599.7607843279839Q291.1000454425812 587.6155540943146 291.1000454425812 558.6139875650406V527.4156116247177H432.8989404439926V403.74609375H291.1000454425812V0Z"/>
+<path transform="translate(3758.0 0)" d="M64.25490021705627 0V527.4156116247177H209.79824686050415L222.21116423606873 440.41136825084686H230.322408080101Q244.62911558151245 471.07111179828644 267.06966733932495 493.512400329113Q289.51021909713745 515.9536888599396 319.04306906461716 527.9563787579536Q348.57591903209686 539.9590686559677 382.63770401477814 539.9590686559677Q402.25147354602814 539.9590686559677 419.4030892252922 536.9712335467339Q436.5547049045563 533.9833984375 450.1595923900604 528.6087268590927V383.7680490016937H372.7082780599594Q338.5978161096573 383.7680490016937 314.06692361831665 373.2332880496979Q289.536031126976 362.698527097702 273.9151437282562 343.87022483348846Q258.29425632953644 325.0419225692749 250.71816873550415 300.17094653844833Q243.14208114147186 275.29997050762177 243.14208114147186 246.03541505336761V0Z"/>
+<path transform="translate(4183.0 0)" d="M369.9728248119354 -12Q269.4343435764313 -12 195.5928373336792 18.53650337457657Q121.75133109092712 49.07300674915314 81.36831659078598 110.31344747543335Q40.985302090644836 171.55388820171356 40.985302090644836 263.8721545934677Q40.985302090644836 356.7991478443146 81.36831659078598 417.9308617115021Q121.75133109092712 479.0625755786896 195.5928373336792 509.23909360170364Q269.4343435764313 539.4156116247177 369.9728248119354 539.4156116247177Q470.63915145397186 539.4156116247177 544.4928269386292 509.23909360170364Q618.3465024232864 479.0625755786896 658.7295169234276 417.9308617115021Q699.1125314235687 356.7991478443146 699.1125314235687 263.8721545934677Q699.1125314235687 171.55388820171356 658.7295169234276 110.31344747543335Q618.3465024232864 49.07300674915314 544.4928269386292 18.53650337457657Q470.63915145397186 -12 369.9728248119354 -12ZM369.9728248119354 111.66951787471771Q419.01528787612915 111.66951787471771 451.38085502386093 128.82168871164322Q483.7464221715927 145.97385954856873 499.53899562358856 177.3927075266838Q515.3315690755844 208.8115555047989 515.3315690755844 251.36419689655304V276.2279284000397Q515.3315690755844 319.10926735401154 499.53899562358856 350.4398584961891Q483.7464221715927 381.7704496383667 451.38085502386093 398.75827169418335Q419.01528787612915 415.74609375 369.9728248119354 415.74609375Q320.9303617477417 415.74609375 288.6408865451813 398.75827169418335Q256.35141134262085 381.7704496383667 240.558837890625 350.4398584961891Q224.76626443862915 319.10926735401154 224.76626443862915 276.2279284000397V251.36419689655304Q224.76626443862915 208.8115555047989 240.558837890625 177.3927075266838Q256.35141134262085 145.97385954856873 288.6408865451813 128.82168871164322Q320.9303617477417 111.66951787471771 369.9728248119354 111.66951787471771Z"/>
+<path transform="translate(4889.0 0)" d="M64.25490021705627 0V527.4156116247177H209.79824686050415L222.21116423606873 443.05945122241974H230.65110564231873Q256.2447887659073 477.3592064380646 290.08142960071564 498.48783510923386Q323.918070435524 519.6164637804031 362.99823719263077 529.5160377025604Q402.07840394973755 539.4156116247177 442.0590994358063 539.4156116247177Q513.273152589798 539.4156116247177 561.1710175275803 516.0005638599396Q609.0688824653625 492.58551609516144 633.511336505413 445.37189304828644Q657.9537905454636 398.15827000141144 657.9537905454636 326.6646350622177V0H478.9387642145157V301.7465064525604Q478.9387642145157 327.30575704574585 471.9526758790016 346.68832540512085Q464.96658754348755 366.07089376449585 451.70356380939484 378.751271545887Q438.4405400753021 391.43164932727814 418.94538074731827 397.8146216869354Q399.4502214193344 404.1975940465927 374.0164678096771 404.1975940465927Q337.4444463253021 404.1975940465927 307.826273560524 388.8119361400604Q278.20810079574585 373.42627823352814 260.67509096860886 346.5354177951813Q243.14208114147186 319.6445573568344 243.14208114147186 284.36803901195526V0Z"/>
+<path transform="translate(5575.0 0)" d="M306.06031143665314 -12Q244.34183168411255 -12 202.26721328496933 3.132269024848938Q160.1925948858261 18.264538049697876 138.8429855108261 53.489151775836945Q117.49337613582611 88.71376550197601 117.49337613582611 148.60339057445526V403.74609375H23.895374059677124V527.4156116247177H123.93063199520111L159.70668816566467 683.7814359664917H296.3805570602417V527.4156116247177H431.14508044719696V403.74609375H296.3805570602417V184.14084577560425Q296.3805570602417 148.8603776693344 310.941212952137 130.26494777202606Q325.5018688440323 111.66951787471771 369.2837088108063 111.66951787471771H431.14508044719696V5.806884765625Q417.3520942926407 0.9347301721572876 394.2906420826912 -3.2730756402015686Q371.2291898727417 -7.480881452560425 347.42034763097763 -9.740440726280212Q323.61150538921356 -12 306.06031143665314 -12Z"/><g transform="translate(4183.0 0)"><path d="M 370.0 403.6 L 245.1 319.7 L 333.7 319.7 L 333.7 123.8 L 406.4 123.8 L 406.4 319.7 L 495.0 319.7 Z"/></g></g></symbol></svg>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="anno" id="anno">
+  <div class="wrap"><div class="anno-in"><span class="dot" aria-hidden="true"></span><span>Taking on two new rebrands for November. <a href="#start" data-start="call">Grab a free 15-minute call<svg width="14" height="10" viewBox="0 0 15 11" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M1 5.5h12M9 1.5l4 4-4 4"/></svg></a></span><button type="button" class="anno-x" id="annoX" aria-label="Hide this notice">&times;</button></div></div>
+</div>
+
+<header class="head" id="head">
+  <div class="wrap head-in">
+    <a class="logo" href="#top" aria-label="Brightfront Studio home"><svg aria-hidden="true"><use href="#bfw"></use></svg></a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="#work">Examples</a>
+      <a href="#services">What we do</a>
+      <a href="#pricing">Pricing</a>
+      <a class="btn" href="#start" data-start="project"><i aria-hidden="true"></i>Start a project</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="hero" id="top">
+  <div class="wrap">
+    <p class="mark"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="8" cy="8" r="7"/><path d="M8 5v6M5 8h6"/></svg>Business rebrands and refreshes</p>
+    <h1><span class="ln"><span>Rebrand.</span></span><span class="ln"><span>Rebuild.</span></span><span class="ln"><span><em class="it">Grow</em>.</span></span></h1>
+    <div class="hero-foot">
+      <div class="btns">
+        <a class="btn" href="#start" data-start="project"><i aria-hidden="true"></i>Start a project</a>
+        <a class="btn btn-ghost" href="#work">See examples</a>
+      </div>
+    </div>
+    <div class="facts">
+      <div><b>The whole rebrand</b><small>Brand, website, menus, signage and social, done together</small></div>
+      <div><b>First draft in days</b><small>Not weeks of waiting</small></div>
+      <div><b>Fixed prices</b><small>Quoted up front and fixed</small></div>
+    </div>
+    <p class="swipe swipe-facts"><svg width="17" height="11" viewBox="0 0 17 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><path d="M1 5.5h14M11 1.5l4 4-4 4"/></svg>Swipe</p>
+  </div>
+</section>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-row">
+    <span>Branding</span><span>Websites</span><span>Menus</span><span>Signage</span><span>Social media</span><span>Google &amp; Meta ads</span><span>Billboards</span><span>Flyers</span><span>Loyalty cards</span><span>Apps</span><span>Shopify</span>
+    <span>Branding</span><span>Websites</span><span>Menus</span><span>Signage</span><span>Social media</span><span>Google &amp; Meta ads</span><span>Billboards</span><span>Flyers</span><span>Loyalty cards</span><span>Apps</span><span>Shopify</span>
+  </div>
+</div>
+
+<section class="slab slab-ink" id="work">
+  <div class="wrap work-bleed">
+    <p class="eyebrow">A few examples</p>
+    <div class="shead">
+      <h2>Examples.</h2>
+    </div>
+
+    <div class="proj">
+      <div class="proj-head"><h3>The Pizza Garden</h3><span>Full rebrand for Phill &middot; Morningside, Brisbane</span></div>
+      <div class="work-grid">
+        <figure class="tile full only-d"><div class="shot"><picture><source media="(max-width:820px)" srcset="img/work-pizza-1-m.webp" width="1080" height="1350"><img src="img/work-pizza-1.webp?v=2" width="1560" height="1200" alt="The Pizza Garden website before the rebrand beside the new one, shown on two phones" loading="lazy"></picture></div><figcaption><b>Before and after</b><span>Same pizzeria, new owner, new brand</span></figcaption></figure><figure class="tile port only-m"><div class="shot"><img src="img/pg-site-before-m.webp" width="1000" height="1250" alt="The Pizza Garden website before the rebrand" loading="lazy"></div><figcaption><b>The site</b><span>Before</span></figcaption></figure><figure class="tile port only-m"><div class="shot"><img src="img/pg-site-after-m.webp" width="1000" height="1250" alt="The Pizza Garden website after the rebrand" loading="lazy"></div><figcaption><b>The site</b><span>After</span></figcaption></figure>
+        <figure class="tile full only-d"><div class="shot"><picture><source media="(max-width:820px)" srcset="img/work-pizza-3-m.webp" width="1080" height="1350"><img src="img/work-pizza-3.webp?v=2" width="1560" height="1200" alt="The Pizza Garden menu before and after the rebrand, the old yellow sheet beside the new one" loading="lazy"></picture></div><figcaption><b>The menu</b><span>Before and after</span></figcaption></figure><figure class="tile port only-m"><div class="shot"><img src="img/pg-menu-before-m.webp" width="1000" height="1250" alt="The Pizza Garden menu before the rebrand" loading="lazy"></div><figcaption><b>The menu</b><span>Before</span></figcaption></figure><figure class="tile port only-m"><div class="shot"><img src="img/pg-menu-after-m.webp" width="1000" height="1250" alt="The Pizza Garden menu after the rebrand" loading="lazy"></div><figcaption><b>The menu</b><span>After</span></figcaption></figure>
+        <figure class="tile full only-d"><div class="shot"><picture><source media="(max-width:820px)" srcset="img/work-pizza-4-m.webp" width="1080" height="1350"><img src="img/work-pizza-4.webp?v=2" width="1560" height="1200" alt="The Pizza Garden Instagram profile before and after the rebrand" loading="lazy"></picture></div><figcaption><b>The Instagram</b><span>Before and after</span></figcaption></figure><figure class="tile port only-m"><div class="shot"><img src="img/pg-insta-before-m.webp" width="1000" height="1250" alt="The Pizza Garden Instagram before the rebrand" loading="lazy"></div><figcaption><b>The Instagram</b><span>Before</span></figcaption></figure><figure class="tile port only-m"><div class="shot"><img src="img/pg-insta-after-m.webp" width="1000" height="1250" alt="The Pizza Garden Instagram after the rebrand" loading="lazy"></div><figcaption><b>The Instagram</b><span>After</span></figcaption></figure>
+        <figure class="tile port"><div class="shot"><img src="img/work-pizza-2.webp" width="1000" height="1250" alt="The Pizza Garden menu page shown on a phone" loading="lazy"></div><figcaption><b>Ordering</b><span>Readable at the table, on a phone</span></figcaption></figure>
+      </div>
+      <p class="swipe"><svg width="17" height="11" viewBox="0 0 17 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><path d="M1 5.5h14M11 1.5l4 4-4 4"/></svg>Swipe for more</p>
+      <ul class="caps" style="margin-top:22px"><li>Brand Identity</li><li>Website Design</li><li>Menu Design</li><li>Instagram</li><li>Launch</li></ul>
+    </div>
+
+    <div class="proj">
+      <div class="proj-head"><h3>Alter You</h3><span>Brand and website &middot; alteryouapp.com</span></div>
+    <div class="work-grid">
+        <figure class="tile full only-d"><div class="shot"><img src="img/work-alteryou-1.webp?v=3" width="1560" height="1200" alt="The Alter You website on two phones, showing the app's features" loading="lazy"></div><figcaption><b>The site</b><span>Built for the launch</span></figcaption></figure><figure class="tile port only-m"><div class="shot"><img src="img/ay-site-a-m.webp" width="1000" height="1250" alt="The Alter You website home screen" loading="lazy"></div><figcaption><b>The site</b><span>Built for the launch</span></figcaption></figure><figure class="tile port only-m"><div class="shot"><img src="img/ay-site-b-m.webp" width="1000" height="1250" alt="The Alter You welcome screen, showing the programs on offer" loading="lazy"></div><figcaption><b>The site</b><span>Who it is for</span></figcaption></figure>
+        <figure class="tile port"><div class="shot"><img src="img/work-alteryou-2.webp" width="1000" height="1250" alt="Alter You food and macro tracking page" loading="lazy"></div><figcaption><b>Food and macros</b><span>Photography and page design</span></figcaption></figure>
+        <figure class="tile port"><div class="shot"><img src="img/work-alteryou-3.webp" width="1000" height="1250" alt="An Alter You training program card" loading="lazy"></div><figcaption><b>Programs</b><span>Twelve programs that fit around your week</span></figcaption></figure>
+      </div>
+      <p class="swipe"><svg width="17" height="11" viewBox="0 0 17 11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><path d="M1 5.5h14M11 1.5l4 4-4 4"/></svg>Swipe for more</p>
+      <ul class="caps" style="margin-top:22px"><li>Brand Identity</li><li>Website Design</li><li>Page Design</li><li>Photography</li><li>Launch</li></ul>
+    </div>
+
+  </div>
+</section>
+
+<section class="slab slab-ink" id="belief">
+  <div class="wrap">
+    <p class="eyebrow">How we see it</p>
+    <div class="phil">
+      <h2>Usually it isn't broken.<span class="l2">It just needs a <em class="it">revamp</em>.</span></h2>
+      <div>
+        <p>Most businesses outgrow their branding without noticing. The work gets better every year and the logo, the website and the marketing stay exactly where they were five years ago.</p>
+        <p>Starting again is rarely the answer. The brand gets tidied up, the website gets rebuilt around what people came there to do, and someone keeps all of it moving.</p>
+        <p>Design that only looks good is half the job. We came to this from sales, so what we care about is the thirty seconds after someone lands on your page, and whether they call, book or order.</p>
+        <p>Brightfront is Roxanne Alterio, and you work with her from the first call to the day it goes live. We go through what you want in detail, down to the parts you can picture but can't describe. Then we build it, you see it early, and you say what changes.</p>
+        <div class="btns" style="margin-top:30px"><a class="btn" href="#start" data-start="project"><i aria-hidden="true"></i>Start a project</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slab" id="services">
+  <div class="wrap">
+    <p class="eyebrow">What we do</p>
+    <div class="shead">
+      <h2>Do it right <em class="it">this time</em>.</h2>
+      <p>Take one service or take all of them. Either way it gets handled and you stop thinking about it.</p>
+    </div>
+
+    <details class="svc" open>
+      <summary><h3><em class="num">01</em>Strategy Session</h3><span class="plus" aria-hidden="true"></span></summary>
+      <div class="svc-body">
+        <p class="svc-lede">$350 for ninety minutes, redeemable against your project.</p>
+        <ul class="caps"><li>Brand Audit</li><li>Goal Setting</li><li>What to Fix First</li><li>Order of Work</li><li>Budget Planning</li><li>A Plan on Paper</li></ul>
+        <div><a class="more" href="#start" data-start="call">Book a session<svg class="arw" width="15" height="11" viewBox="0 0 15 11" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M1 5.5h12M9 1.5l4 4-4 4"/></svg></a></div>
+      </div>
+    </details>
+
+    <details class="svc">
+      <summary><h3><em class="num">02</em>Branding</h3><span class="plus" aria-hidden="true"></span></summary>
+      <div class="svc-body">
+        <ul class="caps"><li>Brand Identity</li><li>Logo Design</li><li>Colour &amp; Type</li><li>Brand Guidelines</li><li>Email Signatures</li><li>Social Templates</li><li>Print &amp; Web Files</li></ul>
+        <div><a class="more" href="#start" data-start="project">Start a brand<svg class="arw" width="15" height="11" viewBox="0 0 15 11" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M1 5.5h12M9 1.5l4 4-4 4"/></svg></a></div>
+      </div>
+    </details>
+
+    <details class="svc">
+      <summary><h3><em class="num">03</em>Websites</h3><span class="plus" aria-hidden="true"></span></summary>
+      <div class="svc-body">
+        <ul class="caps"><li>Website Design</li><li>Website Refreshes</li><li>Shopify Stores</li><li>Booking &amp; Enquiry Forms</li><li>Copywriting</li><li>Hosting &amp; Care</li></ul>
+        <div><a class="more" href="#pricing">See website prices<svg class="arw" width="15" height="11" viewBox="0 0 15 11" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M1 5.5h12M9 1.5l4 4-4 4"/></svg></a></div>
+      </div>
+    </details>
+
+    <details class="svc">
+      <summary><h3><em class="num">04</em>Apps</h3><span class="plus" aria-hidden="true"></span></summary>
+      <div class="svc-body">
+        <p class="svc-lede">From $10,000, added onto a brand or website build. The real number depends on what the app has to do.</p>
+        <ul class="caps"><li>App Design</li><li>Screens &amp; Onboarding</li><li>App Branding</li><li>App Store Listings</li><li>Launch Pages</li><li>Launch Campaigns</li></ul>
+        <div><a class="more" href="#work">See Alter You<svg class="arw" width="15" height="11" viewBox="0 0 15 11" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M1 5.5h12M9 1.5l4 4-4 4"/></svg></a></div>
+      </div>
+    </details>
+
+    <details class="svc">
+      <summary><h3><em class="num">05</em>Social Media</h3><span class="plus" aria-hidden="true"></span></summary>
+      <div class="svc-body">
+        <ul class="caps"><li>Social Media Management</li><li>Content Strategy</li><li>Content Creation</li><li>Reels Editing</li><li>Copywriting</li><li>Scheduling</li></ul>
+        <div><a class="more" href="#start" data-start="project">See a plan<svg class="arw" width="15" height="11" viewBox="0 0 15 11" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M1 5.5h12M9 1.5l4 4-4 4"/></svg></a></div>
+      </div>
+    </details>
+
+    <details class="svc">
+      <summary><h3><em class="num">06</em>Google &amp; Meta Ads</h3><span class="plus" aria-hidden="true"></span></summary>
+      <div class="svc-body">
+        <ul class="caps"><li>Google Search Ads</li><li>Facebook &amp; Instagram Ads</li><li>Landing Pages</li><li>Campaign Management</li><li>Tracking &amp; Analytics</li><li>Monthly Reporting</li></ul>
+        <div><a class="more" href="#start" data-start="project">Get a quote<svg class="arw" width="15" height="11" viewBox="0 0 15 11" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M1 5.5h12M9 1.5l4 4-4 4"/></svg></a></div>
+      </div>
+    </details>
+
+    <details class="svc">
+      <summary><h3><em class="num">07</em>Signage, Print &amp; Billboards</h3><span class="plus" aria-hidden="true"></span></summary>
+      <div class="svc-body">
+        <ul class="caps"><li>Business Cards</li><li>Shopfront Signage</li><li>Vehicle Wraps</li><li>Billboards</li><li>Menus &amp; DL Flyers</li><li>Loyalty Cards</li><li>Brochures &amp; Stickers</li></ul>
+        <div><a class="more" href="#start" data-start="project">Send us the sizes<svg class="arw" width="15" height="11" viewBox="0 0 15 11" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M1 5.5h12M9 1.5l4 4-4 4"/></svg></a></div>
+      </div>
+    </details>
+
+    <details class="svc">
+      <summary><h3><em class="num">08</em>Email &amp; Automation</h3><span class="plus" aria-hidden="true"></span></summary>
+      <div class="svc-body">
+        <ul class="caps"><li>Email Marketing</li><li>Enquiry Forms</li><li>Automatic Replies</li><li>Follow-Up Sequences</li><li>Newsletters</li><li>Customer Lists</li></ul>
+        <div><a class="more" href="#start" data-start="project">Set it up<svg class="arw" width="15" height="11" viewBox="0 0 15 11" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M1 5.5h12M9 1.5l4 4-4 4"/></svg></a></div>
+      </div>
+    </details>
+
+    <details class="svc">
+      <summary><h3><em class="num">09</em>Real Estate Marketing</h3><span class="plus" aria-hidden="true"></span></summary>
+      <div class="svc-body">
+        <ul class="caps"><li>Agency Websites</li><li>EOI Forms</li><li>Property E-Brochures</li><li>Listing Campaigns</li><li>Agent Profiles</li><li>Appraisal Requests</li></ul>
+        <div><a class="more" href="#start" data-start="project">Get a quote<svg class="arw" width="15" height="11" viewBox="0 0 15 11" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M1 5.5h12M9 1.5l4 4-4 4"/></svg></a></div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<section class="slab slab-bone" id="plans">
+  <div class="wrap">
+    <p class="eyebrow">After the launch</p>
+    <div class="shead">
+      <h2>Keep it <em class="it">moving</em>.</h2>
+      <p>A rebrand gets you looking right. What keeps the work coming is somebody still there the month after, chasing it. Pick the level that matches where you're at.</p>
+    </div>
+    <div class="plans">
+      <div class="plan">
+        <span class="tag">Plan one</span>
+        <h3>Keep it live</h3>
+        <p class="who">For businesses who just want the site looked after and the odd change made.</p>
+        <p class="cost">$350</p><p class="per">a month</p>
+        <ul>
+          <li>Hosting, backups and security</li>
+          <li>Up to 5 changes a month</li>
+          <li>Google Business Profile kept current</li>
+          <li>Text us and it gets done</li>
+        </ul>
+        <button type="button" class="btn btn-ghost" data-start="project">Start here</button>
+      </div>
+      <div class="plan plan-main">
+        <span class="tag">Most people start here</span>
+        <h3>Keep it moving</h3>
+        <p class="who">For businesses who need something going out every week without having to think about it.</p>
+        <p class="cost">$950</p><p class="per">a month</p>
+        <ul>
+          <li>Everything in Keep it live</li>
+          <li>12 posts and stories a month, written and scheduled</li>
+          <li>One content day a quarter</li>
+          <li>Seasonal menu or print updates</li>
+          <li>A short monthly note on what moved</li>
+          <li>A strategy review every quarter, included</li>
+        </ul>
+        <button type="button" class="btn" data-start="project"><i aria-hidden="true"></i>Start here</button>
+      </div>
+      <div class="plan">
+        <span class="tag">Plan three</span>
+        <h3>Keep it growing</h3>
+        <p class="who">For businesses ready to put money behind it and watch what comes back.</p>
+        <p class="cost">$1,800</p><p class="per">a month plus ad spend</p>
+        <ul>
+          <li>Everything in Keep it moving</li>
+          <li>Google and Meta ads, managed</li>
+          <li>Landing pages built for each campaign</li>
+          <li>Enquiry tracking so you know what paid off</li>
+          <li>A call every month to go through the numbers</li>
+        </ul>
+        <button type="button" class="btn btn-ghost" data-start="project">Start here</button>
+      </div>
+    </div>
+    <p class="plan-note">Month to month, no lock-in. Need one thing only? Build it below and we'll quote it as a one-off.</p>
+  </div>
+</section>
+
+<section class="slab slab-ink" id="pricing">
+  <div class="wrap">
+    <p class="eyebrow">What it costs</p>
+    <div class="shead">
+      <h2>Pricing.</h2>
+      <p>Select what you need for an estimate. The fixed price comes before any work starts, and it doesn't move unless you add to the job.</p>
+    </div>
+    <div class="build">
+      <div class="picks" id="picks">
+        <label class="pick"><input type="checkbox" data-item="brand"><span class="sw" aria-hidden="true"></span><span><b>Branding</b><small>Logo, colours, type and a one-page guide</small></span><span class="from" data-from="brand"></span></label>
+        <label class="pick"><input type="checkbox" data-item="web" checked><span class="sw" aria-hidden="true"></span><span><b>Website</b><small>Custom site, written for you, yours to keep</small></span><span class="from" data-from="web"></span></label>
+        <label class="pick"><input type="checkbox" data-item="app"><span class="sw" aria-hidden="true"></span><span><b>App</b><small>Design, screens and store listings</small></span><span class="from" data-from="app"></span></label>
+        <label class="pick"><input type="checkbox" data-item="social"><span class="sw" aria-hidden="true"></span><span><b>Social media</b><small>A month of posts, designed and scheduled</small></span><span class="from" data-from="social"></span></label>
+        <label class="pick"><input type="checkbox" data-item="ads"><span class="sw" aria-hidden="true"></span><span><b>Google &amp; Meta ads</b><small>Setup, landing page and monthly management</small></span><span class="from" data-from="ads"></span></label>
+        <label class="pick"><input type="checkbox" data-item="print"><span class="sw" aria-hidden="true"></span><span><b>Signage, print &amp; billboards</b><small>Print-ready artwork for anything offline</small></span><span class="from" data-from="print"></span></label>
+        <label class="pick"><input type="checkbox" data-item="care"><span class="sw" aria-hidden="true"></span><span><b>Care plan</b><small>Hosting, backups and 5 changes a month</small></span><span class="from" data-from="care"></span></label>
+      </div>
+      <div class="quote">
+        <p class="lab" id="qLab">Your project, from</p>
+        <p class="total" id="qTotal">$0</p>
+        <p class="sub" id="qSub"></p>
+        <ul id="qList"></ul>
+        <button type="button" class="btn" data-start="project"><i aria-hidden="true"></i>Start a project</button>
+        <p class="fine">Prices in Australian dollars, including GST for Australian clients. Half to begin, half on the day you go live. Monthly work is month to month, with no lock-in.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slab slab-bone" id="how">
+  <div class="wrap">
+    <p class="eyebrow">The Brightfront approach</p>
+    <div class="shead">
+      <h2>How it works.</h2>
+      <p>Five steps, and about two hours of your time across the whole job.</p>
+    </div>
+    <div class="appr">
+      <div class="row"><span class="n">01</span><h3>Discover</h3><p>We go through the business, the customers, the goals and whatever marketing is running now.</p></div>
+      <div class="row"><span class="n">02</span><h3>Shape</h3><p>We set the direction, the scope and the fixed price before anything is built.</p></div>
+      <div class="row"><span class="n">03</span><h3>Build</h3><p>Brand, website and words come together under one direction.</p></div>
+      <div class="row"><span class="n">04</span><h3>Launch</h3><p>Everything goes live tested, tracked and registered in your name.</p></div>
+      <div class="row"><span class="n">05</span><h3>Grow</h3><p>The marketing keeps moving as the business does, with ads and content added when you're ready.</p></div>
+    </div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<section class="slab" id="faq">
+  <div class="wrap faq">
+    <div>
+      <p class="eyebrow">Before you ask</p>
+      <h2>Questions.</h2>
+      <p class="note">Something not covered? <a href="#start" data-start="call">Book a free 15-minute call</a> and ask.</p>
+    </div>
+    <div class="faq-list">
+      <details><summary>Do I own everything?<span class="plus" aria-hidden="true"></span></summary><p>Yes, all of it. Domain, designs, words, photos, ad accounts, all in your name. If you walk away it all goes with you.</p></details>
+      <details><summary>What if I don't like the first draft?<span class="plus" aria-hidden="true"></span></summary><p>Tell us what's not working and we'll change it. If the whole direction's wrong, we start again once and don't charge you for it.</p></details>
+      <details><summary>Does my business need a rebrand?<span class="plus" aria-hidden="true"></span></summary><p>Often not. If people already recognise your logo, a refresh of the site and how you present it costs less and does more. We'll tell you that on the first call even though it's the smaller job.</p></details>
+      <details><summary>Can't you just do a logo?<span class="plus" aria-hidden="true"></span></summary><p>We can, and sometimes that really is all it takes. Just know a new logo won't fix a website that's five years behind it. People notice that sort of thing.</p></details>
+      <details><summary>What if I don't know what I need yet?<span class="plus" aria-hidden="true"></span></summary><p>That's what the strategy session is for. Ninety minutes, $350, and you walk away with the plan whether or not you hire us to build it. The first fifteen-minute call is still free, so ask us anything there first.</p></details>
+      <details><summary>Do you offer payment plans?<span class="plus" aria-hidden="true"></span></summary><p>Half to start, half the day you go live. Bigger jobs can be split monthly. Ask on the call.</p></details>
+      <details><summary>Are you only in Brisbane?<span class="plus" aria-hidden="true"></span></summary><p>We're in Brisbane and happy to meet up. Most of the work happens over email and video calls though, so it doesn't much matter where you are.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="slab slab-sage" id="start">
+  <div class="wrap">
+    <p class="eyebrow">Ready when you are</p>
+    <div class="shead">
+      <h2>Put your best front <em class="it">forward</em>.</h2>
+      <p>Tell us what you sell and who you're trying to reach. We'll tell you straight what would help and what wouldn't. We love these calls, and it costs you nothing to have one.</p>
+    </div>
+    <div class="close-grid">
+      <button type="button" class="pathcard main" data-start="call"><b>Book a free call</b><span>15 minutes, phone or video. Pick a time that suits.</span></button>
+      <button type="button" class="pathcard" data-start="project"><b>Send us a brief</b><span>A few questions about the business. Five minutes.</span></button>
+      <a class="pathcard" href="mailto:info@brightfrontstudio.com"><b>Send an email</b><span>info@brightfrontstudio.com</span></a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div><a class="logo" href="#top" aria-label="Brightfront Studio home"><svg aria-hidden="true"><use href="#bf"></use></svg></a><p class="blurb">Brand, website and marketing for small businesses. Designed and built in Brisbane, Australia.</p></div>
+      <div><h4>What we do</h4><a href="#services">Branding</a><a href="#pricing">Websites</a><a href="#services">Apps</a><a href="#services">Social media</a><a href="#services">Ads</a><a href="#services">Signage &amp; print</a></div>
+      <div><h4>Studio</h4><a href="#work">Examples</a><a href="#start" data-start="call">Book a free call</a><a href="#pricing">Pricing</a><a href="mailto:info@brightfrontstudio.com">Email us</a></div>
+    </div>
+    <div class="foot-legal"><span>&copy; 2026 Brightfront Studio. ABN 80 241 124 181. Brisbane, Queensland.</span><span><a href="privacy.html">Privacy</a> &nbsp; <a href="terms.html">Terms</a></span></div>
+  </div>
+</footer>
+
+<div class="pl" id="planner" hidden>
+  <div class="pl-panel" role="dialog" aria-modal="true" aria-labelledby="plTitle">
+    <div class="pl-top">
+      <span class="pl-brand"><span class="logo-mark" aria-hidden="true"></span>Brightfront</span>
+      <div class="pl-progress" aria-hidden="true"><span id="plBar"></span></div>
+      <span class="pl-count" id="plCount"></span>
+      <button type="button" class="pl-close" id="plClose" aria-label="Close. Your answers are saved."><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12"/></svg></button>
+    </div>
+    <form class="pl-form" id="plForm" novalidate>
+      <div class="pl-step" id="plStep"></div>
+      <div class="hp" aria-hidden="true"><label for="plHp">Leave this empty</label><input id="plHp" type="text" tabindex="-1" autocomplete="off"></div>
+    </form>
+    <div class="pl-foot" id="plFoot">
+      <button type="button" class="btn btn-line" id="plBack">Back</button>
+      <span class="pl-err" id="plErr" role="alert"></span>
+      <button type="button" class="btn btn-solid" id="plNext">Continue</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+(function(){
+  var btn=document.getElementById('menuBtn'), nav=document.getElementById('nav'), head=document.getElementById('head');
+  btn.addEventListener('click',function(){ var o=nav.classList.toggle('open'); btn.setAttribute('aria-expanded',o?'true':'false'); btn.textContent=o?'Close':'Menu'; });
+  nav.addEventListener('click',function(e){ if(e.target.tagName==='A'){ nav.classList.remove('open'); btn.setAttribute('aria-expanded','false'); btn.textContent='Menu'; } });
+  addEventListener('scroll',function(){ head.classList.toggle('stuck', scrollY>8); },{passive:true});
+  var anno=document.getElementById('anno'), annoX=document.getElementById('annoX');
+  if(anno&&annoX){
+    try{ if(sessionStorage.getItem('bf-anno')==='off') anno.style.display='none'; }catch(e){}
+    annoX.addEventListener('click',function(){ anno.style.display='none';
+      try{ sessionStorage.setItem('bf-anno','off'); }catch(e){} });
+  }
+
+  /* ===== scroll reveal =====
+     Sections rise in as they come into view, with a small stagger between siblings so
+     a row arrives as a sequence rather than all at once. Falls back to everything
+     visible if IntersectionObserver is missing or motion is reduced. */
+  var MOTION = window.matchMedia && matchMedia('(prefers-reduced-motion:no-preference)').matches;
+  if (MOTION && 'IntersectionObserver' in window) {
+    var GROUPS = ['.pains>div','.appr .row','.svc','.close-grid>*','.faq-list details','.reads>a'];
+    var GROUPS2='.reads>a';
+    var SINGLES = ['.eyebrow','.shead','.phil>div','.phil h2','.quote','.picks','.caps','.note'];
+    var items = [];
+    GROUPS.forEach(function(sel){
+      document.querySelectorAll(sel).forEach(function(el, i){
+        el.classList.add('rv');
+        el.style.transitionDelay = Math.min(i, 5) * 40 + 'ms';
+        items.push(el);
+      });
+    });
+    SINGLES.forEach(function(sel){
+      document.querySelectorAll(sel).forEach(function(el){ el.classList.add('rv'); items.push(el); });
+    });
+    document.querySelectorAll('.tile').forEach(function(el, i){
+      el.style.transitionDelay = Math.min(i, 3) * 55 + 'ms';
+      el.querySelector('.shot').style.transitionDelay = el.style.transitionDelay;
+      items.push(el);
+    });
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (!e.isIntersecting) return;
+        e.target.classList.add('in');
+        io.unobserve(e.target);           // reveal once; no flicker on the way back up
+      });
+    }, {rootMargin:'0px 0px -2% 0px', threshold:0.01});
+    items.forEach(function(el){ io.observe(el); });
+
+    /* Anything inside a closed <details> never intersects, so it would still be
+       invisible when the panel is opened. Reveal it on toggle. */
+    document.querySelectorAll('details').forEach(function(d){
+      d.addEventListener('toggle', function(){
+        if (!d.open) return;
+        d.querySelectorAll('.rv').forEach(function(el){ el.style.transitionDelay='0ms'; el.classList.add('in'); });
+      });
+    });
+  }
+
+  /* ===== price builder =====
+     CHECK THESE BEFORE YOU PUBLISH. from = the lowest price you'll do that work for.
+     unit 'project' adds to the one-off total, 'month' adds to the monthly total,
+     and quote:true means "we'll quote it" instead of a number. */
+  var ITEMS = {
+    brand:  {name:'Branding',                    from:1200, unit:'project'},
+    web:    {name:'Website',                     from:1500, unit:'project'},
+    app:    {name:'App',                        from:10000, unit:'project'},
+    social: {name:'Social media',                from:750,  unit:'month'},
+    ads:    {name:'Google & Meta ads',           from:600,  unit:'month', note:'plus your ad spend'},
+    print:  {name:'Signage, print & billboards', from:450,  unit:'project'},
+    care:   {name:'Care plan',                   from:99,   unit:'month'}
+  };
+  var money=function(n){ return '$'+n.toLocaleString('en-AU'); };
+  var picks=document.getElementById('picks');
+  var elTotal=document.getElementById('qTotal'), elSub=document.getElementById('qSub'), elList=document.getElementById('qList'), elLab=document.getElementById('qLab');
+  Object.keys(ITEMS).forEach(function(k){
+    var it=ITEMS[k], cell=document.querySelector('[data-from="'+k+'"]');
+    if(cell) cell.textContent = it.quote ? 'Quoted' : 'from '+money(it.from)+(it.unit==='month'?' a month':'');
+  });
+  function update(){
+    var once=0, monthly=0, rows=[], quoted=false;
+    picks.querySelectorAll('input:checked').forEach(function(i){
+      var it=ITEMS[i.dataset.item]; if(!it) return;
+      if(it.quote){ quoted=true; rows.push([it.name,'Quoted']); return; }
+      if(it.unit==='month'){ monthly+=it.from; rows.push([it.name, money(it.from)+' a month']); }
+      else { once+=it.from; rows.push([it.name,'from '+money(it.from)]); }
+    });
+    elLab.textContent = rows.length ? (once? 'Your project, from' : 'Your monthly, from') : 'Pick what you need';
+    elTotal.textContent = once ? money(once) : (monthly ? money(monthly) : '$0');
+    var bits=[];
+    if(once && monthly) bits.push('then '+money(monthly)+' a month');
+    else if(!once && monthly) bits.push('a month, no lock-in');
+    if(quoted) bits.push('plus quoted items');
+    if(picks.querySelector('[data-item=ads]:checked')) bits.push('ad spend is paid by you, direct to Google or Meta');
+    elSub.textContent = rows.length ? bits.join(', ') : 'Nothing selected yet.';
+    elList.innerHTML = rows.map(function(r){ return '<li><span>'+r[0]+'</span><b>'+r[1]+'</b></li>'; }).join('');
+  }
+  picks.addEventListener('change', update); update();
+})();
+</script>
+<script>
+(function(){
+  /* ================= SETUP =================
+     ENDPOINT: your Supabase function URL (see README step 4).
+     CALENDAR_URL: optional. A booking link (GoHighLevel calendar, Calendly etc.).
+     When set, people who ask for a call can also pick an exact time straight away. */
+  var CONFIG = {
+    ENDPOINT: 'https://YOUR-PROJECT-REF.supabase.co/functions/v1/submit-lead',
+    // FORMSPREE: the quick way to start. Paste your Formspree form ID (or its full URL)
+    // and every enquiry and call request is emailed to you, with no server to set up.
+    // Supabase is used instead whenever it's connected.
+    FORMSPREE: 'mwlvvozo',
+    CALENDAR_URL: '',
+    // Call booking: Brisbane time. Keep in step with the BOOKING_ secrets (the server sends its own on load).
+    BOOKING: {days:[1,2,3,4,5], start:'09:00', end:'17:00', slot:30, length:15, notice:12, window:21},
+    EMAIL: 'info@brightfrontstudio.com'
+  };
+  var LIVE = CONFIG.ENDPOINT.indexOf('YOUR-'+'PROJECT-REF') === -1; // split so the setup script doesn't replace it
+  var FS = String(CONFIG.FORMSPREE || '').trim();
+  if (FS && FS.indexOf('http') !== 0) FS = 'https://formspree.io/f/' + FS.replace(/^\/+|\/+$/g, '');
+  var MODE_FS = !LIVE && !!FS;   // Formspree: emails you the answers. No files, and call times are requests.
+  var KEY = 'bf-planner-v1';
+
+  var NEED = [['The Refresh','Refresh my website','Keep what works, make it look and work like new'],
+              ['The Build','Build a new website','Starting from scratch or from a Facebook page'],
+              ['Real estate website','Real estate website','For an agency or agent, with listings and appraisal requests'],
+              ['Property e-brochure','Property e-brochure','An online brochure for a listing'],
+              ['Expression of interest form','Expression of interest form','Branded EOI forms for sales or new projects'],
+              ['Branding','Custom branding','Logo, colours and type for your business'],
+              ['Shopify store','Shopify store or theme','A custom Shopify theme or store setup'],
+              ['Link in bio site','Replace my Linktree','A proper site for your Instagram bio, with an enquiry form'],
+              ['Get Found','Get found on Google','Show up when locals search for what you do'],
+              ['The Care Plan','Look after my website','Hosting, updates and changes each month'],
+              ['Not sure','Not sure yet','Tell us about your business and we\'ll recommend']];
+  var GOALS = ['Call us','Book online','Send an enquiry','Request a quote','Buy online','Visit in person','See our work','Check our menu or prices'];
+  var PAGES = ['Home','About','Services','Pricing','Menu','Gallery or portfolio','Reviews','FAQ','Blog or news','Booking','Shop','Contact'];
+  var FEATURES = ['Enquiry form','Online booking','Online shop','Quote request form','Photo gallery','Google reviews','Newsletter sign-up','Map and directions','Live chat','Instagram feed'];
+  var STYLES = [
+    ['Warm and welcoming',['#C9A27E','#F4E9DC','#6B4F3A'],'Georgia, serif'],
+    ['Clean and minimal',['#FFFFFF','#E4E4E4','#1E1E1E'],'Helvetica, Arial, sans-serif'],
+    ['Bold and modern',['#111111','#FF5A36','#F2F2F2'],'Arial Black, Helvetica, sans-serif'],
+    ['Luxury and refined',['#1C1B1A','#C8A96A','#F5F1EA'],'Didot, Georgia, serif'],
+    ['Earthy and natural',['#5B6B4E','#D9CBB0','#A0694A'],'Georgia, serif'],
+    ['Bright and playful',['#FFD23F','#3BCEAC','#EE4266'],'Trebuchet MS, sans-serif']];
+  var LOGO = ['I have a logo I love','I have one, but it needs a refresh','I need a logo'];
+  var BUDGET = ['Under $1,500','$1,500 to $3,500','$3,500 to $6,000','$6,000 or more','Not sure yet'];
+  var TIMELINE = ['As soon as possible','Within a month','In 1 to 3 months','No rush'];
+  var CONTENT = ['I have the words ready','I have some of it','I need help writing it'];
+  var PHOTOS = ['I have good photos','I have a few','I need photos'];
+  var CALLTYPE = ['Phone call','Video call'];
+  var CONTACT = ['Email','Phone call','Text message'];
+  var LABELS = {need:'Looking for',current_site:'Current website',business:'Business',industry:'Industry',area:'Area',about:'What makes us different',customers:'Ideal customers',goals:'Visitors should',pages:'Pages',features:'Features',styles:'Style',colours:'Brand colours',logo:'Logo',inspo:'Inspiration sites',dislikes:"Don't want",budget:'Budget',timeline:'Timeline',content:'Words',photos:'Photos',frustration:'Frustrations',topic:'Call topic',call_type:'Call type',booking_label:'Call booked for',slots:'Preferred call times',contact_pref:'Contact by',extra:'Anything else',tagline:'Tagline',services:'Services and prices',hours:'Opening hours',address:'Address',booking_link:'Booking link',show_phone:'Phone to show',show_email:'Email to show',socials:'Social links',reviews:'Reviews'};
+
+  if(MODE_FS) LABELS.booking_label = 'Call time requested';
+  var FLOWS = { project:['need','business','goals','content','look','uploads','budget','contact'], call:['business','call','contact'], review:['review','contact'] };
+  if(MODE_FS) FLOWS.project = FLOWS.project.filter(function(s){ return s !== 'uploads'; }); // uploads need the full setup
+
+  var root=document.getElementById('planner'), stepEl=document.getElementById('plStep'), form=document.getElementById('plForm');
+  var bar=document.getElementById('plBar'), count=document.getElementById('plCount'), foot=document.getElementById('plFoot');
+  var back=document.getElementById('plBack'), next=document.getElementById('plNext'), err=document.getElementById('plErr');
+  var mode='project', step=0, ans={}, files=[], openedAt=0, lastFocus=null, busy=false;
+
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify({mode:mode,step:step,ans:ans}));}catch(e){}}
+  function restore(m){try{var j=JSON.parse(localStorage.getItem(KEY)||'null');if(j&&j.mode===m){ans=j.ans||{};step=Math.min(j.step||0,FLOWS[m].length-1);return true;}}catch(e){}return false;}
+  function forget(){try{localStorage.removeItem(KEY);}catch(e){}}
+  var ICON_TICK='<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#F2EDE7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 6.2l2.3 2.3 4.7-5"/></svg>';
+  var ICON_X='<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8"/></svg>';
+
+  /* ---------- field builders ---------- */
+  function field(k,label,ph,type,opt){
+    var tag=type==='area'?'textarea':'input';
+    return '<div class="field"><label for="pl_'+k+'">'+esc(label)+(opt?' <span style="color:var(--soft)">(optional)</span>':'')+'</label>'+
+      (tag==='textarea'?'<textarea id="pl_'+k+'" data-a="'+k+'" rows="3" placeholder="'+esc(ph||'')+'">'+esc(ans[k]||'')+'</textarea>'
+      :'<input id="pl_'+k+'" data-a="'+k+'" type="'+(type||'text')+'" placeholder="'+esc(ph||'')+'" value="'+esc(ans[k]||'')+'"'+(type==='email'?' autocomplete="email"':type==='tel'?' autocomplete="tel"':k==='name'?' autocomplete="name"':k==='business'?' autocomplete="organization"':'')+(type==='url'?' inputmode="url"':'')+'>')+'</div>';
+  }
+  function two(a,b){return '<div class="two">'+a+b+'</div>';}
+  function group(q,inner,hint){return '<div class="pl-group" role="group" aria-label="'+esc(q)+'"><span class="q">'+esc(q)+(hint?'<small>'+esc(hint)+'</small>':'')+'</span>'+inner+'</div>';}
+  function chips(k,list,single,max){
+    var cur=ans[k];
+    return '<div class="chips">'+list.map(function(v){
+      var on=single?cur===v:(cur||[]).indexOf(v)>-1;
+      return '<label class="chip"><input type="'+(single?'radio':'checkbox')+'" name="pl_'+k+'" value="'+esc(v)+'" '+(single?'data-one':'data-multi')+'="'+k+'"'+(max?' data-max="'+max+'"':'')+(on?' checked':'')+'><span>'+esc(v)+'</span></label>';
+    }).join('')+'</div>';
+  }
+  function cards(k,list){
+    return '<div class="opts">'+list.map(function(o){
+      return '<label class="opt"><input type="radio" name="pl_'+k+'" value="'+esc(o[0])+'" data-one="'+k+'"'+(ans[k]===o[0]?' checked':'')+'><span class="box"><b>'+esc(o[1])+'</b><span class="d">'+esc(o[2])+'</span></span><span class="tick">'+ICON_TICK+'</span></label>';
+    }).join('')+'</div>';
+  }
+  function styleCards(){
+    return '<div class="styles">'+STYLES.map(function(s){
+      var on=(ans.styles||[]).indexOf(s[0])>-1;
+      return '<label class="opt"><input type="checkbox" value="'+esc(s[0])+'" data-multi="styles" data-max="2"'+(on?' checked':'')+'><span class="box"><span class="sw">'+s[1].map(function(c){return '<i style="background:'+c+'"></i>';}).join('')+'</span><span class="sample" style="font-family:'+s[2]+'">Aa</span><b>'+esc(s[0])+'</b></span><span class="tick">'+ICON_TICK+'</span></label>';
+    }).join('')+'</div>';
+  }
+  function colourList(){
+    var list=ans.colours||[];
+    return '<div class="colours" id="plColours">'+list.map(function(c,i){
+      return '<div class="colour"><label title="Pick a colour"><input type="color" value="'+c+'" data-ci="'+i+'" aria-label="Brand colour '+(i+1)+'"></label><input type="text" value="'+c.toUpperCase()+'" data-ct="'+i+'" maxlength="7" aria-label="Colour code '+(i+1)+'"><button type="button" data-cr="'+i+'" aria-label="Remove colour '+(i+1)+'">'+ICON_X+'</button></div>';
+    }).join('')+(list.length<6&&!ans.no_colours?'<button type="button" class="add-btn" id="plAddColour">Add a colour</button>':'')+'</div>'+
+    '<label class="check-row"><input type="checkbox" id="plNoColours"'+(ans.no_colours?' checked':'')+'> I don\'t have brand colours yet</label>';
+  }
+  function inspoList(){
+    var list=ans.inspo&&ans.inspo.length?ans.inspo:[{url:'',note:''}];
+    return '<div id="plInspo">'+list.map(function(r,i){
+      return '<div class="inspo-row"><input type="text" inputmode="url" placeholder="Website you like" value="'+esc(r.url)+'" data-iu="'+i+'" aria-label="Inspiration website '+(i+1)+'"><input type="text" placeholder="What do you like about it?" value="'+esc(r.note)+'" data-in="'+i+'" aria-label="What you like about website '+(i+1)+'">'+(list.length>1?'<button type="button" data-ir="'+i+'" aria-label="Remove website '+(i+1)+'">'+ICON_X+'</button>':'<span></span>')+'</div>';
+    }).join('')+(list.length<4?'<button type="button" class="add-btn" id="plAddInspo">Add another website</button>':'')+'</div>';
+  }
+  function serviceRows(){
+    var list=ans.services&&ans.services.length?ans.services:[{name:'',price:'',detail:''}];
+    return '<div id="plServices">'+list.map(function(r,i){
+      return '<div class="svc-row"><input type="text" placeholder="Service or product" value="'+esc(r.name)+'" data-sv="name" data-si="'+i+'" aria-label="Service '+(i+1)+' name"><input type="text" placeholder="Price (optional)" value="'+esc(r.price)+'" data-sv="price" data-si="'+i+'" aria-label="Service '+(i+1)+' price">'+
+        (list.length>1?'<button type="button" data-sr="'+i+'" aria-label="Remove service '+(i+1)+'">'+ICON_X+'</button>':'<span></span>')+
+        '<input type="text" class="svc-detail" placeholder="Short description (optional)" value="'+esc(r.detail)+'" data-sv="detail" data-si="'+i+'" aria-label="Service '+(i+1)+' description"></div>';
+    }).join('')+(list.length<15?'<button type="button" class="add-btn" id="plAddService">Add another</button>':'')+'</div>';
+  }
+  function dropzone(kind,title,hint){
+    var mine=files.filter(function(f){return f.kind===kind;});
+    return '<div class="pl-group"><label class="drop" data-drop="'+kind+'" tabindex="0"><input type="file" multiple accept="image/*,.pdf,.svg" data-file="'+kind+'" style="position:absolute;opacity:0;width:1px;height:1px">'+
+      '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>'+
+      '<b>'+esc(title)+'</b><small>'+esc(hint)+'</small><small>Tap to choose, or drag files here</small></label>'+
+      (mine.length?'<div class="thumbs">'+mine.map(function(f){
+        var i=files.indexOf(f);
+        return '<div class="thumb">'+(f.url?'<img src="'+f.url+'" alt="'+esc(f.file.name)+'">':'<span class="doc">'+esc(f.file.name)+'</span>')+'<button type="button" data-fr="'+i+'" aria-label="Remove '+esc(f.file.name)+'">'+ICON_X+'</button></div>';
+      }).join('')+'</div>':'')+'</div>';
+  }
+  /* ---------- booking calendar: real times, Brisbane time (UTC+10 all year) ---------- */
+  var booked=[], bookedLoaded=false, bookedLoading=false, BTZ='Australia/Brisbane';
+  var VTZ=(function(){ try{ return Intl.DateTimeFormat().resolvedOptions().timeZone||BTZ; }catch(e){ return BTZ; } })();
+  function hm(s){ var p=String(s).split(':'); return (+p[0])*60+(+p[1]||0); }
+  function tfmt(iso,tz){ return new Date(iso).toLocaleTimeString('en-AU',{timeZone:tz||BTZ,hour:'numeric',minute:'2-digit'}).replace(/\s/g,'').toLowerCase(); }
+  function localDiffers(iso){ try{ return VTZ!==BTZ && new Date(iso).toLocaleString('en-AU',{timeZone:VTZ})!==new Date(iso).toLocaleString('en-AU',{timeZone:BTZ}); }catch(e){ return false; } }
+  function bookingLabel(iso){ return new Date(iso).toLocaleDateString('en-AU',{timeZone:BTZ,weekday:'long',day:'numeric',month:'long'})+' at '+tfmt(iso)+' (Brisbane time)'; }
+  function bkDays(){
+    var B=CONFIG.BOOKING, out=[], now=Date.now(), base=new Date(now+36e6);
+    for(var i=0;i<=B.window;i++){
+      var y=base.getUTCFullYear(), m=base.getUTCMonth(), d=base.getUTCDate()+i, day=new Date(Date.UTC(y,m,d));
+      if(B.days.indexOf(day.getUTCDay())<0) continue;
+      var slots=[];
+      for(var t=hm(B.start); t+B.length<=hm(B.end); t+=B.slot){
+        var s=Date.UTC(y,m,d,0,t)-36e6;
+        if(s>=now+B.notice*36e5) slots.push(new Date(s).toISOString());
+      }
+      if(slots.length) out.push({key:day.toISOString().slice(0,10),date:day,slots:slots});
+    }
+    return out;
+  }
+  function loadBooked(){
+    if(!LIVE||bookedLoaded||bookedLoading) return; bookedLoading=true;
+    post({action:'availability'}).then(function(j){
+      if(j.config&&j.config.days) CONFIG.BOOKING=j.config;
+      booked=j.booked||[]; bookedLoaded=true; bookedLoading=false;
+      if(!root.hidden&&stepEl.querySelector('.bk-days')) rerender();
+    }).catch(function(){ bookedLoading=false; });
+  }
+  function bookingPicker(){
+    loadBooked();
+    var days=bkDays();
+    if(!days.length) return group('Pick a day and time','<p class="file-note">There are no open times in the next few weeks. Email '+esc(CONFIG.EMAIL)+' and we\'ll find one.</p>');
+    if(ans.booking_start&&(booked.indexOf(ans.booking_start)>-1||!days.some(function(d){return d.slots.indexOf(ans.booking_start)>-1;}))){ delete ans.booking_start; delete ans.booking_label; }
+    var dayOf=function(iso){ return new Date(Date.parse(iso)+36e6).toISOString().slice(0,10); };
+    // the day the person last tapped wins; the chosen time only picks the day before they have tapped one
+    var selKey=ans.booking_day||(ans.booking_start?dayOf(ans.booking_start):null);
+    var sel=days.filter(function(d){return d.key===selKey;})[0]||days[0];
+    var dayHtml='<div class="bk-days">'+days.map(function(d){
+      var o={timeZone:'UTC'}, on=d.key===sel.key, free=d.slots.filter(function(s){return booked.indexOf(s)<0;}).length;
+      return '<button type="button" class="bk-day'+(on?' on':'')+'" data-bkday="'+d.key+'" aria-pressed="'+on+'"'+(free?'':' disabled')+'><small>'+d.date.toLocaleDateString('en-AU',Object.assign({weekday:'short'},o))+'</small><b>'+d.date.getUTCDate()+'</b><small>'+(free?d.date.toLocaleDateString('en-AU',Object.assign({month:'short'},o)):'Full')+'</small></button>';
+    }).join('')+'</div>';
+    var times='<div class="bk-times" role="group" aria-label="Times on '+esc(sel.date.toLocaleDateString('en-AU',{timeZone:'UTC',weekday:'long',day:'numeric',month:'long'}))+'">'+sel.slots.map(function(iso){
+      var taken=booked.indexOf(iso)>-1, on=ans.booking_start===iso;
+      return '<button type="button" class="bk-time'+(on?' on':'')+'" data-bktime="'+iso+'" aria-pressed="'+on+'"'+(taken?' disabled title="Already booked"':'')+'>'+tfmt(iso)+(localDiffers(iso)?'<small>'+esc(tfmt(iso,VTZ))+' yours</small>':'')+'</button>';
+    }).join('')+'</div>';
+    var chosen=ans.booking_start?'<p class="bk-chosen"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg><span>Your call: <b>'+esc(bookingLabel(ans.booking_start))+'</b></span></p>':'';
+    var note=VTZ!==BTZ?'Brisbane time. Your local time is shown under each time.':'15 minutes, Brisbane time';
+    return group('Pick a day and time',dayHtml+times+chosen,note);
+  }
+
+  /* ---------- steps ---------- */
+  var STEPS = {
+    need:{t:'What can we help with?',s:'Pick the closest option. We\'ll talk it through with you either way.',
+      r:function(){return cards('need',NEED)+field('current_site','Your current website, if you have one','yourbusiness.com.au','text',true);},
+      v:function(){return ans.need?null:['Choose what you need help with.','[data-one=need]'];}},
+    business:{t:'Tell us about your business',s:mode==='call'?'Just the basics, so we can prepare for the call.':'The more we know, the more it\'ll feel like you.',
+      r:function(){return two(field('business','Business name','e.g. Wattle & Co. Café'),field('industry','What do you do?','e.g. café, plumber, hair salon'))+
+        field('area','Where are your customers?','e.g. Brisbane northside, all of Australia, or worldwide','text',true)+
+        (mode==='project'?field('about','What makes you different from others nearby?','e.g. family-run since 1998, same-day callouts, everything made in-house','area',true)+field('customers','Who are your ideal customers?','e.g. young families, local offices, tradies','area',true):'');},
+      v:function(){return ans.business?null:['Enter your business name.','#pl_business'];}},
+    goals:{t:'What should your website do?',s:'Think about what you want people to do once they land on it.',
+      r:function(){return group('What should visitors do?',chips('goals',GOALS),'Choose any')+group('Which pages do you need?',chips('pages',PAGES),'Best guess is fine')+group('Any special features?',chips('features',FEATURES),'Optional');},
+      v:function(){return (ans.goals||[]).length?null:['Choose at least one thing visitors should do.','[data-multi=goals]'];}},
+    content:{t:'What should your website say?',s:'Skip anything you\'re not sure about. We\'ll help write the rest.',
+      r:function(){return field('tagline','A one-line description of your business','e.g. Slow mornings and good coffee in Paddington','text',true)+
+        group('Your services, products or menu highlights',serviceRows(),'Add the main ones')+
+        two(field('hours','Opening hours','e.g. Mon to Fri 6:30am to 3pm','area',true),field('address','Address to show','e.g. 12 Given Tce, Paddington QLD','text',true))+
+        two(field('show_phone','Phone number to show','','tel',true),field('show_email','Email to show','','email',true))+
+        field('booking_link','Online booking or ordering link, if you have one','e.g. your Fresha, Square or Timely link','text',true)+
+        field('socials','Instagram, Facebook or other links','One per line','area',true)+
+        field('reviews','Reviews you\'d like to show','Paste a few real reviews, with the reviewer\'s first name','area',true);},
+      v:function(){return null;}},
+    look:{t:'How should it look and feel?',s:'Pick up to two styles, add your brand colours, and point us to websites you like.',
+      r:function(){return group('Which styles feel right?',styleCards(),'Up to 2')+group('Your brand colours',colourList(),'Tap a circle to pick')+group('Do you have a logo?',chips('logo',LOGO,true))+group('Websites you like',inspoList(),'Optional')+field('dislikes','Anything you definitely don\'t want?','e.g. no dark backgrounds, nothing too corporate','area',true);},
+      v:function(){return (ans.styles||[]).length?null:['Pick at least one style.','[data-multi=styles]'];}},
+    uploads:{t:'Share your logo, photos and inspiration',s:'Optional, but it helps us get it right first time. Phone photos and screenshots are perfect.',
+      r:function(){return dropzone('logo','Logo and brand files','Your logo, brand guide or anything with your colours')+dropzone('photo','Photos for your website','Your shopfront, team, work, products or food. These go on your site.')+dropzone('inspiration','Inspiration','Screenshots of websites, Instagram posts or anything with a look you love')+'<p class="file-note">Images or PDFs, up to 10 files and 10 MB each. Your best, largest photos work best.</p>';},
+      v:function(){return null;}},
+    budget:{t:'Budget and timing',s:'There are no wrong answers. This helps us suggest the right option.',
+      r:function(){return group('Roughly what budget do you have in mind?',chips('budget',BUDGET,true))+group('When would you like it live?',chips('timeline',TIMELINE,true))+group('Do you have the words for your website?',chips('content',CONTENT,true))+group('And photos?',chips('photos',PHOTOS,true));},
+      v:function(){return !ans.budget?['Choose a budget range, or "Not sure yet".','[data-one=budget]']:!ans.timeline?['Choose when you\'d like it live.','[data-one=timeline]']:null;}},
+    call:{t:'Book a free 15-minute call',s:'Pick a time that suits you. '+(MODE_FS?'We\'ll confirm it by email.':'You\'ll get a confirmation and calendar invite straight away.'),
+      r:function(){return group('Phone or video?',chips('call_type',CALLTYPE,true))+bookingPicker()+field('topic','What would you like to talk about?','e.g. a new website for my salon','area',true);},
+      v:function(){return !ans.call_type?['Choose phone or video.','[data-one=call_type]']:!ans.booking_start?['Pick a day and time for your call.','.bk-times']:null;}},
+    review:{t:'Get a free website review',s:'We\'ll look through your site and tell you honestly what\'s working and what isn\'t.',
+      r:function(){return field('current_site','Your website address','yourbusiness.com.au','text')+two(field('business','Business name',''),field('industry','What do you do?','e.g. café, plumber','text',true))+field('frustration','Anything bugging you about it?','e.g. it looks dated, nobody books through it','area',true);},
+      v:function(){return !ans.current_site?['Enter your website address.','#pl_current_site']:!ans.business?['Enter your business name.','#pl_business']:null;}},
+    contact:{t:'',s:'',
+      r:function(){
+        var callBits=ans.want_call?group('Phone or video?',chips('call_type',CALLTYPE,true))+bookingPicker():'';
+        return two(field('name','Your name',''),field('email','Email','','email'))+
+          two(field('phone','Phone',mode==='call'||ans.want_call?'':'','tel',!(mode==='call'||ans.want_call)),'<div class="field"><span class="q" style="font-size:15px;color:var(--muted);display:block;margin-bottom:8px">Best way to reach you</span>'+chips('contact_pref',CONTACT,true)+'</div>')+
+          (mode==='project'?'<label class="toggle-card"><input type="checkbox" id="plWantCall"'+(ans.want_call?' checked':'')+'><span><b>Book a free 15-minute call</b><span>Talk through your brief with us before we quote. Pick a time below.</span></span></label>'+callBits:'')+
+          field('extra','Anything else we should know?','','area',true)+
+          '<p class="file-note">We\'ll only use your details to reply to you. See our <a href="privacy.html">privacy policy</a> and <a href="terms.html">terms</a>.</p>';
+      },
+      v:function(){
+        var e=(ans.email||'').trim();
+        if(!ans.name) return ['Enter your name.','#pl_name'];
+        if(!e) return ['Enter your email so we can reply.','#pl_email'];
+        if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) return ['Check your email address. It should look like name@example.com.','#pl_email'];
+        var needPhone=mode==='call'&&ans.call_type==='Phone call'||ans.want_call&&ans.call_type==='Phone call'||ans.contact_pref==='Phone call'||ans.contact_pref==='Text message';
+        if(needPhone&&!ans.phone) return ['Add a phone number so we can call or text you.','#pl_phone'];
+        if(ans.want_call&&!ans.call_type) return ['Choose phone or video for your call.','[data-one=call_type]'];
+        if(ans.want_call&&!ans.booking_start) return ['Pick a day and time for your call.','.bk-times'];
+        return null;
+      }}
+  };
+  function flow(){return FLOWS[mode];}
+  function cur(){return STEPS[flow()[step]];}
+
+  /* ---------- render ---------- */
+  function render(dir){
+    err.textContent='';
+    var id=flow()[step], s=cur(), last=step===flow().length-1;
+    var title=id==='contact'?(mode==='project'?'Last step: how can we reach you?':'How can we reach you?'):s.t;
+    var sub=id==='contact'?'We\'ll reply within one business day.':id==='business'?(mode==='call'?'Just the basics, so we can prepare for the call.':'The more we know, the more it\'ll feel like you.'):s.s;
+    stepEl.innerHTML='<h2 id="plTitle" tabindex="-1">'+esc(title)+'</h2><p class="pl-sub">'+esc(sub)+'</p>'+s.r();
+    stepEl.classList.remove('enter','enter-back'); void stepEl.offsetWidth;
+    if(dir) stepEl.classList.add(dir<0?'enter-back':'enter');
+    bar.style.width=((step+1)/flow().length*100)+'%';
+    count.textContent='Step '+(step+1)+' of '+flow().length;
+    back.style.visibility=step===0?'hidden':'visible';
+    next.textContent=last?(mode==='call'?'Request my call':mode==='review'?'Request my review':'Send my brief'):'Continue';
+    bind();
+    form.scrollTop=0;
+  }
+
+  function bind(){
+    stepEl.querySelectorAll('[data-a]').forEach(function(i){ i.addEventListener('input',function(){ ans[i.dataset.a]=i.value.trim(); save(); }); });
+    stepEl.querySelectorAll('[data-one]').forEach(function(i){ i.addEventListener('change',function(){ ans[i.dataset.one]=i.value; save(); err.textContent=''; }); });
+    stepEl.querySelectorAll('[data-multi]').forEach(function(i){ i.addEventListener('change',function(){
+      var k=i.dataset.multi, list=ans[k]||[], max=+i.dataset.max||99;
+      if(i.checked){ if(list.length>=max){ i.checked=false; err.textContent='You can choose up to '+max+'.'; return; } list.push(i.value); }
+      else list=list.filter(function(v){return v!==i.value;});
+      ans[k]=list; save(); err.textContent='';
+    }); });
+    // colours
+    var add=document.getElementById('plAddColour');
+    if(add) add.onclick=function(){ ans.colours=(ans.colours||[]).concat(['#8A5A30']); save(); rerender(); var n=stepEl.querySelectorAll('[data-ci]'); if(n.length) n[n.length-1].click(); };
+    stepEl.querySelectorAll('[data-ci]').forEach(function(i){ i.addEventListener('input',function(){ ans.colours[+i.dataset.ci]=i.value; stepEl.querySelector('[data-ct="'+i.dataset.ci+'"]').value=i.value.toUpperCase(); save(); }); });
+    stepEl.querySelectorAll('[data-ct]').forEach(function(i){
+      function apply(final){ var v=i.value.trim(); if(v&&v[0]!=='#') v='#'+v;
+        if(/^#[0-9a-f]{6}$/i.test(v)){ ans.colours[+i.dataset.ct]=v.toLowerCase(); stepEl.querySelector('[data-ci="'+i.dataset.ct+'"]').value=v.toLowerCase(); save(); err.textContent=''; }
+        else if(final){ err.textContent='Colour codes look like #8A5A30.'; } }
+      i.addEventListener('input',function(){ apply(false); });
+      i.addEventListener('change',function(){ apply(true); });
+    });
+    stepEl.querySelectorAll('[data-cr]').forEach(function(b){ b.onclick=function(){ ans.colours.splice(+b.dataset.cr,1); save(); rerender(); }; });
+    var nc=document.getElementById('plNoColours'); if(nc) nc.onchange=function(){ ans.no_colours=nc.checked; if(nc.checked) ans.colours=[]; save(); rerender(); };
+    // inspiration links
+    var ai=document.getElementById('plAddInspo');
+    if(ai) ai.onclick=function(){ ans.inspo=(ans.inspo&&ans.inspo.length?ans.inspo:[{url:'',note:''}]).concat([{url:'',note:''}]); save(); rerender(); };
+    stepEl.querySelectorAll('[data-iu],[data-in]').forEach(function(i){ i.addEventListener('input',function(){
+      if(!ans.inspo||!ans.inspo.length) ans.inspo=[{url:'',note:''}];
+      var idx=+(i.dataset.iu||i.dataset.in); ans.inspo[idx][i.dataset.iu!=null?'url':'note']=i.value.trim(); save(); }); });
+    stepEl.querySelectorAll('[data-ir]').forEach(function(b){ b.onclick=function(){ ans.inspo.splice(+b.dataset.ir,1); save(); rerender(); }; });
+    // uploads
+    stepEl.querySelectorAll('[data-file]').forEach(function(inp){ inp.onchange=function(){ addFiles(inp.files,inp.dataset.file); inp.value=''; }; });
+    stepEl.querySelectorAll('[data-drop]').forEach(function(z){
+      z.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); z.querySelector('input').click(); } });
+      z.addEventListener('dragover',function(e){ e.preventDefault(); z.classList.add('over'); });
+      z.addEventListener('dragleave',function(){ z.classList.remove('over'); });
+      z.addEventListener('drop',function(e){ e.preventDefault(); z.classList.remove('over'); addFiles(e.dataTransfer.files,z.dataset.drop); });
+    });
+    stepEl.querySelectorAll('[data-fr]').forEach(function(b){ b.onclick=function(){ var f=files[+b.dataset.fr]; if(f.url) URL.revokeObjectURL(f.url); files.splice(+b.dataset.fr,1); rerender(); }; });
+    var as=document.getElementById('plAddService');
+    if(as) as.onclick=function(){ ans.services=(ans.services&&ans.services.length?ans.services:[{name:'',price:'',detail:''}]).concat([{name:'',price:'',detail:''}]); save(); rerender(); var n=stepEl.querySelectorAll('[data-sv=name]'); n[n.length-1].focus(); };
+    stepEl.querySelectorAll('[data-sv]').forEach(function(i){ i.addEventListener('input',function(){
+      if(!ans.services||!ans.services.length) ans.services=[{name:'',price:'',detail:''}];
+      ans.services[+i.dataset.si][i.dataset.sv]=i.value.trim(); save(); }); });
+    stepEl.querySelectorAll('[data-sr]').forEach(function(b){ b.onclick=function(){ ans.services.splice(+b.dataset.sr,1); save(); rerender(); }; });
+    stepEl.querySelectorAll('[data-bkday]').forEach(function(b){ b.onclick=function(){
+      ans.booking_day=b.dataset.bkday;
+      if(ans.booking_start&&new Date(Date.parse(ans.booking_start)+36e6).toISOString().slice(0,10)!==ans.booking_day){
+        delete ans.booking_start; delete ans.booking_label; }
+      save(); rerender(); }; });
+    stepEl.querySelectorAll('[data-bktime]').forEach(function(b){ b.onclick=function(){ ans.booking_start=b.dataset.bktime; ans.booking_day=new Date(Date.parse(b.dataset.bktime)+36e6).toISOString().slice(0,10); ans.booking_label=bookingLabel(b.dataset.bktime); save(); err.textContent=''; rerender(); var c=stepEl.querySelector('.bk-chosen'); if(c) c.scrollIntoView({block:'nearest',behavior:'smooth'}); }; });
+    var wc=document.getElementById('plWantCall'); if(wc) wc.onchange=function(){ ans.want_call=wc.checked; save(); rerender(); };
+  }
+  function rerender(){ var y=form.scrollTop; render(0); form.scrollTop=y; }
+
+  var OK_TYPES=['image/png','image/jpeg','image/webp','image/gif','image/svg+xml','image/heic','image/heif','application/pdf'];
+  function addFiles(list,kind){
+    var msgs=[];
+    Array.prototype.forEach.call(list,function(f){
+      var type=f.type||(/\.heic$/i.test(f.name)?'image/heic':'');
+      if(files.length>=10){ msgs.push('You can add up to 10 files.'); return; }
+      if(OK_TYPES.indexOf(type)<0){ msgs.push(f.name+' isn\'t an image or PDF.'); return; }
+      if(f.size>10*1024*1024){ msgs.push(f.name+' is over 10 MB.'); return; }
+      var previewable=/^image\/(png|jpeg|webp|gif|svg\+xml)$/.test(type);
+      files.push({file:f,kind:kind,type:type,url:previewable?URL.createObjectURL(f):null});
+    });
+    rerender();
+    if(msgs.length) err.textContent=msgs[0];
+  }
+
+  /* ---------- navigation ---------- */
+  function go(d){
+    if(busy) return;
+    if(d>0){
+      var bad=cur().v();
+      if(bad){ err.textContent=bad[0]; var t=stepEl.querySelector(bad[1]); if(t){ t.focus(); t.scrollIntoView({block:'center',behavior:'smooth'}); } return; }
+      if(step===flow().length-1) return submit();
+    }
+    step=Math.max(0,Math.min(flow().length-1,step+d)); save(); render(d);
+    document.getElementById('plTitle').focus({preventScroll:true});
+  }
+  back.onclick=function(){go(-1);};
+  next.onclick=function(){go(1);};
+  form.addEventListener('submit',function(e){ e.preventDefault(); });
+  form.addEventListener('keydown',function(e){
+    var t=e.target;
+    if(e.key==='Enter'&&t.tagName==='INPUT'&&!/^(checkbox|radio|color|file)$/.test(t.type)){ e.preventDefault(); go(1); }
+  });
+
+  function open(m,pkg,industry){
+    mode=FLOWS[m]?m:'project'; lastFocus=document.activeElement;
+    if(!restore(mode)){ ans={}; step=0; }
+    if(pkg&&mode==='project'){ ans.need=pkg; }
+    if(industry&&!ans.industry){ ans.industry=industry; }
+    busy=false; foot.hidden=false; openedAt=Date.now();
+    root.hidden=false; document.documentElement.style.overflow='hidden';
+    render(0);
+    document.getElementById('plTitle').focus({preventScroll:true});
+  }
+  function close(){
+    root.hidden=true; document.documentElement.style.overflow='';
+    if(history.replaceState&&/^#start/.test(location.hash)) history.replaceState(null,'',location.pathname+location.search);
+    if(lastFocus&&lastFocus.focus) lastFocus.focus();
+  }
+  document.getElementById('plClose').onclick=close;
+  root.addEventListener('click',function(e){ if(e.target===root) close(); });
+  document.addEventListener('keydown',function(e){
+    if(root.hidden) return;
+    if(e.key==='Escape'){ close(); return; }
+    if(e.key==='Tab'){
+      var f=root.querySelectorAll('button:not([disabled]),input:not([type=hidden]),textarea,select,a[href],[tabindex="0"]');
+      f=Array.prototype.filter.call(f,function(x){return x.offsetParent!==null;});
+      if(!f.length) return;
+      if(e.shiftKey&&document.activeElement===f[0]){ e.preventDefault(); f[f.length-1].focus(); }
+      else if(!e.shiftKey&&document.activeElement===f[f.length-1]){ e.preventDefault(); f[0].focus(); }
+    }
+  });
+  document.querySelectorAll('[data-start]').forEach(function(b){
+    b.addEventListener('click',function(e){ e.preventDefault(); open(b.dataset.start,b.dataset.package,b.dataset.industry||document.body.dataset.industry); });
+  });
+  var h=location.hash.match(/^#start(?:-(project|call|review))?$/); if(h) open(h[1]||'project');
+
+  /* ---------- submit ---------- */
+  function center(html){ foot.hidden=true; stepEl.classList.remove('enter','enter-back'); stepEl.innerHTML='<div class="pl-center">'+html+'</div>'; bar.style.width='100%'; }
+  function summary(){
+    var out=[];
+    Object.keys(LABELS).forEach(function(k){
+      var v=ans[k]; if(v==null||v===''||(Array.isArray(v)&&!v.length)) return;
+      if(k==='inspo') v=v.filter(function(x){return x.url;}).map(function(x){return x.url+(x.note?' ('+x.note+')':'');}).join('; ');
+      else if(k==='services') v=v.filter(function(x){return x.name;}).map(function(x){return x.name+(x.price?' ('+x.price+')':'')+(x.detail?': '+x.detail:'');}).join('; ');
+      else if(Array.isArray(v)) v=v.join(', ');
+      if(v) out.push(LABELS[k]+': '+v);
+    });
+    return out.join('\n');
+  }
+  function payloadAnswers(){
+    var a=JSON.parse(JSON.stringify(ans));
+    if(a.inspo) a.inspo=a.inspo.filter(function(x){return x.url;});
+    if(a.services) a.services=a.services.filter(function(x){return x.name;});
+    if(mode!=='project') delete a.want_call;
+    if(mode==='project'&&!a.want_call){ delete a.slots; delete a.call_type; delete a.booking_start; delete a.booking_label; }
+    delete a.booking_day;
+    return a;
+  }
+  function calLinks(iso){
+    var s=new Date(iso), e=new Date(s.getTime()+CONFIG.BOOKING.length*6e4), st=function(d){return d.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');};
+    var g='https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent('Call with Brightfront Studio')+'&dates='+st(s)+'/'+st(e);
+    var ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Brightfront Studio//EN','BEGIN:VEVENT','UID:'+st(s)+'@brightfront','DTSTAMP:'+st(new Date()),'DTSTART:'+st(s),'DTEND:'+st(e),'SUMMARY:Call with Brightfront Studio','END:VEVENT','END:VCALENDAR'].join('\r\n');
+    return '<div class="row"><a class="btn btn-solid" href="'+g+'" target="_blank" rel="noopener">Add to Google Calendar</a><a class="btn btn-line" href="data:text/calendar;charset=utf-8,'+encodeURIComponent(ics)+'" download="brightfront-call.ics">Apple or Outlook</a></div>';
+  }
+  function done(res){
+    forget();
+    var first=(ans.name||'').split(' ')[0], bk=res&&res.booking?res.booking:null;
+    var how=String(ans.call_type||'').indexOf('Video')===0?'We\'ll email you a video link on the day.':'We\'ll call you'+(ans.phone?' on '+ans.phone:'')+'.';
+    var t=bk?(MODE_FS?'Call time requested':'Your call is booked'):mode==='call'?'Call requested':mode==='review'?'Review requested':'Brief received';
+    var steps=mode==='call'
+      ?[MODE_FS?['We confirm your time','We\'ll email '+ans.email+' to confirm '+(bk?bk.label:'your call')+'.']:['Check your email','A confirmation and calendar invite are on their way to '+ans.email+'.'],['We look at your business first','So the call is useful from the first minute.'],['We talk it through','15 minutes, no pressure. '+how]]
+      :mode==='review'
+      ?[['We review your site','Mobile, speed, search and how easy it is to contact you.'],['You get honest feedback','Within one business day, in plain English.'],['You decide','Fix it yourself, or have us do it.']]
+      :[['We read your brief','And look through your photos, brand files and inspiration.'],['You get ideas and a fixed quote','Within one business day.'],['You see your first draft','Often within days, not weeks.']];
+    var box=bk?'<div class="bk-done"><small>'+(MODE_FS?'The time you asked for':'Your call')+'</small><b>'+esc(bk.label)+'</b>'+calLinks(bk.start)+'</div>':'';
+    center('<div class="done-mark"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#F2EDE7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>'+
+      '<h2 id="plTitle" tabindex="-1">'+esc(t)+(first?', thanks '+esc(first):'')+'</h2>'+box+'<p>'+(MODE_FS?'We\'ll reply to '+esc(ans.email)+'.':'We\'ve sent a copy to '+esc(ans.email)+'.')+' Here\'s what happens next:</p>'+
+      '<ol class="next-steps">'+steps.map(function(s,i){return '<li><span>'+(i+1)+'</span><div><b>'+esc(s[0])+'</b>'+esc(s[1])+'</div></li>';}).join('')+'</ol>'+
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:8px"><button type="button" class="btn btn-line" id="plDone">Back to the website</button></div>');
+    document.getElementById('plDone').onclick=close;
+    document.getElementById('plTitle').focus();
+    if(bk) booked.push(bk.start);
+    ans={}; files.forEach(function(f){ if(f.url) URL.revokeObjectURL(f.url); }); files=[];
+  }
+  function fallback(){
+    var subj=(mode==='call'?'Call request: ':mode==='review'?'Website review request: ':'Project brief: ')+(ans.business||'');
+    var body='Name: '+(ans.name||'')+'\nEmail: '+(ans.email||'')+'\nPhone: '+(ans.phone||'')+'\n\n'+summary()+(files.length?'\n\n(I\'ll attach my '+files.length+' file'+(files.length===1?'':'s')+' to this email.)':'');
+    var mail='mailto:'+CONFIG.EMAIL+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);
+    center('<div class="done-mark"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#F2EDE7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>'+
+      '<h2 id="plTitle" tabindex="-1">One last tap to send it</h2><p>Press the button below and your email will open with all your answers filled in. Then just press send'+(files.length?', after attaching your logo and photos':'')+'.'+(ans.booking_label?' We\'ll confirm '+esc(ans.booking_label)+' by email.':'')+'</p>'+
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px"><a class="btn btn-solid" id="plMail" href="'+esc(mail)+'" target="_blank" rel="noopener">Send it by email</a><button type="button" class="btn btn-line" id="plCopy">Copy my answers</button></div>'+
+      '<p style="font-size:15px">Email not working? Copy your answers and send them to <a href="mailto:'+CONFIG.EMAIL+'">'+CONFIG.EMAIL+'</a>.</p>'+
+      '<button type="button" class="btn btn-line" id="plDone" style="margin-top:4px">Back to the website</button>');
+    document.getElementById('plCopy').onclick=function(){
+      var btn=this, text=subj+'\n\n'+body;
+      function done(){ btn.textContent='Copied'; setTimeout(function(){btn.textContent='Copy my answers';},2500); }
+      if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done,function(){ legacy(); }); } else legacy();
+      function legacy(){ var t=document.createElement('textarea'); t.value=text; t.style.position='fixed'; t.style.opacity='0'; document.body.appendChild(t); t.select(); try{ document.execCommand('copy'); done(); }catch(e){} t.remove(); }
+    };
+    document.getElementById('plMail').onclick=function(){ forget(); };
+    document.getElementById('plDone').onclick=close;
+    document.getElementById('plTitle').focus();
+  }
+  function post(data){
+    return fetch(CONFIG.ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
+      .then(function(r){ return r.json().catch(function(){return {};}).then(function(j){ if(!r.ok||j.error) throw Object.assign(new Error(j.error||'Something went wrong.'),{fields:j.fields}); return j; }); });
+  }
+  async function submit(){
+    if(!LIVE && !MODE_FS){ fallback(); return; }
+    busy=true; next.disabled=true; back.disabled=true;
+    var hp=document.getElementById('plHp').value, t=Date.now()-openedAt;
+    center('<div class="bigspin" aria-hidden="true"></div><h2 id="plTitle" tabindex="-1" style="font-size:32px">Sending</h2><p id="plSending">Just a moment.</p>');
+    var status=document.getElementById('plSending');
+    try{
+      if(MODE_FS){
+        status.textContent='Sending your answers';
+        var fsBody={ name:ans.name||'', email:ans.email||'', phone:ans.phone||'', type:mode,
+          _subject:(mode==='call'?'Call request: ':mode==='review'?'Website review request: ':'Project brief: ')+(ans.business||ans.name||''),
+          message:summary() };
+        if(ans.booking_label) fsBody.call_time=ans.booking_label;
+        if(hp) fsBody._gotcha=hp;
+        var fr=await fetch(FS,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(fsBody)});
+        var fj=await fr.json().catch(function(){return {};});
+        if(!fr.ok) throw new Error((fj.errors&&fj.errors[0]&&fj.errors[0].message)||'We couldn\'t send that just now. Please try again.');
+        done({booking:ans.booking_start?{start:ans.booking_start,label:ans.booking_label}:null});
+        return;
+      }
+      var session=null, uploaded=[];
+      if(files.length){
+        status.textContent='Preparing your files';
+        var prep=await post({action:'prepare_uploads',hp:hp,t:t,files:files.map(function(f){return {name:f.file.name,type:f.type,size:f.file.size};})});
+        session=prep.session;
+        for(var i=0;i<files.length;i++){
+          status.textContent='Uploading file '+(i+1)+' of '+files.length;
+          var fd=new FormData(); fd.append('cacheControl','3600'); fd.append('',files[i].file);
+          var up=await fetch(prep.uploads[i].url,{method:'PUT',headers:{'x-upsert':'false',apikey:prep.key,Authorization:'Bearer '+prep.key},body:fd});
+          if(!up.ok) throw new Error('One of your files didn\'t upload. Please try again.');
+          uploaded.push({path:prep.uploads[i].path,name:files[i].file.name,type:files[i].type,size:files[i].file.size,kind:files[i].kind});
+        }
+      }
+      status.textContent='Sending your answers';
+      var res=await post({action:'submit',mode:mode,answers:payloadAnswers(),session:session,files:uploaded,hp:hp,t:t});
+      done(res);
+    }catch(e){
+      busy=false; next.disabled=false; back.disabled=false; foot.hidden=false;
+      if(e.fields&&e.fields.booking_start){
+        if(ans.booking_start) booked.push(ans.booking_start);
+        delete ans.booking_start; delete ans.booking_label;
+        var ci=flow().indexOf('call'); if(ci>-1) step=ci;
+        render(0); err.textContent=e.message; return;
+      }
+      render(0);
+      err.textContent=(e.message||'Something went wrong.')+' If it keeps happening, email '+CONFIG.EMAIL+'.';
+    }
+  }
+})();
+</script>
+<!-- analytics -->
+
+<!-- bf-analytics · Paste your Google Analytics ID between the quotes below (it looks like
+     G-ABC1234XYZ) and tracking starts on every page. Left empty, nothing loads. -->
+<script>
+(function(){
+  var ID = '';
+  if (!ID) return;
+  var s = document.createElement('script');
+  s.async = 1; s.src = 'https://www.googletagmanager.com/gtag/js?id=' + ID;
+  document.head.appendChild(s);
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  window.gtag = gtag; gtag('js', new Date()); gtag('config', ID);
+})();
+</script>
+</body>
+</html>
