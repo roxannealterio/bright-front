@@ -1,46 +1,56 @@
-# Brightfront Studio
+# Brightfront
 
-> Brightfront Studio is a one-person brand, web and marketing studio in Brisbane, Australia (ABN 80 241 124 181), run by Roxanne Alterio. The work is rebrands and refreshes: tidying up a brand that has fallen behind the business, rebuilding the website around what customers actually do, and then running the marketing that keeps it moving. Clients deal with Roxanne directly from first call to launch. Australian and worldwide.
+> Brightfront is a digital marketing agency in Brisbane, Queensland, Australia (ABN 80 241 124 181), founded and run by Roxanne Alterio. It runs search, paid media, social and email as one system rather than as separate line items, for established small and mid-sized businesses. Fixed monthly fees, no percentage of ad spend, no lock-in contract.
 
-Tagline: Rebrand. Build. Grow.
+Tagline: We build brands and scale revenue with sharper digital marketing.
 
 ## Who it is for
 
-Established small businesses whose branding no longer matches how good the business has become: the logo is years old, the website was built in a hurry, and the marketing is whatever anyone remembered to post that week. Most do not need to start again, they need a tidy-up and someone keeping it moving.
+Established businesses that have outgrown doing their own marketing: the ads are running but nobody can say what they return, the website gets traffic that does not convert, and social, email and search are each handled by someone different. Above roughly fifty thousand dollars a month in media spend a large agency will serve them better. Below that, they get more attention here.
 
-## Services and prices (AUD, including GST for Australian clients)
+## Services
 
-Prices are a starting point. The real number is fixed in writing before any work starts and does not move unless the client adds to the job. Half to begin, half on the day the site goes live. Monthly work is month to month with no lock-in.
+- Google Ads: search, Performance Max and remarketing campaigns built and managed against revenue rather than clicks.
+- Meta and Instagram advertising: paid social creative, audience building and structured testing across Facebook and Instagram.
+- Search engine optimisation: technical SEO, content and local search, so the business is found without paying for every click.
+- Social media management: organic content planned, produced and published so the brand stays visible between campaigns.
+- Email and SMS marketing: Klaviyo and Mailchimp flows that turn one-time buyers into repeat revenue.
+- Conversion and analytics: landing pages, tracking and reporting so every dollar of spend is attributed to a result.
 
-- Strategy session, $350: a 90-minute call covering where the business is, where the owner wants it, and what the marketing has to do to get there, written up as a one-page plan with priorities, order of work and rough costs. The $350 is redeemable against the project if the client goes ahead with the work. A quarterly strategy review is included in the Keep it moving and Keep it growing monthly plans.
-- Branding, from $1,200: logo, colours, type, a one-page brand guide, email signatures, social templates, and every print and web file. Supplied ready to use.
-- Websites, from $1,500: custom sites built around the one thing the customer came to do. Fast on phones, easy to find on Google, owned by the client.
-- App design, from $10,000: app screens, onboarding, app branding, App Store and Google Play listings, launch pages and launch campaigns. Sold as an add-on to a brand or website build, typically $10,000 to $20,000 depending on scope.
-- Social media management, from $750 a month: a month of posts designed, written and scheduled from one content day.
-- Google and Meta ads, from $600 a month plus ad spend: campaign setup, landing pages, management and monthly reporting.
-- Signage, print and billboards, from $450: print-ready artwork for business cards, shopfronts, vehicles, billboards, menus, DL flyers, loyalty and stamp cards, stickers, brochures and packaging, supplied to the client's printer or signwriter.
-- Email and automation: enquiry forms, automatic replies, follow-up sequences and a customer list the client owns.
-- Care plan, $99 a month: hosting, security, backups and up to 5 changes a month. No lock-in.
-- Real estate marketing, quoted to suit: agency websites, expression of interest forms and property e-brochures.
+Platforms worked in: Google Ads, Google Analytics, Google Business Profile, Google Search Console, Meta Ads, Instagram, Facebook, TikTok, LinkedIn, Klaviyo, Mailchimp, Shopify, WordPress.
 
-## How it works
+## Performance guarantee
 
-1. Discover: a fifteen-minute call about what the business sells, who is buying, and what the marketing is doing now.
-2. Shape: a fixed price and a plan in writing, usually within one business day.
-3. Build: brand, website and words made by the same person, with a real draft early rather than a wireframe weeks later.
-4. Launch: forms tested, tracking on, search engines told, every account in the client's name before handover.
-5. Grow: watch what it does, change what is not working, add ads and content when the client is ready.
+For businesses already running profitable Google or Facebook ads, Brightfront designs a new funnel, writes the ads and optimises performance until it beats the client's existing conversion rate, cost per lead or ROAS by 40% within 90 days. If it has not, Brightfront keeps working at no charge until it does. The 40% baseline is the client's own last 90 days of performance, agreed in writing before the engagement starts and measured in the client's own accounts.
 
-## What clients own
+## How engagements work
 
-Everything. Domain, designs, words, photos and ad accounts are all registered in the client's name. If they leave, they take the lot.
+1. A free fifteen-minute call. The current website, search presence and social are reviewed beforehand, and the call covers what would change first.
+2. A written plan and a fixed monthly fee, usually within one business day. Pricing is quoted per business and is not published.
+3. Tracking, accounts and measurement set up before any spend goes out.
+4. Campaigns live, then reported monthly in dollars: spend in, revenue or qualified enquiries out.
+5. Thirty days' notice to stop, in writing. No exit fees, no minimum term.
 
-## Work
+## Commercial terms
 
-- Alter You (alteryouapp.com), health and fitness: a women's training, nutrition and cycle-tracking app. Brand identity, website design, page design, photography and launch.
+- Fixed monthly fee, agreed in writing before work starts.
+- The fee does not change with ad spend. Brightfront never takes a percentage of spend and never marks it up.
+- The client's own card sits on their own Google and Meta accounts, so those platforms bill them directly.
+- Every account, Google Ads, Meta Business, Analytics, the domain and the hosting, is in the client's name from day one. If the relationship ends, the client keeps all of it with the history intact.
+- No lock-in contract. Thirty days' notice.
+
+## Realistic timeframes
+
+Paid media moves in weeks. SEO takes months. Brightfront does not promise a specific number by a specific date. Within the first month a client has a plan, tracking configured and campaigns live.
+
+## Areas served
+
+Based in Brisbane, Queensland. Works with businesses across Brisbane, the Gold Coast, Queensland and the rest of Australia, and remotely elsewhere.
 
 ## Contact
 
 - Website: https://brightfrontstudio.com/
+- Book a free 15-minute call: https://brightfrontstudio.com/book.html
 - Email: info@brightfrontstudio.com
-- Based in Brisbane, Queensland, Australia. Works with clients anywhere.
+- Founder: Roxanne Alterio
+- Location: Brisbane, Queensland, Australia
