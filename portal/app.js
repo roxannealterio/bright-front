@@ -31,7 +31,9 @@ const ICON = {
   star: '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',
   image: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/>',
   report: '<path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/>',
-  inbox: '<path d="M3 13h5l1 3h6l1-3h5"/><path d="M5 5h14l2 8v6H3v-6z"/>'
+  inbox: '<path d="M3 13h5l1 3h6l1-3h5"/><path d="M5 5h14l2 8v6H3v-6z"/>',
+  plug: '<path d="M9 2v6M15 2v6M6 8h12v4a6 6 0 0 1-12 0zM12 18v4"/>',
+  down: '<path d="M12 4v12M7 11l5 5 5-5M4 20h16"/>'
 };
 const ic = (n, s = 18) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[n]}</svg>`;
 const PILL = {
@@ -185,6 +187,12 @@ if (LIVE) {
     saveReport: (c, o) => q(sb.from('reports').upsert({ ...o, client_id: c }, { onConflict: 'client_id,month' })),
     async draftReport(c, month) { const r = await api.replyFn({ action: 'report', client_id: c, month }); return r.report; },
     setLeadFields: (id, o) => q(sb.from('leads').update(o).eq('id', id)),
+    allLeads: (c) => q(sb.from('leads').select('*').eq('client_id', c).order('created_at', { ascending: false }).limit(10000)),
+    async everyLead() { const rows = await q(sb.from('leads').select('*, clients(name)').order('created_at', { ascending: false }).limit(20000)); return rows.map((r) => ({ ...r, client: r.clients?.name })); },
+    async connStatus(c) { const r = await q(sb.rpc('connection_status', { p_client: c })); return r?.[0] || null; },
+    conn: (c) => q(sb.from('connections').select('*').eq('client_id', c).maybeSingle()),
+    saveConn: (c, o) => q(sb.from('connections').upsert({ ...o, client_id: c, updated_at: new Date().toISOString() }, { onConflict: 'client_id' })),
+    metaConnect(c) { return api.replyFn({ action: 'meta_connect', client_id: c }); },
     async saveReply(c, o) {
       const up = (x) => sb.from('reply_settings').upsert({ ...x, client_id: c, updated_at: new Date().toISOString() }, { onConflict: 'client_id' }).select().single();
       let { data, error } = await up(o);
@@ -250,6 +258,12 @@ if (LIVE) {
     setLeadFields(id, o) { [...Object.values(D.leads).flat(), ...D.extra.leads].forEach((l) => { if (l.id === id) Object.assign(l, o); }); return ok(); },
     saveReply(c, o) { D.reply[c] = { intake_key: 'demo-key-' + c, ...(D.reply[c] || {}), ...o, client_id: c }; return ok(D.reply[c]); },
     conversations: (c) => ok(D.convs[c] || []),
+    allLeads: (c) => api.leads(c),
+    everyLead: () => ok(D.clients.flatMap((cl) => (cl.id === 'c1' ? D.extra.leads : (D.leads[cl.id] || [])).map((l) => ({ ...l, client: cl.name })))),
+    connStatus: (c) => ok(c === 'c1' ? { meta_page_name: 'Sample Electrical', meta_ig_username: 'sampleelectrical', facebook: true, instagram: true, inbound_email: null } : null),
+    conn: (c) => ok(D.conn?.[c] || (c === 'c1' ? { meta_page_id: '1029384756', meta_page_name: 'Sample Electrical', meta_ig_username: 'sampleelectrical', meta_page_token: 'set', lead_ads: true, dms: true } : null)),
+    saveConn(c, o) { (D.conn ||= {})[c] = { ...(D.conn[c] || {}), ...o }; return ok(); },
+    metaConnect: () => ok({ ok: true, page: 'Sample Electrical', instagram: 'sampleelectrical' }),
     messages: (id) => ok((D.msgs[id] || []).map(([sender, body, n]) => ({ id: uid(), sender, body, direction: sender === 'lead' ? 'in' : 'out', created_at: new Date(Date.now() + n * 86400000).toISOString() }))),
     setConv(id, status) { Object.values(D.convs).flat().forEach((v) => { if (v.id === id) v.status = status; }); return ok(); },
     sendMsg(id, body) { (D.msgs[id] ||= []).push(['human', body, 0]); Object.values(D.convs).flat().forEach((v) => { if (v.id === id) { v.status = 'human'; v.last_message_at = new Date().toISOString(); } }); return ok(); },
@@ -270,6 +284,10 @@ async function load() {
   const [calls, reviews, reqs, creatives, reports] = await Promise.all([safe(api.calls(c)), safe(api.reviews(c)), safe(api.reviewRequests(c)), safe(api.creatives(c)), safe(api.reports(c))]);
   Object.assign(state.data, { calls, reviews, reqs, creatives, reports });
   if (state.view === 'replies' || state.view === 'dashboard') { state.data.convs = await api.conversations(c).catch(() => []); }
+  if (state.view === 'channels') {
+    const [reply, cs, conn] = await Promise.all([api.replySettings(c).catch(() => null), api.connStatus(c).catch(() => null), isAgency() ? api.conn(c).catch(() => null) : Promise.resolve(null)]);
+    Object.assign(state.data, { reply, cs, conn });
+  }
   if (state.view === 'replies') {
     const [reply, convs] = await Promise.all([api.replySettings(c).catch(() => null), api.conversations(c).catch(() => [])]);
     Object.assign(state.data, { reply, convs });
@@ -358,6 +376,7 @@ function render() {
     ${navBtn('replies', 'Inbox', 'inbox', c.needYou)}
     ${navBtn('leads', 'Leads & pipeline', 'leads')}
     ${navBtn('calls', 'Calls', 'phone')}
+    ${navBtn('channels', 'Connections', 'plug')}
     <div class="nav-label">Marketing</div>
     ${navBtn('ads', 'Ads & creative', 'image')}
     ${navBtn('reviews', 'Reviews', 'star', c.unreplied)}
@@ -442,7 +461,7 @@ const monthName = (d) => new Date(d).toLocaleDateString('en-AU', { month: 'long'
 /* ---------------- views ---------------- */
 const VIEWS = {
   overview() {
-    return head('Agency', 'All clients', 'Every client at a glance: results, what’s waiting, and who needs a nudge.', `<button class="btn btn-pink" data-act="newClient">${ic('plus', 16)} Add client</button>`) + `<div id="ov"><div class="card empty">Loading clients…</div></div>`;
+    return head('Agency', 'All clients', 'Every client at a glance: results, what’s waiting, and who needs a nudge.', `<button class="btn btn-ghost" data-act="csvAll">${ic('down', 16)} All leads (CSV)</button><button class="btn btn-pink" data-act="newClient">${ic('plus', 16)} Add client</button>`) + `<div id="ov"><div class="card empty">Loading clients…</div></div>`;
   },
   dashboard() {
     const cl = client(); const d = state.data; const s = stats(cl, d.metrics);
@@ -493,7 +512,7 @@ const VIEWS = {
     const rep = L.filter((l) => l.first_reply_seconds != null); const avg = rep.length ? rep.reduce((a, l) => a + l.first_reply_seconds, 0) / rep.length : null;
     const cols = [['new', 'New'], ['follow_up', 'Follow-up'], ['booked', 'Booked'], ['won', 'Won']];
     const sorted = [...L].sort((a, b) => scoreOf(b) - scoreOf(a));
-    return head('Pipeline', 'Leads & pipeline', 'Every enquiry, scored and tracked from first message to sale. Hot leads first.', `<div class="seg" role="tablist" aria-label="View"><button role="tab" data-leadmode="table" aria-selected="${mode === 'table'}">List</button><button role="tab" data-leadmode="board" aria-selected="${mode === 'board'}">Board</button></div>${isAgency() ? `<button class="btn btn-pink" data-act="addLead">${ic('plus', 16)} Add lead</button>` : ''}`) + `
+    return head('Pipeline', 'Leads & pipeline', 'Every enquiry, scored and tracked from first message to sale. Hot leads first.', `<div class="seg" role="tablist" aria-label="View"><button role="tab" data-leadmode="table" aria-selected="${mode === 'table'}">List</button><button role="tab" data-leadmode="board" aria-selected="${mode === 'board'}">Board</button></div><button class="btn btn-ghost" data-act="csvLeads">${ic('down', 16)} Download CSV</button>${isAgency() ? `<button class="btn btn-pink" data-act="addLead">${ic('plus', 16)} Add lead</button>` : ''}`) + `
     <section class="grid g4">
       <div class="card kpi"><span class="lab">Hot leads to action</span><span class="val">${hot}</span><span class="delta muted">Score 75 and up</span></div>
       <div class="card kpi"><span class="lab">Open pipeline value</span><span class="val">${money0(pipe)}</span><span class="delta muted">${open.length} open leads</span></div>
@@ -645,15 +664,15 @@ const VIEWS = {
     if (!r.client_id && tab === 'inbox') body = `<div class="card empty" style="text-align:left"><h2 style="margin-bottom:6px">Set up your assistant</h2><p class="muted">Tell it about the business and what to ask every lead. It takes about five minutes.</p><button class="btn btn-pink" data-rtab="settings">Start set-up</button></div>`;
     else if (tab === 'inbox') body = `<section class="rp-wrap">
       <div class="card rp-list"><div class="card-head"><h2>Conversations</h2><button class="btn btn-ghost btn-sm" data-act="refreshReplies">Refresh</button></div>
-        ${convs.length ? `<ul class="list rp-convs">${convs.map((v) => `<li><button type="button" class="rp-conv" data-conv="${esc(v.id)}" ${v.id === state.convId ? 'aria-current="true"' : ''}><span class="row" style="justify-content:space-between;gap:8px"><b>${esc(v.lead_name || v.contact)}</b><span class="small muted">${fmtDate(v.last_message_at)}</span></span><span class="row" style="gap:6px">${pill(v.status)}<span class="small muted">${v.channel === 'sms' ? 'Text' : 'Email'}</span></span>${v.summary ? `<span class="small muted rp-sum">${esc(v.summary)}</span>` : ''}</button></li>`).join('')}</ul>` : '<p class="empty">No conversations yet. Send a test lead from Connect & test.</p>'}
+        ${convs.length ? `<ul class="list rp-convs">${convs.map((v) => `<li><button type="button" class="rp-conv" data-conv="${esc(v.id)}" ${v.id === state.convId ? 'aria-current="true"' : ''}><span class="row" style="justify-content:space-between;gap:8px"><b>${esc(v.lead_name || v.contact)}</b><span class="small muted">${fmtDate(v.last_message_at)}</span></span><span class="row" style="gap:6px">${pill(v.status)}<span class="small muted">${CHN[v.channel] || 'Email'}</span></span>${v.summary ? `<span class="small muted rp-sum">${esc(v.summary)}</span>` : ''}</button></li>`).join('')}</ul>` : '<p class="empty">No conversations yet. Send a test lead from Connect & test.</p>'}
       </div>
       <div class="card rp-thread">${cv ? `
-        <div class="card-head" style="align-items:flex-start"><div><h2>${esc(cv.lead_name || cv.contact)}</h2><span class="small muted">${cv.channel === 'sms' ? 'Mobile' : 'Email'}: ${esc(cv.contact)}</span></div>${pill(cv.status)}</div>
+        <div class="card-head" style="align-items:flex-start"><div><h2>${esc(cv.lead_name || cv.contact)}</h2><span class="small muted">${['messenger', 'instagram'].includes(cv.channel) ? CHN[cv.channel] : (cv.channel === 'sms' ? 'Mobile' : 'Email') + ': ' + esc(cv.contact)}</span></div>${pill(cv.status)}</div>
         ${cv.summary ? `<p class="rp-note"><b>Summary</b> ${esc(cv.summary)}</p>` : ''}
         <div class="rp-msgs" id="rpMsgs">${state.msgs.map((m) => `<div class="rp-m ${m.sender === 'lead' ? 'in' : 'out'} ${m.sender}"><span class="small">${m.sender === 'lead' ? esc(cv.lead_name || 'Lead') : m.sender === 'ai' ? 'Assistant' : 'You'} · ${fmtDT(m.created_at)}</span><p>${esc(m.body)}</p>${m.error ? `<span class="small" style="color:var(--pinkd)">Not sent: ${esc(m.error)}</span>` : ''}</div>`).join('') || '<p class="empty">No messages yet.</p>'}</div>
         ${cv.status === 'opted_out' ? '<p class="muted small" style="margin:12px 0 0">This person opted out, so they can’t be messaged here.</p>' : `
         <div class="row" style="gap:8px;margin:12px 0">${cv.status === 'ai' ? `<button class="btn btn-ghost btn-sm" data-convst="human">Take over</button>` : `<button class="btn btn-ghost btn-sm" data-convst="ai">Let the assistant reply</button>`}<button class="btn btn-ghost btn-sm" data-convst="closed">Close</button></div>
-        <form id="rpSend" class="rp-send" novalidate><label class="sr" for="rpBody">Your reply</label><textarea class="field" id="rpBody" name="body" maxlength="${cv.channel === 'sms' ? 480 : 4000}" placeholder="Write your reply. Sending it takes the conversation over from the assistant."></textarea><button class="btn btn-navy" type="submit">Send ${cv.channel === 'sms' ? 'text' : 'email'}</button></form>`}` : '<p class="empty">Pick a conversation to read it.</p>'}
+        <form id="rpSend" class="rp-send" novalidate><label class="sr" for="rpBody">Your reply</label><textarea class="field" id="rpBody" name="body" maxlength="${cv.channel === 'sms' ? 480 : cv.channel === 'email' ? 4000 : 1000}" placeholder="Write your reply. Sending it takes the conversation over from the assistant."></textarea><button class="btn btn-navy" type="submit">Send ${cv.channel === 'sms' ? 'text' : cv.channel === 'email' ? 'email' : 'message'}</button></form>`}` : '<p class="empty">Pick a conversation to read it.</p>'}
       </div></section>`;
     else if (tab === 'settings') body = `<form class="card rp-form" id="rpSettings" novalidate>
       <h2>What your assistant knows and says</h2><p class="muted small" style="margin:0">It only uses what you write here. Anything else, it hands to you.</p>
@@ -695,11 +714,65 @@ const VIEWS = {
   <input name="website" style="display:none" tabindex="-1" autocomplete="off">
   <button>Send</button>
 </form>`)}</pre></details>
-        <details><summary class="small" style="font-weight:700;cursor:pointer">Facebook and Instagram lead forms</summary><p class="small muted">In Zapier or Make: when a new Meta lead comes in, send a POST (webhook) to the lead address above with name, email, phone and source “Meta lead form”.</p></details>
+        <p class="small muted" style="margin:0">Facebook, Instagram, email and other lead sources: see <button type="button" class="linkbtn" data-go="channels">Connections</button>.</p>
         ${r.sms_number ? `<p class="small muted" style="margin:0">Texts send from ${esc(r.sms_number)}.</p>` : '<p class="small muted" style="margin:0">Texting turns on once we’ve set up your sending number.</p>'}` : '<p class="empty">Save your settings first.</p>'}
       </div></section>`;
     return top + kpis + tabBar + body;
   }
+};
+
+const CHN = { sms: 'Text', email: 'Email', messenger: 'Messenger', instagram: 'Instagram' };
+const CSV_COLS = [['created_at', 'Date'], ['name', 'Name'], ['phone', 'Mobile'], ['email', 'Email'], ['source', 'Source'], ['enquiry', 'Enquiry'], ['message', 'Message'], ['status', 'Stage'], ['score', 'Score'], ['value', 'Deal value'], ['first_reply_seconds', 'First reply (seconds)'], ['notes', 'Notes']];
+function downloadCsv(rows, file, withClient) {
+  const cols = withClient ? [['client', 'Client'], ...CSV_COLS] : CSV_COLS;
+  const cell = (v) => { let t = v == null ? '' : String(v); if (/^[=+\-@\t\r]/.test(t)) t = "'" + t; return /[",\n\r]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t; };
+  const fmt = (k, v) => k === 'created_at' && v ? new Date(v).toLocaleString('en-AU', { dateStyle: 'short', timeStyle: 'short' }) : k === 'status' && PILL[v] ? PILL[v][0] : v;
+  const text = '﻿' + [cols.map((c) => c[1]).join(','), ...rows.map((r) => cols.map(([k]) => cell(fmt(k, r[k]))).join(','))].join('\r\n');
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: 'text/csv;charset=utf-8' })); a.download = file; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+}
+const slug = (t) => String(t || 'leads').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+VIEWS.channels = function () {
+  const d = state.data, r = d.reply || {}, cs = d.cs || {}, cn = d.conn || {};
+  const fn = LIVE ? `${CFG.SUPABASE_URL}/functions/v1/reply` : 'https://YOUR-PROJECT.supabase.co/functions/v1/reply';
+  const key = r.intake_key;
+  const L = d.leads || [];
+  const bySrc = Object.entries(L.reduce((a, l) => { const k = l.source || 'Other'; a[k] = (a[k] || 0) + 1; return a; }, {})).sort((a, b) => b[1] - a[1]);
+  const on = (x) => `<span class="pill ${x ? 'p-green' : 'p-grey'}">${x ? 'Connected' : 'Not connected'}</span>`;
+  const copy = (label, val) => `<label class="lab">${label}<span class="row" style="gap:8px"><input class="field" readonly value="${esc(val)}" onclick="this.select()"><button type="button" class="btn btn-ghost btn-sm" data-copy="${esc(val)}">Copy</button></span></label>`;
+  const card = (title, sub, status, inner) => `<article class="card ch-card"><div class="card-head" style="align-items:flex-start;gap:12px"><div><h2>${title}</h2><p class="small muted" style="margin:4px 0 0">${sub}</p></div>${status}</div>${inner}</article>`;
+  if (!key) return head('Leads', 'Connections', 'Every place your leads come from, feeding one inbox and one lead list.') + `<div class="card empty" style="text-align:left"><h2 style="margin-bottom:6px">Set up your assistant first</h2><p class="muted">Connections need your assistant’s settings saved. It takes about five minutes.</p><button class="btn btn-pink" data-go="replies">Open Inbox set-up</button></div>`;
+
+  const flow = `<section class="card ch-flow" aria-label="How your leads flow"><div class="ch-flow-in">${['Website & chat', 'Facebook & Instagram', 'Email', 'Text', 'Zapier, Hipages & more'].map((t) => `<span>${t}</span>`).join('')}</div><div class="ch-arrow" aria-hidden="true">→</div><div class="ch-flow-mid"><b>Instant reply</b><span class="small">in your name, under a minute</span></div><div class="ch-arrow" aria-hidden="true">→</div><div class="ch-flow-out"><b>One lead list</b><span class="small">scored, tracked, downloadable</span></div></section>`;
+
+  const fb = card('Facebook & Instagram', 'Lead ad forms land here instantly. Instagram and Messenger DMs get an automatic reply inside the chat.', on(cs.facebook),
+    `${cs.facebook ? `<p class="small" style="margin:0">Page: <b>${esc(cs.meta_page_name || '')}</b>${cs.instagram ? ` · Instagram: <b>@${esc(cs.meta_ig_username || '')}</b>` : ' · <span class="muted">No Instagram account linked to this Page</span>'}</p>` : `<p class="small muted" style="margin:0">${isAgency() ? 'Add the client’s Facebook Page below.' : 'We connect this for you. Give us admin access to your Facebook Page in Onboarding.'}</p>`}
+    ${isAgency() ? `<form id="metaForm" class="ch-form" novalidate>
+      <div class="two">${F('Facebook Page ID', 'meta_page_id', 'text', `inputmode="numeric" value="${esc(cn.meta_page_id || '')}" placeholder="e.g. 1029384756"`)}<label class="lab">Page access token<span class="small muted">${cn.meta_page_token ? 'Saved. Paste a new one to replace it.' : 'Long-lived Page token from your Meta app.'}</span><input class="field" name="meta_page_token" type="password" autocomplete="off" placeholder="${cn.meta_page_token ? '••••••••' : 'Paste token'}"></label></div>
+      <fieldset class="rp-ch"><legend class="lab">Use it for</legend><label><input type="checkbox" name="lead_ads" ${cn.lead_ads !== false ? 'checked' : ''}> Lead ad forms</label><label><input type="checkbox" name="dms" ${cn.dms !== false ? 'checked' : ''}> Auto-reply to DMs</label></fieldset>
+      <div class="row" style="gap:8px"><button class="btn btn-navy" type="submit">Save</button><button class="btn btn-ghost" type="button" data-act="metaCheck">Connect & check</button></div></form>
+      <details><summary class="small" style="font-weight:700;cursor:pointer">Meta app settings (one time, for all clients)</summary><p class="small muted">Webhook callback URL and fields for your Meta app. Subscribe the Page object to <b>leadgen</b> and <b>messages</b>, and the Instagram object to <b>messages</b>.</p>${copy('Callback URL', fn + '/meta')}</details>` : ''}`);
+
+  const web = card('Website form & chat button', 'Your website enquiry form and the “Text us” button.', on(L.some((l) => /website|chat/i.test(l.source || ''))),
+    `<details><summary class="small" style="font-weight:700;cursor:pointer">“Text us” chat button</summary><p class="small muted">Paste just before &lt;/body&gt; on the website.</p><pre class="rp-code">${esc(`<script src="https://brightfrontstudio.com/widget.js" data-key="${key}" data-name="${r.business_name || ''}" data-color="${r.brand_color || '#0B0B2E'}" async></script>`)}</pre></details>
+    <details><summary class="small" style="font-weight:700;cursor:pointer">Form address</summary>${copy('Send the website form here', `${fn}/intake?key=${key}`)}</details>`);
+
+  const em = card('Email enquiries', 'Forward enquiry emails here. Each one becomes a lead and gets a reply. Website form notifications are read too.', on(!!cs.inbound_email),
+    `${cs.inbound_email ? `<p class="small" style="margin:0">Forwarding address: <b>${esc(cs.inbound_email)}</b>. When leads reply to the assistant’s email, it answers them too.</p>` : ''}
+    ${isAgency() ? `<form id="emailForm" class="ch-form" novalidate>${F('Inbound address (from Postmark, Mailgun or Cloudflare)', 'inbound_email', 'email', `value="${esc(cn.inbound_email || '')}" placeholder="abc123@inbound.postmarkapp.com"`)}<button class="btn btn-navy" type="submit" style="align-self:flex-start">Save</button></form>
+    <details><summary class="small" style="font-weight:700;cursor:pointer">Inbound webhook</summary><p class="small muted">Point the inbound email service’s webhook here. It’s unique to this business.</p>${copy('Webhook URL', `${fn}/email?key=${key}`)}</details>` : `<p class="small muted" style="margin:0">${cs.inbound_email ? 'Set your inbox to forward new enquiries to the address above.' : 'We’ll give you an address to forward enquiries to.'}</p>`}`);
+
+  const sms = card('Text messages', 'Leads who text your business number get an instant reply.', on(!!r.sms_number), `<p class="small muted" style="margin:0">${r.sms_number ? `Your number: <b>${esc(r.sms_number)}</b>` : 'Turns on once your business sending number is set up.'}</p>`);
+
+  const hook = card('Zapier, Make, Hipages & any other tool', 'One link that accepts leads from anywhere. Names, phones and emails are matched automatically, whatever the fields are called.', on(L.some((l) => !/website|chat|email|text|sms|test|instagram dm|messenger|lead ad/i.test(l.source || '') && l.source)),
+    `${copy('Lead link', `${fn}/hook?key=${key}&source=Zapier`)}
+    <p class="small muted" style="margin:0">Change <b>source=Zapier</b> to the tool’s name (e.g. <b>source=Hipages</b>) so you can see where each lead came from. In Zapier: <b>Webhooks by Zapier → POST</b>, payload type <b>JSON</b>. In Make: <b>HTTP → Make a request</b>. Google Ads lead forms: paste this link as the webhook URL.</p>`);
+
+  const db = `<article class="card ch-card"><div class="card-head"><div><h2>Your lead database</h2><p class="small muted" style="margin:4px 0 0">Every lead from every channel, in one place.</p></div><button class="btn btn-ghost btn-sm" data-act="csvLeads">${ic('down', 14)} Download CSV</button></div>
+    ${bySrc.length ? `<ul class="list">${bySrc.slice(0, 8).map(([k, n]) => `<li class="row" style="justify-content:space-between"><span>${esc(k)}</span><b>${n}</b></li>`).join('')}</ul>` : '<p class="empty">No leads yet.</p>'}
+    <button type="button" class="btn btn-ghost btn-sm" data-go="leads" style="align-self:flex-start">Open leads & pipeline</button></article>`;
+
+  return head('Leads', 'Connections', 'Every place your leads come from, feeding one inbox and one lead list.') + flow + `<section class="grid g2 ch-grid" style="margin-top:16px;align-items:start">${fb}${web}${em}${hook}${sms}${db}</section>`;
 };
 
 function analytics(d) {
@@ -810,6 +883,9 @@ const ACTS = {
   addPost: () => dialog('Add post for approval', `<div class="two"><label class="lab">Channel<select class="field" name="channel"><option>Instagram Reel</option><option>Instagram post</option><option>Instagram carousel</option><option>Meta ad</option><option>Google Ads</option><option>Google Business</option><option>TikTok</option><option>Email</option></select></label>${F('Goes live', 'scheduled_for', 'datetime-local', 'required')}</div>${F('Title', 'title', 'text', 'required')}<label class="lab">Caption<textarea class="field" name="caption"></textarea></label>`, (o) => api.addPost(state.clientId, { channel: o.channel, title: o.title, caption: o.caption, scheduled_for: new Date(o.scheduled_for).toISOString(), status: 'waiting' })),
   addInvoice: () => dialog('New invoice', `<div class="two">${F('Invoice number', 'number', 'text', 'required placeholder="BF-0014"')}${F('Amount ($)', 'amount', 'number', 'step="0.01" min="0" required')}</div>${F('Description', 'description', 'text', 'placeholder="Keep it growing · monthly fee"')}<div class="two">${F('Issued', 'issued_on', 'date', `value="${today()}"`)}${F('Due', 'due_date', 'date', 'required')}</div>${F('Payment link (optional)', 'pay_url', 'url', 'placeholder="https://buy.stripe.com/…"')}`, (o) => api.addInvoice(state.clientId, { number: o.number, amount: +o.amount, description: o.description, issued_on: o.issued_on, due_date: o.due_date, pay_url: o.pay_url || null, status: 'due' })),
   refreshReplies: () => reload(),
+  async csvLeads() { try { const rows = await api.allLeads(state.clientId); if (!rows.length) return toast('No leads to download yet.'); downloadCsv(rows, `${slug(client()?.name)}-leads-${today()}.csv`); toast(`Downloaded ${rows.length} lead${rows.length === 1 ? '' : 's'}.`); } catch (e) { toast(e.message); } },
+  async csvAll() { try { const rows = await api.everyLead(); if (!rows.length) return toast('No leads yet.'); downloadCsv(rows, `brightfront-all-leads-${today()}.csv`, true); toast(`Downloaded ${rows.length} leads.`); } catch (e) { toast(e.message); } },
+  async metaCheck() { toast('Checking with Facebook…'); try { const r = await api.metaConnect(state.clientId); toast(`Connected: ${r.page}${r.instagram ? ' + @' + r.instagram : ''}`); reload(); } catch (e) { toast(e.message); } },
   addCall: () => dialog('Log a call', `<label class="lab">Lead<select class="field" name="lead">${state.data.leads.map((l) => `<option value="${esc(l.id)}">${esc(l.name)}</option>`).join('')}<option value="">Someone else</option></select></label>${F('Name (if someone else)', 'lead_name')}<div class="two"><label class="lab">Outcome<select class="field" name="outcome">${['booked', 'sold', 'callback', 'no_answer', 'not_interested', 'wrong_number'].map((k) => `<option value="${k}">${PILL[k][0]}</option>`).join('')}</select></label>${F('Length (minutes)', 'mins', 'number', 'min="0" step="0.5"')}</div>${F('Caller', 'caller', 'text', `value="${esc((state.me.full_name || '').split(' ')[0])}"`)}<label class="lab">Notes<textarea class="field" name="notes"></textarea></label>`,
     async (o) => { const l = state.data.leads.find((x) => x.id === o.lead); await api.addCall(state.clientId, { lead_id: l ? l.id : null, lead_name: l ? l.name : o.lead_name, outcome: o.outcome, duration_seconds: Math.round((+o.mins || 0) * 60), caller: o.caller, notes: o.notes }); if (l && ['booked', 'sold'].includes(o.outcome)) await api.setLead(l.id, o.outcome === 'sold' ? 'won' : 'booked'); }),
   addReview: () => dialog('Add a review', `<div class="two">${F('Customer', 'author', 'text', 'required')}<label class="lab">Platform<select class="field" name="platform"><option>Google</option><option>Facebook</option></select></label></div><label class="lab">Stars<select class="field" name="rating">${[5, 4, 3, 2, 1].map((n) => `<option>${n}</option>`).join('')}</select></label><label class="lab">Review<textarea class="field" name="body"></textarea></label>`, (o) => api.addReview(state.clientId, { author: o.author, platform: o.platform, rating: +o.rating, body: o.body })),
@@ -873,6 +949,11 @@ function wire() {
   inv && (inv.onsubmit = async (e) => { e.preventDefault(); const f = Object.fromEntries(new FormData(inv)); if (!f.name.trim()) return inv.name.reportValidity(); if (!f.phone && !f.email) return toast('Add a mobile or an email.'); const btn = inv.querySelector('[type=submit]'); btn.disabled = true; try { await api.sendReviewInvite(state.clientId, f); toast('Review request sent.'); reload(); } catch (err) { toast(err.message); btn.disabled = false; } });
   $app.querySelectorAll('.rvForm').forEach((f) => f.onsubmit = async (e) => { e.preventDefault(); const t = f.reply.value.trim(); if (!t) return f.reply.focus(); try { await api.replyReview(f.dataset.review, t); toast('Reply saved. Paste it into Google or Facebook to post it.'); reload(); } catch (err) { toast(err.message); } });
   $app.querySelectorAll('[data-draft]').forEach((b) => b.onclick = async () => { b.disabled = true; b.textContent = 'Drafting…'; try { const r = await api.draftReviewReply(b.dataset.draft); const ta = document.getElementById('rv-' + b.dataset.draft); ta.value = r.reply; ta.focus(); } catch (err) { toast(err.message); } b.disabled = false; b.innerHTML = ic('bolt', 14) + ' Draft with AI'; });
+  $app.querySelectorAll('[data-copy]').forEach((b) => b.onclick = async () => { try { await navigator.clipboard.writeText(b.dataset.copy); toast('Copied'); } catch { b.previousElementSibling?.select(); toast('Press Cmd+C to copy'); } });
+  const mf = document.getElementById('metaForm');
+  mf && (mf.onsubmit = async (e) => { e.preventDefault(); const f = Object.fromEntries(new FormData(mf)); const id = f.meta_page_id.trim(); if (id && !/^\d{5,25}$/.test(id)) return toast('The Page ID is a number, e.g. 1029384756.'); const o = { meta_page_id: id || null, lead_ads: !!f.lead_ads, dms: !!f.dms }; if (f.meta_page_token.trim()) o.meta_page_token = f.meta_page_token.trim(); try { await api.saveConn(state.clientId, o); toast('Saved. Now click Connect & check.'); reload(); } catch (err) { toast(/duplicate|unique/i.test(err.message) ? 'That Page is already connected to another client.' : err.message); } });
+  const ef = document.getElementById('emailForm');
+  ef && (ef.onsubmit = async (e) => { e.preventDefault(); const v = ef.inbound_email.value.trim(); if (v && !ef.inbound_email.checkValidity()) return ef.inbound_email.reportValidity(); try { await api.saveConn(state.clientId, { inbound_email: v || null }); toast('Saved'); reload(); } catch (err) { toast(err.message); } });
   if (state.view === 'overview') fillOverview();
 }
 function scrollMsgs() { const m = document.getElementById('rpMsgs'); if (m) m.scrollTop = m.scrollHeight; }

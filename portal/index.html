@@ -276,12 +276,19 @@ dialog.profile form{display:flex;flex-direction:column;gap:14px}
 .wi::before{content:"";position:absolute;left:50%;top:-.02em;width:.3em;height:.3em;transform:translateX(-50%);background:var(--pink);clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%)}
 .mobilebar .wm{font-size:22px}
 @media(max-width:900px){.field,select,textarea,input{font-size:16px !important}}
+.ch-flow{display:grid;grid-template-columns:1.4fr auto 1fr auto 1fr;align-items:center;gap:14px;margin-top:16px;background:var(--navy);color:#fff}
+.ch-flow-in{display:flex;flex-wrap:wrap;gap:6px}.ch-flow-in span{background:rgba(255,255,255,.1);border-radius:999px;padding:5px 11px;font-size:13px;font-weight:600}
+.ch-flow-mid,.ch-flow-out{display:flex;flex-direction:column;gap:2px}.ch-flow-mid b,.ch-flow-out b{font-size:16px}.ch-flow-mid .small,.ch-flow-out .small{color:#B8B8D8}
+.ch-arrow{font-size:22px;color:var(--pink)}
+.ch-card{display:flex;flex-direction:column;gap:12px}.ch-card .card-head{margin:0}.ch-form{display:flex;flex-direction:column;gap:12px}
+.ch-card .row .field{flex:1;min-width:0}.ch-card .card-head{flex-wrap:nowrap}.ch-card .card-head>.pill{flex-shrink:0;white-space:nowrap}
+@media (max-width:900px){.ch-flow{grid-template-columns:1fr}.ch-arrow{transform:rotate(90deg);justify-self:start}}
 </style>
 </head>
 <body>
 <div id="app" aria-live="polite"></div>
 <div class="toast" id="toast" role="status"></div>
-<script src="config.js?v=20261112a"></script>
-<script type="module" src="app.js?v=20261112a"></script>
+<script src="config.js?v=20261112b"></script>
+<script type="module" src="app.js?v=20261112b"></script>
 </body>
 </html>
