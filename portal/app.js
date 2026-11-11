@@ -193,6 +193,14 @@ if (LIVE) {
     conn: (c) => q(sb.from('connections').select('*').eq('client_id', c).maybeSingle()),
     saveConn: (c, o) => q(sb.from('connections').upsert({ ...o, client_id: c, updated_at: new Date().toISOString() }, { onConflict: 'client_id' })),
     metaConnect(c) { return api.replyFn({ action: 'meta_connect', client_id: c }); },
+    intStatus: (c) => q(sb.rpc('integration_status', { p_client: c })),
+    ints: (c) => q(sb.from('integrations').select('provider,status,account_name,config,last_error,last_sync_at').eq('client_id', c)),
+    intLog: (c) => q(sb.from('integration_log').select('*, leads(name)').eq('client_id', c).order('created_at', { ascending: false }).limit(25)),
+    saveInt: (c, provider, o) => q(sb.from('integrations').upsert({ client_id: c, provider, status: 'connected', ...o }, { onConflict: 'client_id,provider' })),
+    removeInt: (c, provider) => q(sb.from('integrations').delete().eq('client_id', c).eq('provider', provider)),
+    async oauthStart(c, provider) { const r = await api.replyFn({ action: 'oauth_start', client_id: c, provider }); return r.url; },
+    async testInt(c, provider) { const r = await api.replyFn({ action: 'integration_test', client_id: c, provider }); return r.detail; },
+    leadEvent(id) { return api.replyFn({ action: 'lead_event', lead_id: id }); },
     async saveReply(c, o) {
       const up = (x) => sb.from('reply_settings').upsert({ ...x, client_id: c, updated_at: new Date().toISOString() }, { onConflict: 'client_id' }).select().single();
       let { data, error } = await up(o);
@@ -264,6 +272,14 @@ if (LIVE) {
     conn: (c) => ok(D.conn?.[c] || (c === 'c1' ? { meta_page_id: '1029384756', meta_page_name: 'Sample Electrical', meta_ig_username: 'sampleelectrical', meta_page_token: 'set', lead_ads: true, dms: true } : null)),
     saveConn(c, o) { (D.conn ||= {})[c] = { ...(D.conn[c] || {}), ...o }; return ok(); },
     metaConnect: () => ok({ ok: true, page: 'Sample Electrical', instagram: 'sampleelectrical' }),
+    intStatus: (c) => ok(c === 'c1' ? (D.ints ||= [{ provider: 'xero', status: 'connected', account_name: 'Sample Electrical Pty Ltd', config: {} }, { provider: 'gcal', status: 'connected', account_name: 'bookings@sampleelectrical.com.au', config: { start_hour: 7, end_hour: 16 } }]) : []),
+    ints: (c) => api.intStatus(c),
+    intLog: (c) => ok(c === 'c1' ? [{ id: 'l1', provider: 'xero', action: 'Contact and draft invoice created for $2400', ok: true, created_at: new Date().toISOString(), leads: { name: 'Sarah K.' } }, { id: 'l2', provider: 'gcal', action: 'Offered 3 free times', ok: true, created_at: new Date(Date.now() - 3600e3).toISOString(), leads: { name: 'Tom R.' } }] : []),
+    saveInt(c, provider, o) { const a = (D.ints ||= []); const i = a.findIndex((x) => x.provider === provider); const n = { provider, status: 'connected', account_name: o.account_name || (provider === 'webhook' ? 'Webhook' : provider === 'cliniko' ? 'Cliniko' : provider), config: o.config || {} }; if (i >= 0) a[i] = { ...a[i], ...n }; else a.push(n); return ok(); },
+    removeInt(c, provider) { D.ints = (D.ints || []).filter((x) => x.provider !== provider); return ok(); },
+    oauthStart: () => Promise.reject(new Error('Connecting opens the app’s sign-in page on the live portal.')),
+    testInt: () => ok('Working'),
+    leadEvent: () => ok(),
     messages: (id) => ok((D.msgs[id] || []).map(([sender, body, n]) => ({ id: uid(), sender, body, direction: sender === 'lead' ? 'in' : 'out', created_at: new Date(Date.now() + n * 86400000).toISOString() }))),
     setConv(id, status) { Object.values(D.convs).flat().forEach((v) => { if (v.id === id) v.status = status; }); return ok(); },
     sendMsg(id, body) { (D.msgs[id] ||= []).push(['human', body, 0]); Object.values(D.convs).flat().forEach((v) => { if (v.id === id) { v.status = 'human'; v.last_message_at = new Date().toISOString(); } }); return ok(); },
@@ -285,8 +301,8 @@ async function load() {
   Object.assign(state.data, { calls, reviews, reqs, creatives, reports });
   if (state.view === 'replies' || state.view === 'dashboard') { state.data.convs = await api.conversations(c).catch(() => []); }
   if (state.view === 'channels') {
-    const [reply, cs, conn] = await Promise.all([api.replySettings(c).catch(() => null), api.connStatus(c).catch(() => null), isAgency() ? api.conn(c).catch(() => null) : Promise.resolve(null)]);
-    Object.assign(state.data, { reply, cs, conn });
+    const [reply, cs, conn, ints, ilog] = await Promise.all([api.replySettings(c).catch(() => null), api.connStatus(c).catch(() => null), isAgency() ? api.conn(c).catch(() => null) : Promise.resolve(null), (isAgency() ? api.ints(c) : api.intStatus(c)).catch(() => []), api.intLog(c).catch(() => [])]);
+    Object.assign(state.data, { reply, cs, conn, ints, ilog });
   }
   if (state.view === 'replies') {
     const [reply, convs] = await Promise.all([api.replySettings(c).catch(() => null), api.conversations(c).catch(() => [])]);
@@ -305,7 +321,10 @@ async function boot() {
     if (isAgency()) { state.view = state.view === 'dashboard' && !state.clientId ? 'overview' : state.view; }
     else { state.clientId = state.me.client_id; if (!state.clientId) return renderPending(); }
     if (isAgency() && !state.clientId && state.view !== 'overview') state.view = 'overview';
+    const ret = new URLSearchParams(location.search).get('integration');
+    if (ret) { history.replaceState(null, '', location.pathname); if (isAgency() && state.clients.length) { state.clientId = state.clientId || sessionStorage.getItem('bfClient') || null; if (state.clientId) state.view = 'channels'; } }
     await load(); render();
+    if (ret) toast(ret === 'failed' ? 'That didn’t connect. Try again.' : ret === 'expired' ? 'That link expired. Click Connect again.' : ret === 'cancelled' ? 'Connection cancelled.' : `${NAMES_INT[ret] || 'App'} connected.`);
   } catch (e) { console.error(e); renderError(e); }
 }
 function go(view, clientId) { if (clientId !== undefined) state.clientId = clientId; state.view = view; state.openPost = null; load().then(render).then(() => { window.scrollTo(0, 0); document.querySelector('.main h1')?.focus({ preventScroll: true }); }); }
@@ -772,8 +791,37 @@ VIEWS.channels = function () {
     ${bySrc.length ? `<ul class="list">${bySrc.slice(0, 8).map(([k, n]) => `<li class="row" style="justify-content:space-between"><span>${esc(k)}</span><b>${n}</b></li>`).join('')}</ul>` : '<p class="empty">No leads yet.</p>'}
     <button type="button" class="btn btn-ghost btn-sm" data-go="leads" style="align-self:flex-start">Open leads & pipeline</button></article>`;
 
-  return head('Leads', 'Connections', 'Every place your leads come from, feeding one inbox and one lead list.') + flow + `<section class="grid g2 ch-grid" style="margin-top:16px;align-items:start">${fb}${web}${em}${hook}${sms}${db}</section>`;
+  return head('Leads', 'Connections', 'Every place your leads come from, feeding one inbox and one lead list.') + flow + `<section class="grid g2 ch-grid" style="margin-top:16px;align-items:start">${fb}${web}${em}${hook}${sms}${db}</section>` + integrationsSection(d);
 };
+
+const LOGO = (k, name) => `<span class="lg" data-name="${esc(k === 'webhook' ? '+' : k === 'gcal' ? 'GC' : k === 'servicem8' ? 'M8' : name.slice(0, 2))}"><img src="../assets/logos/${k === 'gcal' ? 'google-calendar' : k === 'webhook' ? 'zapier' : k}.svg" alt="${esc(name)}" onerror="this.parentNode.classList.add('txt');this.remove()"></span>`;
+const INTS = [
+  { k: 'xero', name: 'Xero', what: 'When a lead is marked Won, the customer and a draft invoice for the deal value are created in Xero. Your reports show real sales.', how: 'oauth' },
+  { k: 'servicem8', name: 'ServiceM8', what: 'When a lead is booked, the customer and a quote job are created in ServiceM8, ready to schedule.', how: 'oauth' },
+  { k: 'cliniko', name: 'Cliniko', what: 'When a lead is booked, they’re added as a new patient in Cliniko with their enquiry in the notes.', how: 'key' },
+  { k: 'gcal', name: 'Google Calendar', what: 'The assistant checks the calendar and offers real free times when a lead wants to book.', how: 'oauth' },
+  { k: 'webhook', name: 'Any other app', what: 'Sends every new lead and stage change to Zapier, Make or your own system, so it works with Tradify, HubSpot, Pipedrive, Mindbody, Google Sheets, Slack and 7,000+ more.', how: 'url' }
+];
+function integrationsSection(d) {
+  const by = Object.fromEntries((d.ints || []).map((x) => [x.provider, x]));
+  const cards = INTS.map((t) => {
+    const it = by[t.k]; const on = !!it;
+    const status = `<span class="pill ${on ? (it.last_error ? 'p-amber' : 'p-green') : 'p-grey'}">${on ? (it.last_error ? 'Needs attention' : 'Connected') : 'Not connected'}</span>`;
+    let body = '';
+    if (on) body += `<p class="small" style="margin:0">${esc(it.account_name || 'Connected')}${it.last_sync_at ? ` · last sync ${fmtDT(it.last_sync_at)}` : ''}</p>${it.last_error ? `<p class="small" style="margin:0;color:var(--pinkd)">${esc(it.last_error)}</p>` : ''}`;
+    if (isAgency()) {
+      if (t.how === 'key') body += `<form class="ch-form" data-intkey="${t.k}" novalidate><label class="lab">Cliniko API key<span class="small muted">In Cliniko: My info → Manage API keys → Add an API key.</span><input class="field" name="api_key" type="password" autocomplete="off" placeholder="${on ? '•••••••• (saved)' : 'Paste API key'}"></label><button class="btn btn-navy btn-sm" type="submit" style="align-self:flex-start">${on ? 'Replace key' : 'Connect'}</button></form>`;
+      if (t.how === 'url') body += `<form class="ch-form" data-inturl novalidate><label class="lab">Send leads to this URL<span class="small muted">In Zapier: Webhooks by Zapier → Catch Hook, then paste its URL here.</span><input class="field" name="url" type="url" required placeholder="https://hooks.zapier.com/…" value="${esc(it?.config?.url || '')}"></label><button class="btn btn-navy btn-sm" type="submit" style="align-self:flex-start">Save</button></form>`;
+      if (t.k === 'gcal' && on) body += `<form class="ch-form" data-inthours novalidate><div class="two">${F('Bookable from (hour, 24h)', 'start_hour', 'number', `min="0" max="23" value="${esc(it.config?.start_hour ?? 9)}"`)}${F('Until (hour, 24h)', 'end_hour', 'number', `min="1" max="24" value="${esc(it.config?.end_hour ?? 17)}"`)}</div><button class="btn btn-ghost btn-sm" type="submit" style="align-self:flex-start">Save hours</button></form>`;
+      if (t.k === 'xero' && on) body += `<form class="ch-form" data-intxero novalidate>${F('Sales account code', 'account_code', 'text', `maxlength="10" value="${esc(it.config?.account_code || '200')}"`)}<button class="btn btn-ghost btn-sm" type="submit" style="align-self:flex-start">Save</button></form>`;
+      body += `<div class="row" style="gap:8px;flex-wrap:wrap">${t.how === 'oauth' ? `<button class="btn ${on ? 'btn-ghost' : 'btn-navy'} btn-sm" data-oauth="${t.k}">${on ? 'Reconnect' : 'Connect ' + t.name}</button>` : ''}${on ? `<button class="btn btn-ghost btn-sm" data-inttest="${t.k}">Test</button><button class="btn btn-ghost btn-sm" data-intoff="${t.k}">Disconnect</button>` : ''}</div>`;
+    } else if (!on) body += `<p class="small muted" style="margin:0">Using ${esc(t.name)}? Tell us and we’ll connect it for you.</p>`;
+    return `<article class="card ch-card int-card"><div class="card-head" style="align-items:flex-start;gap:12px"><div class="row" style="gap:12px;align-items:center">${LOGO(t.k, t.name)}<h2>${t.name}</h2></div>${status}</div><p class="small muted" style="margin:0">${t.what}</p>${body}</article>`;
+  }).join('');
+  const log = (d.ilog || []).length ? `<article class="card" style="margin-top:16px"><div class="card-head"><h2>Recent activity</h2></div><ul class="list">${d.ilog.map((l) => `<li class="row" style="justify-content:space-between;gap:12px"><span><b>${esc(NAMES_INT[l.provider] || l.provider)}</b> · ${esc(l.leads?.name || '')} · <span class="${l.ok ? 'muted' : ''}" style="${l.ok ? '' : 'color:var(--pinkd)'}">${esc(l.action)}${l.detail ? ': ' + esc(l.detail) : ''}</span></span><span class="small muted" style="white-space:nowrap">${fmtDT(l.created_at)}</span></li>`).join('')}</ul></article>` : '';
+  return `<h2 class="sec-h" style="margin:32px 0 4px">Your business apps</h2><p class="muted small" style="margin:0 0 12px">Leads flow on into the tools the business already runs on. Nothing to copy across by hand.</p><section class="grid g2 ch-grid" style="align-items:start">${cards}</section>${log}`;
+}
+const NAMES_INT = { xero: 'Xero', servicem8: 'ServiceM8', cliniko: 'Cliniko', gcal: 'Google Calendar', webhook: 'Webhook' };
 
 function analytics(d) {
   const L = d.leads || [], C = d.calls || [], cr = d.creatives || [], M = d.metrics || [];
@@ -912,7 +960,7 @@ function wire() {
   $app.querySelectorAll('[data-req]').forEach((b) => b.onclick = async () => { await api.setRequest(b.dataset.req, b.dataset.to); toast('Request updated'); reload(); });
   $app.querySelectorAll('[data-inv]').forEach((b) => b.onclick = async () => { await api.setInvoice(b.dataset.inv, 'paid'); toast('Marked as paid'); reload(); });
   $app.querySelectorAll('[data-step]').forEach((b) => b.onclick = async () => { await api.completeStep(b.dataset.step); toast('Step done'); reload(); });
-  $app.querySelectorAll('[data-lead]').forEach((s) => s.onchange = async () => { await api.setLead(s.dataset.lead, s.value); toast('Lead updated'); });
+  $app.querySelectorAll('[data-lead]').forEach((s) => s.onchange = async () => { await api.setLead(s.dataset.lead, s.value); toast('Lead updated'); api.leadEvent(s.dataset.lead).catch(() => {}); });
   $app.querySelectorAll('[data-file]').forEach((b) => b.onclick = async () => { const u = await api.fileUrl(b.dataset.file); u ? window.open(u, '_blank', 'noopener') : toast('Files open from the live portal.'); });
   const rf = document.getElementById('reqForm');
   rf && (rf.onsubmit = async (e) => { e.preventDefault(); if (!rf.title.checkValidity()) return rf.title.reportValidity(); await api.addRequest(state.clientId, { title: rf.title.value.trim(), type: rf.type.value, details: rf.details.value.trim(), due_date: rf.due_date.value || null }); toast('Request sent. We’ll reply within one business day.'); reload(); });
@@ -950,6 +998,13 @@ function wire() {
   $app.querySelectorAll('.rvForm').forEach((f) => f.onsubmit = async (e) => { e.preventDefault(); const t = f.reply.value.trim(); if (!t) return f.reply.focus(); try { await api.replyReview(f.dataset.review, t); toast('Reply saved. Paste it into Google or Facebook to post it.'); reload(); } catch (err) { toast(err.message); } });
   $app.querySelectorAll('[data-draft]').forEach((b) => b.onclick = async () => { b.disabled = true; b.textContent = 'Drafting…'; try { const r = await api.draftReviewReply(b.dataset.draft); const ta = document.getElementById('rv-' + b.dataset.draft); ta.value = r.reply; ta.focus(); } catch (err) { toast(err.message); } b.disabled = false; b.innerHTML = ic('bolt', 14) + ' Draft with AI'; });
   $app.querySelectorAll('[data-copy]').forEach((b) => b.onclick = async () => { try { await navigator.clipboard.writeText(b.dataset.copy); toast('Copied'); } catch { b.previousElementSibling?.select(); toast('Press Cmd+C to copy'); } });
+  $app.querySelectorAll('[data-oauth]').forEach((b) => b.onclick = async () => { b.disabled = true; try { sessionStorage.setItem('bfClient', state.clientId); location.href = await api.oauthStart(state.clientId, b.dataset.oauth); } catch (e) { toast(e.message); b.disabled = false; } });
+  $app.querySelectorAll('[data-inttest]').forEach((b) => b.onclick = async () => { b.disabled = true; b.textContent = 'Testing…'; try { toast(await api.testInt(state.clientId, b.dataset.inttest) || 'Working'); } catch (e) { toast(e.message); } reload(); });
+  $app.querySelectorAll('[data-intoff]').forEach((b) => b.onclick = async () => { if (!confirm('Disconnect ' + (NAMES_INT[b.dataset.intoff] || '') + '? New leads won’t be sent there.')) return; await api.removeInt(state.clientId, b.dataset.intoff); toast('Disconnected'); reload(); });
+  $app.querySelectorAll('[data-intkey]').forEach((f) => f.onsubmit = async (e) => { e.preventDefault(); const k = f.api_key.value.trim(); if (k.length < 20) return toast('Paste the full API key.'); try { await api.saveInt(state.clientId, 'cliniko', { tokens: { api_key: k }, account_name: 'Cliniko', last_error: null }); toast('Saved. Testing…'); try { await api.testInt(state.clientId, 'cliniko'); toast('Cliniko connected'); } catch (err) { toast(err.message); } reload(); } catch (err) { toast(err.message); } });
+  $app.querySelectorAll('[data-inturl]').forEach((f) => f.onsubmit = async (e) => { e.preventDefault(); if (!f.url.checkValidity() || !/^https:\/\//.test(f.url.value)) return toast('Use the full https:// address.'); try { await api.saveInt(state.clientId, 'webhook', { config: { url: f.url.value.trim() }, account_name: new URL(f.url.value).host, last_error: null }); toast('Saved. New leads will be sent there.'); reload(); } catch (err) { toast(err.message); } });
+  $app.querySelectorAll('[data-inthours]').forEach((f) => f.onsubmit = async (e) => { e.preventDefault(); const it = state.data.ints.find((x) => x.provider === 'gcal'); try { await api.saveInt(state.clientId, 'gcal', { config: { ...(it?.config || {}), start_hour: +f.start_hour.value, end_hour: +f.end_hour.value } }); toast('Saved'); reload(); } catch (err) { toast(err.message); } });
+  $app.querySelectorAll('[data-intxero]').forEach((f) => f.onsubmit = async (e) => { e.preventDefault(); const it = state.data.ints.find((x) => x.provider === 'xero'); try { await api.saveInt(state.clientId, 'xero', { config: { ...(it?.config || {}), account_code: f.account_code.value.trim() || '200' } }); toast('Saved'); reload(); } catch (err) { toast(err.message); } });
   const mf = document.getElementById('metaForm');
   mf && (mf.onsubmit = async (e) => { e.preventDefault(); const f = Object.fromEntries(new FormData(mf)); const id = f.meta_page_id.trim(); if (id && !/^\d{5,25}$/.test(id)) return toast('The Page ID is a number, e.g. 1029384756.'); const o = { meta_page_id: id || null, lead_ads: !!f.lead_ads, dms: !!f.dms }; if (f.meta_page_token.trim()) o.meta_page_token = f.meta_page_token.trim(); try { await api.saveConn(state.clientId, o); toast('Saved. Now click Connect & check.'); reload(); } catch (err) { toast(/duplicate|unique/i.test(err.message) ? 'That Page is already connected to another client.' : err.message); } });
   const ef = document.getElementById('emailForm');

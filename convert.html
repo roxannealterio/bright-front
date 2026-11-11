@@ -500,6 +500,12 @@ footer a:hover{color:var(--pink)}
 .fsm-nav a:hover,.fsm-bot a:hover{color:var(--pink-d)}
 .fsm-bot{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center;color:#8A8AA6}
 @media(max-width:860px){.fsm-in{flex-direction:column;align-items:flex-start}.fsm-nav a,.fsm-bot a{padding:7px 0}}
+.works{padding:56px 0}.works h2{font-size:clamp(28px,3vw,40px)}.works p.lede{margin:10px 0 0;max-width:620px}
+.works ul{list-style:none;margin:28px 0 0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.works li{height:76px;border:1px solid var(--line);border-radius:16px;background:#fff;display:grid;place-items:center;padding:12px 16px}
+.works li img{max-width:100%;max-height:34px;object-fit:contain}.works li span{font-weight:700;color:var(--navy);font-size:15px;text-align:center}
+.works .fine{font-size:13px;color:var(--muted);margin:14px 0 0}
+@media(max-width:800px){.works ul{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"brightfront","url":"https://brightfrontstudio.com/","email":"info@brightfrontstudio.com","description":"Brisbane digital marketing and personal branding agency: Google Ads, Meta ads, SEO, social media, email and landing pages.","areaServed":"Australia","address":{"@type":"PostalAddress","addressLocality":"Brisbane","addressRegion":"QLD","addressCountry":"AU"}}</script>
 </head>
@@ -606,6 +612,15 @@ footer a:hover{color:var(--pink)}
         <li>Booked with you<b>19</b><span class="pbar"><i style="width:40%;animation-delay:.4s"></i></span></li>
       </ol>
     </div>
+  </div>
+</section>
+
+<section class="works" id="integrations">
+  <div class="wrap reveal">
+    <h2>Works with the tools you already use.</h2>
+    <p class="lede">Leads come in from your ads, website, inbox and socials. Booked and won jobs flow straight into your calendar, job system and accounts.</p>
+    <ul aria-label="Integrations"><li><img src="assets/logos/facebook.svg" alt="Facebook" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'Facebook'}))"></li><li><img src="assets/logos/instagram.svg" alt="Instagram" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'Instagram'}))"></li><li><img src="assets/logos/google-ads.svg" alt="Google Ads" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'Google Ads'}))"></li><li><img src="assets/logos/xero.svg" alt="Xero" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'Xero'}))"></li><li><img src="assets/logos/servicem8.svg" alt="ServiceM8" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'ServiceM8'}))"></li><li><img src="assets/logos/cliniko.svg" alt="Cliniko" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'Cliniko'}))"></li><li><img src="assets/logos/google-calendar.svg" alt="Google Calendar" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'Google Calendar'}))"></li><li><img src="assets/logos/calendly.svg" alt="Calendly" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'Calendly'}))"></li><li><img src="assets/logos/zapier.svg" alt="Zapier" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'Zapier'}))"></li><li><img src="assets/logos/make.svg" alt="Make" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'Make'}))"></li></ul>
+    <p class="fine">Plus 7,000+ more apps through Zapier and Make. All trademarks belong to their owners.</p>
   </div>
 </section>
 

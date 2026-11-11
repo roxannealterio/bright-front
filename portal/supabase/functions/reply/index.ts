@@ -6,6 +6,7 @@
 //   /reply/send    signed-in portal users: send a message by hand, or run a test lead.
 //   /reply/hook    public   universal lead catcher (Zapier, Make, Hipages, Google lead forms, any form). ?key=INTAKE_KEY&source=Name
 //   /reply/meta    public   Meta webhook: Facebook/Instagram lead ads + Messenger/Instagram DMs. Checked with the app secret.
+//   /reply/oauth   GET      OAuth callback for Xero, ServiceM8 and Google Calendar
 //   /reply/email   public   inbound email (Postmark, Mailgun, SendGrid, Cloudflare). ?key=INTAKE_KEY
 //
 // Secrets (Supabase -> Edge Functions -> Secrets):
@@ -14,6 +15,9 @@
 //   TWILIO_AUTH_TOKEN             for SMS
 //   SMTP_PASS                     for email (the info@brightfrontstudio.com mailbox password)
 //   META_APP_SECRET, META_VERIFY_TOKEN   for Facebook/Instagram
+//   XERO_CLIENT_ID, XERO_CLIENT_SECRET    for Xero
+//   SERVICEM8_CLIENT_ID, SERVICEM8_CLIENT_SECRET   for ServiceM8
+//   GCAL_CLIENT_ID, GCAL_CLIENT_SECRET    for Google Calendar (can be the same Google OAuth client as sign-in)
 //   optional: RESEND_API_KEY (send from each client's own domain), AI_MODEL, SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_FROM, TWILIO_FROM
 // SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are provided by Supabase automatically.
 
@@ -137,7 +141,7 @@ ${s.about || "(no details given)"}
 QUESTIONS TO ASK, one at a time, skipping any already answered:
 ${s.questions || "What are you looking for, and when?"}
 
-BOOKING LINK: ${s.booking_url || "none. Say a team member will be in touch to book a time."}
+BOOKING LINK: ${s.booking_url || "none. Say a team member will be in touch to book a time."}${s.available_times ? `\nFREE TIMES IN THE CALENDAR (offer two or three when they want to book, and say a team member will confirm): ${s.available_times}` : ""}
 WHEN A PERSON FOLLOWS UP: ${s.hours || "during business hours"}
 TONE: ${s.tone || "Warm, friendly and to the point"}
 
@@ -288,12 +292,16 @@ async function notifyHandoff(conv: any, s: Settings, lead: any, summary: string)
 
 async function respond(conv: any, s: Settings, lead: any) {
   const { data: hist } = await db.from("messages").select("sender, body").eq("conversation_id", conv.id).order("created_at");
+  try { const slots = await freeTimes(conv.client_id); if (slots) s = { ...s, available_times: slots }; } catch (e) { console.error("calendar", e); }
   const out = await aiReply(s, conv.channel, (hist || []) as Turn[], lead || {});
   await deliver(conv, s, out.reply, "ai");
   const upd: Record<string, unknown> = { summary: out.summary || conv.summary };
   if (out.handoff) upd.status = "human";
   await db.from("conversations").update(upd).eq("id", conv.id);
-  if (lead?.id && out.status !== "new") await db.from("leads").update({ status: out.status }).eq("id", lead.id);
+  if (lead?.id && out.status !== "new" && out.status !== lead.status) {
+    await db.from("leads").update({ status: out.status }).eq("id", lead.id);
+    await fireEvent({ ...lead, status: out.status }, "lead.updated").catch((e) => console.error("events", e));
+  }
   if (out.handoff) await notifyHandoff(conv, s, lead, out.summary);
   return out;
 }
@@ -320,6 +328,7 @@ async function newLead(s: Settings, input: Record<string, string>) {
     ...(input.external_id ? { external_id: clip(input.external_id, 200) } : {}),
   }).select().single();
   if (error) throw error;
+  await fireEvent(lead, "lead.created").catch((e) => console.error("events", e));
 
   if (!s.enabled) return { ok: true, lead_id: lead.id, replied: false };
   const channel = phone && s.sms_enabled && (s.sms_number || env("TWILIO_FROM")) ? "sms" : email && s.email_enabled ? "email" : null;
@@ -424,6 +433,169 @@ async function inboundEmail(s: Settings, raw: any) {
   return await newLead(s, { ...lead, source: "Email", external_id: msgId ? `email:${clip(msgId, 180)}` : "" });
 }
 
+/* ---------- integrations: Xero, ServiceM8, Cliniko, Google Calendar, webhooks ---------- */
+const PORTAL_URL = env("PORTAL_URL", "https://brightfrontstudio.com/portal/");
+type Prov = { auth: string; token: string; id: string; secret: string; scope: string; extra?: Record<string, string>; basic?: boolean };
+const PROVIDERS: Record<string, () => Prov> = {
+  xero: () => ({ auth: "https://login.xero.com/identity/connect/authorize", token: "https://identity.xero.com/connect/token", id: env("XERO_CLIENT_ID"), secret: env("XERO_CLIENT_SECRET"), scope: env("XERO_SCOPES", "openid profile email offline_access accounting.contacts accounting.invoices"), basic: true }),
+  servicem8: () => ({ auth: "https://go.servicem8.com/oauth/authorize", token: "https://go.servicem8.com/oauth/access_token", id: env("SERVICEM8_CLIENT_ID"), secret: env("SERVICEM8_CLIENT_SECRET"), scope: env("SERVICEM8_SCOPES", "read_customers manage_customers read_jobs create_jobs manage_jobs") }),
+  gcal: () => ({ auth: "https://accounts.google.com/o/oauth2/v2/auth", token: "https://oauth2.googleapis.com/token", id: env("GCAL_CLIENT_ID"), secret: env("GCAL_CLIENT_SECRET"), scope: "https://www.googleapis.com/auth/calendar.freebusy https://www.googleapis.com/auth/calendar.events", extra: { access_type: "offline", prompt: "consent" } }),
+};
+const NAMES: Record<string, string> = { xero: "Xero", servicem8: "ServiceM8", gcal: "Google Calendar", cliniko: "Cliniko", webhook: "Webhook" };
+
+async function hmacHex(data: string) {
+  const k = await crypto.subtle.importKey("raw", new TextEncoder().encode(env("SUPABASE_SERVICE_ROLE_KEY") + ":oauth"), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  return [...new Uint8Array(await crypto.subtle.sign("HMAC", k, new TextEncoder().encode(data)))].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+async function oauthStart(provider: string, clientId: string) {
+  const p = PROVIDERS[provider]?.(); if (!p) throw new Error("Unknown integration");
+  if (!p.id || !p.secret) throw new Error(`${NAMES[provider]} isn't set up yet. Add its app keys in Supabase secrets first.`);
+  const payload = `${provider}.${clientId}.${Date.now()}`;
+  const state = btoa(payload + "." + (await hmacHex(payload))).replace(/=+$/, "");
+  const q = new URLSearchParams({ response_type: "code", client_id: p.id, redirect_uri: FN_URL + "/oauth", scope: p.scope, state, ...(p.extra || {}) });
+  return `${p.auth}?${q}`;
+}
+async function tokenCall(provider: string, body: Record<string, string>) {
+  const p = PROVIDERS[provider]();
+  const headers: Record<string, string> = { "Content-Type": "application/x-www-form-urlencoded", Accept: "application/json" };
+  const form: Record<string, string> = { ...body };
+  if (p.basic) headers.Authorization = "Basic " + btoa(`${p.id}:${p.secret}`); else { form.client_id = p.id; form.client_secret = p.secret; }
+  const r = await fetch(p.token, { method: "POST", headers, body: new URLSearchParams(form) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok || !j.access_token) throw new Error(`${NAMES[provider]} sign-in failed: ${j.error_description || j.error || r.status}`);
+  return { access_token: j.access_token, refresh_token: j.refresh_token, expires_at: Date.now() + (Number(j.expires_in) || 3600) * 1000 };
+}
+async function oauthCallback(url: URL) {
+  const back = (q: string) => Response.redirect(`${PORTAL_URL}?integration=${encodeURIComponent(q)}`, 302);
+  try {
+    if (url.searchParams.get("error")) return back("cancelled");
+    const raw = atob(url.searchParams.get("state") || ""); const i = raw.lastIndexOf(".");
+    const payload = raw.slice(0, i), sig = raw.slice(i + 1);
+    const [provider, clientId, ts] = payload.split(".");
+    if (!PROVIDERS[provider] || sig !== (await hmacHex(payload)) || Date.now() - Number(ts) > 30 * 60 * 1000) return back("expired");
+    const tok = await tokenCall(provider, { grant_type: "authorization_code", code: url.searchParams.get("code") || "", redirect_uri: FN_URL + "/oauth" });
+    const config: Record<string, any> = {}; let account = "";
+    if (provider === "xero") {
+      const cons = await (await fetch("https://api.xero.com/connections", { headers: { Authorization: `Bearer ${tok.access_token}` } })).json();
+      if (!cons?.[0]?.tenantId) throw new Error("No Xero organisation was chosen.");
+      config.tenant_id = cons[0].tenantId; account = cons[0].tenantName || "Xero";
+    } else if (provider === "gcal") {
+      const me = await (await fetch("https://www.googleapis.com/calendar/v3/calendars/primary", { headers: { Authorization: `Bearer ${tok.access_token}` } })).json().catch(() => ({}));
+      account = me.summary || me.id || "Google Calendar"; config.calendar_id = "primary"; config.tz = me.timeZone || "Australia/Brisbane";
+    } else account = "ServiceM8";
+    await db.from("integrations").upsert({ client_id: clientId, provider, status: "connected", account_name: clip(account, 120), config, tokens: tok, last_error: null, connected_at: new Date().toISOString() }, { onConflict: "client_id,provider" });
+    return back(provider);
+  } catch (e) { console.error("oauth", e); return back("failed"); }
+}
+async function accessToken(it: any) {
+  if (it.tokens?.expires_at > Date.now() + 60000) return it.tokens.access_token;
+  if (!it.tokens?.refresh_token) throw new Error(`${NAMES[it.provider]} needs reconnecting.`);
+  const tok = await tokenCall(it.provider, { grant_type: "refresh_token", refresh_token: it.tokens.refresh_token });
+  if (!tok.refresh_token) tok.refresh_token = it.tokens.refresh_token;
+  it.tokens = tok;
+  await db.from("integrations").update({ tokens: tok }).eq("client_id", it.client_id).eq("provider", it.provider);
+  return tok.access_token;
+}
+async function api(it: any, url: string, method = "GET", body?: unknown, extraHeaders: Record<string, string> = {}) {
+  let headers: Record<string, string> = { Accept: "application/json", ...extraHeaders };
+  if (it.provider === "cliniko") headers = { ...headers, Authorization: "Basic " + btoa(`${it.tokens?.api_key}:`), "User-Agent": "brightfront (info@brightfrontstudio.com)" };
+  else headers.Authorization = `Bearer ${await accessToken(it)}`;
+  if (body !== undefined) headers["Content-Type"] = "application/json";
+  const r = await fetch(url, { method, headers, body: body === undefined ? undefined : JSON.stringify(body) });
+  const text = await r.text(); let j: any = {}; try { j = text ? JSON.parse(text) : {}; } catch { j = { text }; }
+  if (!r.ok) throw new Error(`${NAMES[it.provider]} ${r.status}: ${clip(j.Detail || j.Message || j.message || j.error?.message || j.errors?.[0] || text, 200)}`);
+  return { j, r };
+}
+const splitName = (n: string) => { const p = String(n || "").trim().split(/\s+/); return { first: p[0] || "New", last: p.slice(1).join(" ") || "Lead" }; };
+async function logInt(it: any, lead: any, action: string, ok: boolean, detail = "") {
+  await db.from("integration_log").insert({ client_id: it.client_id, provider: it.provider, lead_id: lead?.id || null, action, ok, detail: clip(detail, 400) });
+  await db.from("integrations").update({ last_error: ok ? null : clip(detail, 300), last_sync_at: new Date().toISOString() }).eq("client_id", it.client_id).eq("provider", it.provider);
+}
+async function setRef(lead: any, k: string, v: string) {
+  lead.integration_refs = { ...(lead.integration_refs || {}), [k]: v };
+  await db.from("leads").update({ integration_refs: lead.integration_refs }).eq("id", lead.id);
+}
+
+async function toXero(it: any, lead: any) {
+  const H = { "Xero-tenant-id": it.config.tenant_id };
+  let contactId = lead.integration_refs?.xero_contact;
+  if (!contactId) {
+    const c = { Name: `${lead.name}${lead.email ? "" : " " + String(lead.id).slice(0, 4)}`, EmailAddress: lead.email || undefined, FirstName: splitName(lead.name).first, LastName: splitName(lead.name).last, Phones: lead.phone ? [{ PhoneType: "MOBILE", PhoneNumber: lead.phone }] : undefined };
+    const { j } = await api(it, "https://api.xero.com/api.xro/2.0/Contacts", "POST", { Contacts: [c] }, H);
+    contactId = j.Contacts?.[0]?.ContactID; await setRef(lead, "xero_contact", contactId);
+  }
+  if (lead.integration_refs?.xero_invoice) return "Already in Xero";
+  const due = new Date(Date.now() + 14 * 86400000).toISOString().slice(0, 10);
+  const inv = { Type: "ACCREC", Status: "DRAFT", Contact: { ContactID: contactId }, DueDate: due, Reference: clip(lead.source || "brightfront", 50),
+    LineItems: [{ Description: clip(lead.enquiry || lead.message || "Work for " + lead.name, 400), Quantity: 1, UnitAmount: Number(lead.value) || 0, AccountCode: it.config.account_code || "200" }] };
+  const { j } = await api(it, "https://api.xero.com/api.xro/2.0/Invoices", "POST", { Invoices: [inv] }, H);
+  await setRef(lead, "xero_invoice", j.Invoices?.[0]?.InvoiceID);
+  return `Contact and draft invoice created${lead.value ? " for $" + lead.value : ""}`;
+}
+async function toServiceM8(it: any, lead: any) {
+  if (lead.integration_refs?.sm8_job) return "Already in ServiceM8";
+  const base = "https://api.servicem8.com/api_1.0";
+  const co = await api(it, `${base}/company.json`, "POST", { name: lead.name });
+  const cu = co.r.headers.get("x-record-uuid") || "";
+  const n = splitName(lead.name);
+  if (cu) await api(it, `${base}/companycontact.json`, "POST", { company_uuid: cu, first: n.first, last: n.last, email: lead.email || "", mobile: lead.phone || "", type: "JOB", is_primary_contact: "1" }).catch(() => {});
+  const job = await api(it, `${base}/job.json`, "POST", { company_uuid: cu, status: "Quote", job_description: clip([lead.enquiry, lead.message].filter(Boolean).join("\n\n") || "New enquiry", 2000), job_address: lead.address || "" });
+  await setRef(lead, "sm8_job", job.r.headers.get("x-record-uuid") || "created");
+  return "Customer and quote job created";
+}
+function clinikoBase(key: string) { const m = String(key).match(/-([a-z]{2}\d)$/); return `https://api.${m ? m[1] : "au1"}.cliniko.com/v1`; }
+async function toCliniko(it: any, lead: any) {
+  if (lead.integration_refs?.cliniko_patient) return "Already in Cliniko";
+  const n = splitName(lead.name);
+  const { j } = await api(it, `${clinikoBase(it.tokens.api_key)}/patients`, "POST", { first_name: n.first, last_name: n.last, email: lead.email || undefined, patient_phone_numbers: lead.phone ? [{ number: lead.phone, phone_type: "Mobile" }] : undefined, notes: clip(`From ${lead.source || "brightfront"}: ${lead.enquiry || ""} ${lead.message || ""}`, 1000) });
+  await setRef(lead, "cliniko_patient", String(j.id || "created"));
+  return "Patient created";
+}
+async function toWebhook(it: any, lead: any, event: string) {
+  const body = JSON.stringify({ event, lead: { id: lead.id, name: lead.name, phone: lead.phone, email: lead.email, source: lead.source, enquiry: lead.enquiry, message: lead.message, status: lead.status, value: lead.value, score: lead.score, created_at: lead.created_at } });
+  const r = await fetch(it.config.url, { method: "POST", headers: { "Content-Type": "application/json", "X-Brightfront-Event": event }, body });
+  if (!r.ok) throw new Error(`Webhook returned ${r.status}`);
+  return `Sent ${event}`;
+}
+// When to push: Xero on "won"; ServiceM8 and Cliniko on "booked" or "won"; webhooks on everything
+async function fireEvent(lead: any, event: string) {
+  if (!lead?.client_id) return;
+  const { data: its } = await db.from("integrations").select("*").eq("client_id", lead.client_id).eq("status", "connected");
+  for (const it of its || []) {
+    const st = lead.status;
+    let job: (() => Promise<string>) | null = null;
+    if (it.provider === "webhook" && it.config?.url) job = () => toWebhook(it, lead, event);
+    else if (it.provider === "xero" && st === (it.config?.on || "won")) job = () => toXero(it, lead);
+    else if (it.provider === "servicem8" && ["booked", "won"].includes(st)) job = () => toServiceM8(it, lead);
+    else if (it.provider === "cliniko" && ["booked", "won"].includes(st)) job = () => toCliniko(it, lead);
+    if (!job) continue;
+    try { await logInt(it, lead, await job(), true); } catch (e) { await logInt(it, lead, "Failed", false, String((e as Error).message || e)); }
+  }
+}
+// Free times from Google Calendar, offered by the assistant
+async function freeTimes(clientId: string) {
+  const { data: it } = await db.from("integrations").select("*").eq("client_id", clientId).eq("provider", "gcal").eq("status", "connected").maybeSingle();
+  if (!it) return "";
+  const tz = it.config?.tz || "Australia/Brisbane";
+  const now = Date.now(), until = now + 8 * 86400000;
+  const { j } = await api(it, "https://www.googleapis.com/calendar/v3/freeBusy", "POST", { timeMin: new Date(now).toISOString(), timeMax: new Date(until).toISOString(), timeZone: tz, items: [{ id: it.config?.calendar_id || "primary" }] });
+  const busy = (Object.values(j.calendars || {})[0] as any)?.busy?.map((b: any) => [Date.parse(b.start), Date.parse(b.end)]) || [];
+  const startH = Number(it.config?.start_hour ?? 9), endH = Number(it.config?.end_hour ?? 17), len = Number(it.config?.slot_minutes ?? 60) * 60000;
+  const fmt = new Intl.DateTimeFormat("en-AU", { timeZone: tz, weekday: "long", day: "numeric", month: "short", hour: "numeric", minute: "2-digit" });
+  const parts = (t: number) => Object.fromEntries(new Intl.DateTimeFormat("en-AU", { timeZone: tz, weekday: "short", hour: "numeric", hourCycle: "h23" }).formatToParts(new Date(t)).map((p) => [p.type, p.value]));
+  const out: string[] = []; const days = new Set<string>();
+  for (let t = Math.ceil((now + 3 * 3600000) / 1800000) * 1800000; t < until && out.length < 6; t += 1800000) {
+    const p = parts(t); const h = Number(p.hour);
+    if (["Sat", "Sun"].includes(p.weekday) || h < startH || h + len / 3600000 > endH) continue;
+    if (busy.some(([a, b]: number[]) => t < b && t + len > a)) continue;
+    const day = fmt.format(new Date(t)).split(" at ")[0].split(",")[0];
+    if (days.has(day) && out.length >= 3) continue;
+    if ([...out].filter((x) => x.startsWith(day)).length >= 2) continue;
+    days.add(day); out.push(fmt.format(new Date(t)));
+  }
+  return out.join("; ");
+}
+
 /* ---------- routes ---------- */
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
@@ -433,6 +605,7 @@ Deno.serve(async (req) => {
     const ok = url.searchParams.get("hub.mode") === "subscribe" && env("META_VERIFY_TOKEN") && url.searchParams.get("hub.verify_token") === env("META_VERIFY_TOKEN");
     return ok ? new Response(url.searchParams.get("hub.challenge") || "", { status: 200 }) : new Response("Forbidden", { status: 403 });
   }
+  if (req.method === "GET" && route === "oauth") return await oauthCallback(url);
   if (req.method !== "POST") return json({ ok: true, service: "brightfront Reply" });
 
   try {
@@ -523,6 +696,31 @@ Deno.serve(async (req) => {
         return json(r, r.ok ? 200 : 400);
       }
 
+
+      if (input.action === "oauth_start") {
+        if (me?.role !== "agency") return json({ ok: false, error: "Not allowed" }, 403);
+        return json({ ok: true, url: await oauthStart(input.provider, input.client_id) });
+      }
+      if (input.action === "lead_event") {
+        const { data: lead } = await db.from("leads").select("*").eq("id", input.lead_id).single();
+        if (!lead || !can(lead.client_id)) return json({ ok: false, error: "Not allowed" }, 403);
+        await fireEvent(lead, "lead.updated");
+        return json({ ok: true });
+      }
+      if (input.action === "integration_test") {
+        if (me?.role !== "agency") return json({ ok: false, error: "Not allowed" }, 403);
+        const { data: it } = await db.from("integrations").select("*").eq("client_id", input.client_id).eq("provider", input.provider).maybeSingle();
+        if (!it) return json({ ok: false, error: "Not connected yet." }, 400);
+        try {
+          if (it.provider === "xero") await api(it, "https://api.xero.com/api.xro/2.0/Organisation", "GET", undefined, { "Xero-tenant-id": it.config.tenant_id });
+          else if (it.provider === "servicem8") await api(it, "https://api.servicem8.com/api_1.0/vendor.json");
+          else if (it.provider === "cliniko") { const { j } = await api(it, `${clinikoBase(it.tokens.api_key)}/businesses`); await db.from("integrations").update({ account_name: clip(j.businesses?.[0]?.business_name || "Cliniko", 120) }).eq("client_id", it.client_id).eq("provider", "cliniko"); }
+          else if (it.provider === "gcal") { const t = await freeTimes(it.client_id); return json({ ok: true, detail: t ? "Next free times: " + t.split("; ").slice(0, 3).join("; ") : "Connected. No free times in the next week." }); }
+          else if (it.provider === "webhook") await toWebhook(it, { id: "test", name: "Test lead", source: "Test", status: "new", created_at: new Date().toISOString() }, "test");
+          await db.from("integrations").update({ last_error: null, last_sync_at: new Date().toISOString() }).eq("client_id", it.client_id).eq("provider", it.provider);
+          return json({ ok: true, detail: "Working" });
+        } catch (e) { const m = String((e as Error).message || e); await db.from("integrations").update({ last_error: clip(m, 300) }).eq("client_id", it.client_id).eq("provider", it.provider); return json({ ok: false, error: m }, 400); }
+      }
 
       if (input.action === "meta_connect") {
         if (me?.role !== "agency") return json({ ok: false, error: "Not allowed" }, 403);
