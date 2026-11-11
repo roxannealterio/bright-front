@@ -472,7 +472,7 @@ var SERVICES = [
 
   // rotating hero word
   var words = document.querySelectorAll('#rot span'), wi = 0;
-  if (!reduce) setInterval(function () {
+  if (!reduce && words.length) setInterval(function () {
     var cur = words[wi]; cur.classList.remove('on'); cur.classList.add('out');
     wi = (wi + 1) % words.length; var nx = words[wi]; nx.classList.remove('out'); void nx.offsetWidth; nx.classList.add('on');
     setTimeout(function () { cur.classList.remove('out'); }, 700);

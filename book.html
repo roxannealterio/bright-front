@@ -544,7 +544,12 @@ legend.fn-q{margin-bottom:22px}legend.fn-q + .fn-sub{margin-top:-14px}
         <span class="tickbig"><svg width="30" height="30"><use href="#ck"/></svg></span>
         <h3>Request received.</h3>
         <p id="doneText"></p>
-        <a class="btn btn-navy" id="icsLink" download="brightfront-strategy-call.ics">Add to my calendar</a>
+        <p style="margin:6px 0 2px;font-weight:700">Add it to your calendar</p>
+        <div class="cal-btns" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+          <a class="btn btn-navy" id="gcalLink" target="_blank" rel="noopener">Google Calendar</a>
+          <a class="btn btn-navy" id="icsLink" download="brightfront-strategy-call.ics">Apple Calendar</a>
+          <a class="btn btn-navy" id="olLink" target="_blank" rel="noopener">Outlook</a>
+        </div>
       </div>
     </div>
 
@@ -608,7 +613,7 @@ var SERVICES = [
 
   // rotating hero word
   var words = document.querySelectorAll('#rot span'), wi = 0;
-  if (!reduce) setInterval(function () {
+  if (!reduce && words.length) setInterval(function () {
     var cur = words[wi]; cur.classList.remove('on'); cur.classList.add('out');
     wi = (wi + 1) % words.length; var nx = words[wi]; nx.classList.remove('out'); void nx.offsetWidth; nx.classList.add('on');
     setTimeout(function () { cur.classList.remove('out'); }, 700);
@@ -732,11 +737,29 @@ var SERVICES = [
       document.getElementById('fTime').value = pickedTime;
       step(2); form.querySelector('[name=name]').focus();
     }
-    function ics() {
+    function callTimes() {
       var t = pickedTime.match(/(\d+):(\d+)(am|pm)/), h = (+t[1] % 12) + (t[3] === 'pm' ? 12 : 0);
       var st = new Date(picked); st.setHours(h, +t[2], 0, 0); var en = new Date(st.getTime() + 15 * 60000);
       var f = function (d) { return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, ''); };
-      return 'data:text/calendar;charset=utf-8,' + encodeURIComponent('BEGIN:VCALENDAR\r\nVERSION:2.0\r\nBEGIN:VEVENT\r\nDTSTART:' + f(st) + '\r\nDTEND:' + f(en) + '\r\nSUMMARY:brightfront strategy call\r\nDESCRIPTION:Free 15-minute strategy call with brightfront\r\nEND:VEVENT\r\nEND:VCALENDAR');
+      return { st: f(st), en: f(en) };
+    }
+    var CAL_TITLE = 'brightfront strategy call', CAL_DESC = 'Your free 15-minute strategy call with brightfront. We will email your call link. Questions: info@brightfrontstudio.com';
+    function ics() {
+      var c = callTimes();
+      var body = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//brightfront//booking//EN', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', 'BEGIN:VEVENT',
+        'UID:' + c.st + '-' + Math.random().toString(36).slice(2) + '@brightfrontstudio.com', 'DTSTAMP:' + new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, ''),
+        'DTSTART:' + c.st, 'DTEND:' + c.en, 'SUMMARY:' + CAL_TITLE, 'DESCRIPTION:' + CAL_DESC, 'ORGANIZER;CN=brightfront:mailto:info@brightfrontstudio.com',
+        'BEGIN:VALARM', 'TRIGGER:-PT15M', 'ACTION:DISPLAY', 'DESCRIPTION:' + CAL_TITLE, 'END:VALARM', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+      return URL.createObjectURL(new Blob([body], { type: 'text/calendar;charset=utf-8' }));
+    }
+    function gcal() {
+      var c = callTimes();
+      return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(CAL_TITLE) + '&dates=' + c.st + '/' + c.en + '&details=' + encodeURIComponent(CAL_DESC);
+    }
+    function outlook() {
+      var t = pickedTime.match(/(\d+):(\d+)(am|pm)/), h = (+t[1] % 12) + (t[3] === 'pm' ? 12 : 0);
+      var st = new Date(picked); st.setHours(h, +t[2], 0, 0); var en = new Date(st.getTime() + 15 * 60000);
+      return 'https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent&subject=' + encodeURIComponent(CAL_TITLE) + '&startdt=' + encodeURIComponent(st.toISOString()) + '&enddt=' + encodeURIComponent(en.toISOString()) + '&body=' + encodeURIComponent(CAL_DESC);
     }
     prev.addEventListener('click', function () { view.setMonth(view.getMonth() - 1); render(); });
     next.addEventListener('click', function () { view.setMonth(view.getMonth() + 1); render(); });
@@ -746,7 +769,7 @@ var SERVICES = [
       send(form, function (viaMail) {
         var when = picked.toLocaleDateString('en-AU', fmtLong) + ' at ' + pickedTime + ' (Brisbane time)';
         document.getElementById('doneText').textContent = viaMail ? 'Your email app has opened with your request for ' + when + '. Press send and we’ll confirm your call.' : 'You’ve requested ' + when + '. We’ll email you to confirm, with a call link.';
-        document.getElementById('icsLink').href = ics();
+        document.getElementById('icsLink').href = ics(); document.getElementById('gcalLink').href = gcal(); document.getElementById('olLink').href = outlook();
         step(3);
       }, 'Confirm booking');
     });

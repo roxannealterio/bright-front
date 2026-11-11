@@ -209,6 +209,7 @@ function renderLogin(mode = 'in', msg = '') {
       <h2 tabindex="-1">${mode === 'up' ? 'Create your account' : mode === 'reset' ? 'Reset your password' : 'Log in to your portal'}</h2>
       <p class="muted" style="margin:0">${mode === 'up' ? 'Use the email we have for your business. We’ll link your account to your business.' : mode === 'reset' ? 'We’ll email you a link to set a new password.' : 'Welcome back.'}</p>
       ${!LIVE ? '<div class="demo-note">Preview mode with sample data. Log in with any email and password. Use info@brightfrontstudio.com to see your agency view.</div>' : ''}
+      ${LIVE && CFG.GOOGLE_LOGIN && mode !== 'reset' ? `<button type="button" class="btn btn-ghost" id="gBtn" style="width:100%"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.4h6.5a5.6 5.6 0 0 1-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.7z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 7.9-2.9l-3.9-3c-1.1.7-2.4 1.2-4 1.2-3.1 0-5.7-2.1-6.7-4.9h-4v3.1A12 12 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.3 14.4a7.2 7.2 0 0 1 0-4.7V6.6h-4a12 12 0 0 0 0 10.9z"/><path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 1.3 6.6l4 3.1C6.3 6.9 8.9 4.8 12 4.8z"/></svg>Continue with Google</button><div class="row small muted" style="justify-content:center">or use your email</div>` : ''}
       ${mode === 'up' ? '<label class="lab">Full name<input class="field" name="full_name" autocomplete="name" required></label>' : ''}
       <label class="lab">Email<input class="field" name="email" type="email" autocomplete="email" required></label>
       ${mode !== 'reset' ? `<label class="lab">Password<input class="field" name="password" type="password" autocomplete="${mode === 'up' ? 'new-password' : 'current-password'}" minlength="${LIVE ? 8 : 1}" required></label>` : ''}
@@ -221,7 +222,8 @@ function renderLogin(mode = 'in', msg = '') {
   </main></div>`;
   $app.querySelectorAll('.btn-link').forEach((b) => Object.assign(b.style, { background: 'none', border: 0, padding: '8px 0', color: 'var(--pinkd)', fontWeight: 700, cursor: 'pointer', minHeight: '44px' }));
   $app.querySelectorAll('[data-mode]').forEach((b) => b.onclick = () => renderLogin(b.dataset.mode));
-    const f = document.getElementById('authForm');
+    const gb = document.getElementById('gBtn'); if (gb) gb.onclick = async () => { try { const { error } = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: location.href.split('#')[0] } }); if (error) throw error; } catch (err) { renderLogin(mode, err.message); } };
+  const f = document.getElementById('authForm');
   f.onsubmit = async (e) => {
     e.preventDefault();
     const bad = [...f.querySelectorAll('[required]')].find((i) => !i.checkValidity()); if (bad) return bad.reportValidity();
