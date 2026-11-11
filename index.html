@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>brightfront | Brisbane Personal Branding & Digital Marketing Agency</title>
-<meta name="description" content="Brisbane personal branding and digital marketing agency for agents, coaches and brokers. Google Ads, Meta ads, SEO, social and email. Fixed monthly fees, no lock-in, 40% uplift guaranteed.">
+<title>brightfront | Brisbane Lead Generation &amp; Conversion Agency</title>
+<meta name="description" content="We bring in the leads, answer every one in under a minute, and our sales team turns them into booked appointments and paying clients. Brisbane based, working Australia wide.">
 <meta property="og:title" content="brightfront | Be the name they call first">
 <meta property="og:description" content="Personal brands and lead engines for agents, coaches and brokers. Fixed fees, no lock-in, 40% uplift guaranteed.">
 <meta property="og:type" content="website">
@@ -351,7 +351,7 @@ footer{background:#fff;color:var(--muted);padding:44px 0 24px;font-size:14px;bor
 @media(max-width:860px){.f-top{grid-template-columns:1fr 1fr}}
 footer .wm{color:var(--navy);font-size:26px;margin-bottom:10px}
 footer strong{display:block;color:var(--navy);margin-bottom:10px}
-footer a{display:block;text-decoration:none;padding:3px 0;transition:color .15s}
+footer a{display:block;text-decoration:none;padding:3px 0;transition:color .15s}@media(max-width:860px){footer nav a,.f-top div a{padding:8px 0}}
 footer a:hover{color:var(--pink)}
 .f-big{font-size:clamp(70px,14vw,210px);font-weight:300;letter-spacing:-.06em;line-height:.9;color:var(--navy);margin:64px 0 0}
 .f-big b{font-weight:700;color:var(--pink)}
@@ -394,6 +394,20 @@ footer a:hover{color:var(--pink)}
 .tags{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
 .tags li{background:var(--grey);color:var(--navy);border-radius:999px;padding:8px 14px;font-size:14px;font-weight:600}
 .svc-copy .tags{margin-bottom:28px}
+.svc-wide{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:28px;align-items:center}
+.svc-wide .flag{display:inline-block;background:var(--pink);color:#fff;font-size:12px;font-weight:700;border-radius:999px;padding:4px 12px}
+@media(max-width:900px){.svc-wide{grid-template-columns:1fr;gap:12px}}
+/* conversion steps */
+.cv-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media(max-width:900px){.cv-steps{grid-template-columns:1fr}}
+.cv-steps li{background:var(--grey);border-radius:28px;padding:32px 28px;display:flex;flex-direction:column;gap:10px;position:relative}
+.cv-steps p{color:var(--muted);font-size:16px}
+.cv-n{align-self:flex-start;font-size:13px;font-weight:700;border-radius:999px;padding:6px 14px;background:#fff;color:var(--navy)}
+.cv-steps .cv-hot{background:var(--navy);color:#fff}
+.cv-steps .cv-hot h3{color:#fff}.cv-steps .cv-hot p{color:#C9C9E6}
+.cv-steps .cv-hot .cv-n{background:var(--pink);color:#fff}
+.cv-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.cv-cta .btn-line{color:var(--navy)}
 .svc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 .svc{background:#fff;border-radius:28px;padding:30px;display:flex;flex-direction:column;gap:12px}
 .svc h3{font-size:23px;font-weight:700;letter-spacing:-.02em;color:var(--navy)}
@@ -463,6 +477,14 @@ footer a:hover{color:var(--pink)}
 .pchip{border:1.5px solid var(--line);background:#fff}
 .hero{border-radius:0 0 48px 48px}
 .band{border-radius:48px !important;border-top:0 !important;padding-top:var(--sec) !important}
+.fsm{padding:22px 0 18px;font-size:13px}
+.fsm-in{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px}
+.fsm .wm{font-size:20px;margin:0}
+.fsm-nav{display:flex;flex-wrap:wrap;gap:4px 18px}
+.fsm-nav a,.fsm-bot a{display:inline-block;padding:4px 0;color:var(--muted)}
+.fsm-nav a:hover,.fsm-bot a:hover{color:var(--pink-d)}
+.fsm-bot{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center;color:#8A8AA6}
+@media(max-width:860px){.fsm-in{flex-direction:column;align-items:flex-start}.fsm-nav a,.fsm-bot a{padding:7px 0}}
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"brightfront","url":"https://brightfrontstudio.com/","email":"info@brightfrontstudio.com","description":"Brisbane digital marketing and personal branding agency: Google Ads, Meta ads, SEO, social media, email and landing pages.","areaServed":"Australia","address":{"@type":"PostalAddress","addressLocality":"Brisbane","addressRegion":"QLD","addressCountry":"AU"}}</script>
 </head>
@@ -487,14 +509,14 @@ footer a:hover{color:var(--pink)}
 <header class="hdr" id="hdr">
   <div class="bar">
     <a class="wm" href="#top" aria-label="brightfront home">br<span class="i">ı</span>ghtfront</a>
-    <nav class="nav" aria-label="Main"><a href="#services">Services</a><a href="#guarantee">Guarantee</a><a href="#about">About</a><a href="#plans">Plans</a><a href="book.html#start">Book a call</a></nav>
+    <nav class="nav" aria-label="Main"><a href="#services">Services</a><a href="#guarantee">Guarantee</a><a href="#about">About</a><a href="#plans">Plans</a><a href="convert.html">Lead conversion</a><a href="book.html#start">Book a call</a></nav>
     <div class="right">
       <a class="circ" href="mailto:info@brightfrontstudio.com" aria-label="Email us"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m3 8 9 6 9-6"/></svg></a>
       <a class="btn btn-pink" href="book.html#start">Get started</a>
       <button class="circ burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mnav"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg></button>
     </div>
   </div>
-  <nav class="mnav" id="mnav" aria-label="Mobile"><a href="#services">Services</a><a href="#guarantee">Guarantee</a><a href="#about">About</a><a href="#plans">Plans</a><a href="#faq">FAQ</a><a href="book.html#start">Get started</a></nav>
+  <nav class="mnav" id="mnav" aria-label="Mobile"><a href="#services">Services</a><a href="#guarantee">Guarantee</a><a href="#about">About</a><a href="#plans">Plans</a><a href="convert.html">Lead conversion</a><a href="#faq">FAQ</a><a href="book.html#start">Get started</a></nav>
 </header>
 
 <main id="top"><span id="main"></span>
@@ -502,21 +524,20 @@ footer a:hover{color:var(--pink)}
 <!-- HERO -->
 <section class="hero">
   <div class="wrap">
-    <h1 class="statement" aria-label="Digital marketing specialists who actually get you leads.">Digital marketing specialists <br>who actually get you <span class="rot" id="rot" aria-hidden="true"><span class="on">leads</span><span>booked calls</span><span>listings</span><span>new clients</span><span>sales</span><span>followers</span></span></h1>
+    <h1 class="statement" aria-label="We get you the leads, then turn them into paying clients.">We get you the leads, <br>then turn them into <span class="rot" id="rot" aria-hidden="true"><span class="on">clients</span><span>booked calls</span><span>listings</span><span>sales</span><span>test drives</span><span>members</span></span></h1>
   </div>
 
   <div class="cards">
     <div class="rail" id="crail" data-auto="3800" aria-label="Who we help">
-      <a class="card photo" href="book.html#start"><img src="assets/img1.jpg" alt="" width="720" height="964" fetchpriority="high"><span class="ctop">Real estate agents</span><div class="over"><b>Real estate agents</b><span>Appraisal leads and a profile sellers remember</span></div></a>
-      <a class="card photo" href="book.html#start"><img src="assets/img2.jpg" alt="" width="720" height="964" fetchpriority="auto"><span class="ctop">Fitness coaches</span><div class="over"><b>Fitness coaches</b><span>Fill coaching spots with content that converts</span></div></a>
-      <a class="card photo" href="book.html#start"><img src="assets/img10.jpg" alt="" width="720" height="964" loading="lazy"><span class="ctop">Beauty &amp; aesthetics</span><div class="over"><b>Beauty &amp; aesthetics clinics</b><span>Fill your appointment book, not just your feed</span></div></a>
-      <a class="card photo" href="book.html#start"><img src="assets/img3.jpg" alt="" width="720" height="964" fetchpriority="auto"><span class="ctop">Mortgage brokers</span><div class="over"><b>Mortgage brokers</b><span>Be trusted before they need a broker</span></div></a>
-      <a class="card photo" href="book.html#start"><img src="assets/img11.jpg" alt="" width="720" height="964" loading="lazy"><span class="ctop">Trades</span><div class="over"><b>Trades &amp; home services</b><span>Quote requests from locals searching right now</span></div></a>
-      <a class="card photo" href="book.html#start"><img src="assets/img7.jpg" alt="" width="720" height="964" loading="lazy"><span class="ctop">Car sales</span><div class="over"><b>Car dealers &amp; sales</b><span>Test drives booked from ads, not foot traffic</span></div></a>
-      <a class="card photo" href="book.html#start"><img src="assets/img12.jpg" alt="" width="720" height="964" loading="lazy"><span class="ctop">Hospitality</span><div class="over"><b>Cafés, restaurants &amp; bars</b><span>More bookings and regulars, not just likes</span></div></a>
+      <a class="card photo" href="book.html#start"><img src="assets/img11.jpg" alt="" width="720" height="964" fetchpriority="high"><span class="ctop">Trades</span><div class="over"><b>Trades &amp; home services</b><span>Quote requests answered before your competitors</span></div></a>
+      <a class="card photo" href="book.html#start"><img src="assets/img10.jpg" alt="" width="720" height="964" loading="lazy"><span class="ctop">Beauty &amp; aesthetics</span><div class="over"><b>Beauty &amp; aesthetics clinics</b><span>Enquiries turned into booked treatments</span></div></a>
+      <a class="card photo" href="book.html#start"><img src="assets/img2.jpg" alt="" width="720" height="964" loading="lazy"><span class="ctop">Fitness coaches</span><div class="over"><b>Fitness coaches</b><span>Enquiries turned into paying members</span></div></a>
+      <a class="card photo" href="book.html#start"><img src="assets/img7.jpg" alt="" width="720" height="964" loading="lazy"><span class="ctop">Car sales</span><div class="over"><b>Car dealers &amp; sales</b><span>Online enquiries booked in for test drives</span></div></a>
+      <a class="card photo" href="book.html#start"><img src="assets/img12.jpg" alt="" width="720" height="964" loading="lazy"><span class="ctop">Hospitality</span><div class="over"><b>Cafés, restaurants &amp; bars</b><span>More bookings and functions, not just likes</span></div></a>
+      <a class="card photo" href="book.html#start"><img src="assets/img3.jpg" alt="" width="720" height="964" loading="lazy"><span class="ctop">Mortgage brokers</span><div class="over"><b>Mortgage brokers</b><span>Leads qualified and booked for you</span></div></a>
+      <a class="card photo" href="book.html#start"><img src="assets/img1.jpg" alt="" width="720" height="964" loading="lazy"><span class="ctop">Real estate agents</span><div class="over"><b>Real estate agents</b><span>Appraisal leads, called back and booked</span></div></a>
       <a class="card photo" href="book.html#start"><img src="assets/img8.jpg" alt="" width="720" height="964" loading="lazy"><span class="ctop">E-commerce</span><div class="over"><b>E-commerce brands</b><span>More sales from ads, email and repeat buyers</span></div></a>
       <a class="card photo" href="book.html#start"><img src="assets/img4.jpg" alt="" width="720" height="964" loading="lazy"><span class="ctop">Content shoots</span><div class="over"><b>Content shoots</b><span>Planned, filmed and edited for you</span></div></a>
-      
     </div>
     <div class="wrap railnav"><button class="rbtn" id="cPrev" aria-label="Previous"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button><button class="rbtn" id="cNext" aria-label="Next"><svg width="20" height="20"><use href="#arr"/></svg></button></div>
   </div>
@@ -532,24 +553,37 @@ footer a:hover{color:var(--pink)}
 <!-- STATEMENT -->
 <div class="band">
   <div class="wrap reveal">
-    <p>Digital marketing is more than posting content. We connect your <mark>ads, SEO, website, socials and follow-up</mark> into one system built to bring in booked clients.</p>
-    <p class="sub">Agents, coaches, brokers and brands work with us because we think commercially and report in dollars, not likes.</p>
-    <a class="btn btn-pink" href="book.html#start">Contact us today <svg class="ar" width="18" height="18"><use href="#arr"/></svg></a>
+    <p>Most businesses don’t have a lead problem. They have a <mark>follow-up problem.</mark> We bring the enquiries in, answer every one in under a minute, and our sales team turns them into booked appointments and sales.</p>
+    <p class="sub">Run by people who sell for a living. We report in booked appointments and sales, not likes.</p>
+    <a class="btn btn-pink" href="convert.html">See how we convert leads <svg class="ar" width="18" height="18"><use href="#arr"/></svg></a>
   </div>
 </div>
 
 
+<!-- CONVERSION -->
+<section id="convert" style="background:#fff">
+  <div class="wrap">
+    <div class="shead reveal"><h2>Leads in. Clients out.</h2><p class="lede">Three steps, one team. We don’t hand you a pile of leads and walk away. We stay with every enquiry until it books, buys or says no.</p></div>
+    <ol class="cv-steps">
+      <li class="reveal"><span class="cv-n">Get</span><h3>We bring the leads in</h3><p>Ads, SEO, social and content aimed at the people ready to buy, not just scroll.</p></li>
+      <li class="reveal"><span class="cv-n">Answer</span><h3>Every lead hears back in a minute</h3><p>Our AI assistant replies by text or email in your business’s name, day or night, and asks your questions.</p></li>
+      <li class="reveal cv-hot"><span class="cv-n">Convert</span><h3>Our sales team turns them into clients</h3><p>We call, qualify, handle the objections, book them in and chase every no-show until they’re sitting across from you.</p></li>
+    </ol>
+    <div class="cv-cta reveal"><a class="btn btn-navy" href="convert.html">How lead conversion works <svg class="ar" width="18" height="18"><use href="#arr"/></svg></a><a class="btn btn-line" href="book.html#start">Get a free growth plan</a></div>
+  </div>
+</section>
+
 <!-- SERVICES -->
 <section class="grey" id="services">
   <div class="wrap">
-    <div class="shead reveal"><h2>Everything it takes to get you booked.</h2><p class="lede">Every channel is planned, built and managed as one strategy, so each one supports the next instead of competing for budget.</p></div>
+    <div class="shead reveal"><h2>Everything that brings the leads in.</h2><p class="lede">Every channel is planned, built and managed as one strategy, and every lead it brings in goes straight to our conversion team.</p></div>
     <div class="svc-feature reveal">
       <div class="svc-art" aria-hidden="true">
         <div class="svc-you"><b>You</b><span>everywhere your clients look</span></div>
         <span class="orb o1" title="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#FF0069" d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg></span><span class="orb o2" title="TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#000000" d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></span><span class="orb o3" title="Google"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg></span><span class="orb o4" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#FF0000" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></span><span class="orb o5" title="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#0866FF" d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg></span>
       </div>
       <div class="svc-copy">
-        <span class="flag">Our specialty</span>
+        <span class="flag">Get found</span>
         <h3>Personal branding</h3>
         <p>When you’re the reason people buy, we build the profile, the content and the positioning around you, so enquiries arrive already half sold.</p>
         <ul class="cl"><li><svg width="14" height="14" aria-hidden="true"><use href="#ck"/></svg>Positioning and brand story</li><li><svg width="14" height="14" aria-hidden="true"><use href="#ck"/></svg>Content shoots and editing</li><li><svg width="14" height="14" aria-hidden="true"><use href="#ck"/></svg>Instagram, LinkedIn and TikTok profiles</li><li><svg width="14" height="14" aria-hidden="true"><use href="#ck"/></svg>Founder-led video</li><li><svg width="14" height="14" aria-hidden="true"><use href="#ck"/></svg>Google Business Profile</li><li><svg width="14" height="14" aria-hidden="true"><use href="#ck"/></svg>Monthly content plan</li></ul>
@@ -563,6 +597,7 @@ footer a:hover{color:var(--pink)}
       <article class="svc reveal"><h3>Social media management</h3><p>Content shot, written and scheduled, on brand and out on time without you chasing it.</p><ul class="cl"><li><svg width="14" height="14" aria-hidden="true"><use href="#ck"/></svg>Content calendar</li><li><svg width="14" height="14" aria-hidden="true"><use href="#ck"/></svg>Shoots and editing</li><li><svg width="14" height="14" aria-hidden="true"><use href="#ck"/></svg>Captions and scheduling</li></ul></article>
       <article class="svc reveal"><h3>Email &amp; automation</h3><p>Welcome flows, win-backs and campaigns that earn revenue from the audience you already own.</p><ul class="cl"><li><svg width="14" height="14" aria-hidden="true"><use href="#ck"/></svg>Klaviyo and SMS</li><li><svg width="14" height="14" aria-hidden="true"><use href="#ck"/></svg>Welcome and nurture flows</li><li><svg width="14" height="14" aria-hidden="true"><use href="#ck"/></svg>Lead follow-up automations</li></ul></article>
       <article class="svc reveal"><h3>Landing pages &amp; conversion</h3><p>Traffic you paid for is wasted on a page that doesn’t convert. Pages built around one action, then tightened until the enquiry rate moves.</p><ul class="cl"><li><svg width="14" height="14" aria-hidden="true"><use href="#ck"/></svg>Landing page design and build</li><li><svg width="14" height="14" aria-hidden="true"><use href="#ck"/></svg>Booking and lead forms</li><li><svg width="14" height="14" aria-hidden="true"><use href="#ck"/></svg>A/B testing</li></ul></article>
+      <article class="svc svc-wide reveal"><div><span class="flag" style="margin-bottom:10px">New</span><h3>Digital billboards</h3><p>Get your business on digital screens around Brisbane, on the roads and in the suburbs your clients drive through. We plan the locations, design the ad and book the screens, then link it to a QR code and landing page so you can see what it brings in.</p></div><ul class="cl"><li><svg width="14" height="14" aria-hidden="true"><use href="#ck"/></svg>Screen locations and timing planned</li><li><svg width="14" height="14" aria-hidden="true"><use href="#ck"/></svg>Billboard design</li><li><svg width="14" height="14" aria-hidden="true"><use href="#ck"/></svg>QR code and landing page tracking</li><li><svg width="14" height="14" aria-hidden="true"><use href="#ck"/></svg>Followed up with online ads</li></ul></article>
     </div>
   </div>
 </section>
@@ -570,7 +605,7 @@ footer a:hover{color:var(--pink)}
 <!-- WHY US -->
 <section class="grey" id="guarantee" style="padding-top:0">
   <div class="wrap" id="about">
-    <div class="shead reveal"><h2>Brisbane based, working Australia wide.</h2><p class="lede">We started by building brands of our own. Now we bring that playbook to agents, coaches, brokers and brands who want to be known, trusted and booked.</p></div>
+    <div class="shead reveal"><h2>Brisbane based, working Australia wide.</h2><p class="lede">We’re salespeople first. We know what happens after the enquiry comes in, because we’ve spent years turning enquiries into sales ourselves.</p></div>
     <div class="why-grid">
       <div class="why why-g reveal">
         <div class="g2-num"><span id="count">40</span>%</div>
@@ -605,7 +640,8 @@ footer a:hover{color:var(--pink)}
         <a class="btn btn-navy" href="book.html#start">Get a price</a></article>
     </div>
     <p class="swipehint">Swipe to compare plans</p>
-    <div class="addon reveal"><div><b>Add lead follow-up to any plan</b><p>Marketing gets the enquiry in. This makes sure someone acts on it: followed up fast, qualified, and chased until it books.</p></div><a class="btn btn-navy" href="book.html#start">Ask about follow-up</a></div>
+    <div class="addon reveal"><div><b>Got old leads sitting in your inbox or CRM?</b><p>Our lead revival campaign texts, emails and calls your past enquiries and turns them into booked jobs and appointments. It’s the fastest way to see what we can do.</p></div><a class="btn btn-pink" href="convert.html#revival">See lead revival</a></div>
+    <div class="addon reveal"><div><b>Add lead conversion to any plan</b><p>Every lead answered in under a minute by our AI, then called, qualified and booked by our sales team. You just turn up.</p></div><a class="btn btn-navy" href="convert.html">See lead conversion</a></div>
   </div>
 </section>
 
@@ -623,9 +659,10 @@ footer a:hover{color:var(--pink)}
 <!-- FAQ -->
 <section class="grey" id="faq">
   <div class="wrap faq-grid">
-    <div class="reveal"><h2>Brisbane personal branding FAQs</h2><p class="lede" style="margin-top:18px">Can’t see yours? Email <a href="mailto:info@brightfrontstudio.com" style="font-weight:700;color:var(--pink)">info@brightfrontstudio.com</a></p></div>
+    <div class="reveal"><h2>Questions, answered</h2><p class="lede" style="margin-top:18px">Can’t see yours? Email <a href="mailto:info@brightfrontstudio.com" style="font-weight:700;color:var(--pink)">info@brightfrontstudio.com</a></p></div>
     <div class="faq reveal">
-      <details open><summary>How long before I see something?<span class="pm"><svg width="16" height="16"><use href="#plus"/></svg></span></summary><p>Paid media moves in weeks. SEO takes months. Anyone promising a specific number by a specific date is guessing. Within the first month you’ll have a plan, tracking configured and campaigns live.</p></details>
+      <details open><summary>Do you actually call our leads?<span class="pm"><svg width="16" height="16"><use href="#plus"/></svg></span></summary><p>Yes. Our AI answers every enquiry in under a minute, then our sales team calls the ones that need a person. We qualify them, book them into your calendar and follow up no-shows. You see every call and booking in your client portal.</p></details>
+      <details><summary>How long before I see something?<span class="pm"><svg width="16" height="16"><use href="#plus"/></svg></span></summary><p>Paid media moves in weeks. SEO takes months. Anyone promising a specific number by a specific date is guessing. Within the first month you’ll have a plan, tracking configured and campaigns live.</p></details>
       <details><summary>Do I have to take every channel?<span class="pm"><svg width="16" height="16"><use href="#plus"/></svg></span></summary><p>No. Most clients start with one or two. The system is how the pieces are built to fit together, not a minimum order.</p></details>
       <details><summary>Who owns the accounts?<span class="pm"><svg width="16" height="16"><use href="#plus"/></svg></span></summary><p>You do. Google Ads, Meta Business, Analytics, your domain and hosting, all in your name from day one. If we stop working together you keep them, with the history intact.</p></details>
       <details><summary>How is ad spend handled?<span class="pm"><svg width="16" height="16"><use href="#plus"/></svg></span></summary><p>Your card sits on your own Google and Meta accounts, so they bill you directly. We never take a percentage of spend and never mark it up.</p></details>
@@ -637,15 +674,11 @@ footer a:hover{color:var(--pink)}
 
 </main>
 
-<footer>
-  <div class="wrap">
-    <div class="f-top">
-      <div><a class="wm" href="#top" aria-label="brightfront home" style="display:inline-flex">br<span class="i">ı</span>ghtfront</a><p>Personal branding and digital marketing agency in Brisbane, working with clients Australia wide.</p></div>
-      <nav aria-label="Services"><strong>Services</strong><a href="#services">Personal branding</a><a href="#services">Google Ads</a><a href="#services">Meta &amp; Instagram ads</a><a href="#services">SEO</a><a href="#services">Social media</a><a href="#services">Email marketing</a></nav>
-      <nav aria-label="Agency"><strong>Agency</strong><a href="#about">About</a><a href="#plans">Plans</a><a href="book.html#start">Book a call</a></nav>
-      <div><strong>Contact</strong><a href="mailto:info@brightfrontstudio.com">info@brightfrontstudio.com</a><span style="display:block;padding:3px 0">Brisbane, Australia</span><a href="book.html#start">Book a free call</a></div>
-    </div>
-    <div class="f-bot"><span>© <span id="yr">2026</span> brightfront</span><span><a href="portal/" style="display:inline">Client login</a>&nbsp;&nbsp;&nbsp;<a href="privacy.html" style="display:inline">Privacy</a></span></div>
+<footer class="fsm">
+  <div class="wrap fsm-in">
+    <a class="wm" href="index.html" aria-label="brightfront home">br<span class="i">ı</span>ghtfront</a>
+    <nav class="fsm-nav" aria-label="Footer"><a href="#services">Services</a><a href="convert.html">Lead conversion</a><a href="reply.html">AI replies</a><a href="#plans">Plans</a><a href="book.html#start">Book a call</a><a href="mailto:info@brightfrontstudio.com">info@brightfrontstudio.com</a></nav>
+    <span class="fsm-bot"><span>© <span id="yr">2026</span> brightfront · Brisbane</span><a href="portal/">Client login</a><a href="privacy.html">Privacy</a></span>
   </div>
 </footer>
 

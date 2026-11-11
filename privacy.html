@@ -347,7 +347,7 @@ footer{background:#fff;color:var(--muted);padding:44px 0 24px;font-size:14px;bor
 @media(max-width:860px){.f-top{grid-template-columns:1fr 1fr}}
 footer .wm{color:var(--navy);font-size:26px;margin-bottom:10px}
 footer strong{display:block;color:var(--navy);margin-bottom:10px}
-footer a{display:block;text-decoration:none;padding:3px 0;transition:color .15s}
+footer a{display:block;text-decoration:none;padding:3px 0;transition:color .15s}@media(max-width:860px){footer nav a,.f-top div a{padding:8px 0}}
 footer a:hover{color:var(--pink)}
 .f-big{font-size:clamp(70px,14vw,210px);font-weight:300;letter-spacing:-.06em;line-height:.9;color:var(--navy);margin:64px 0 0}
 .f-big b{font-weight:700;color:var(--pink)}
@@ -371,6 +371,14 @@ footer a:hover{color:var(--pink)}
 .skip{position:absolute;left:12px;top:-60px;z-index:100;background:#fff;color:var(--navy);padding:10px 16px;border-radius:12px;font-weight:700}.skip:focus{top:12px}
 .bk-h1{font-size:clamp(40px,5vw,72px);line-height:1.02;letter-spacing:-.04em;font-weight:300;color:var(--navy);margin:0}.bk-h1 b{font-weight:700}
 .legal{max-width:760px;margin:0 auto;padding:150px 24px 80px}.legal h1{font-size:clamp(36px,4.4vw,56px);letter-spacing:-.04em;color:var(--navy);margin:0 0 8px}.legal h2{font-size:22px;color:var(--navy);margin:34px 0 8px;letter-spacing:-.02em}.legal p,.legal li{color:var(--muted);font-size:16px;line-height:1.7}.legal a{color:var(--pink-d);font-weight:600}
+.fsm{padding:22px 0 18px;font-size:13px}
+.fsm-in{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px}
+.fsm .wm{font-size:20px;margin:0}
+.fsm-nav{display:flex;flex-wrap:wrap;gap:4px 18px}
+.fsm-nav a,.fsm-bot a{display:inline-block;padding:4px 0;color:var(--muted)}
+.fsm-nav a:hover,.fsm-bot a:hover{color:var(--pink-d)}
+.fsm-bot{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center;color:#8A8AA6}
+@media(max-width:860px){.fsm-in{flex-direction:column;align-items:flex-start}.fsm-nav a,.fsm-bot a{padding:7px 0}}
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"brightfront","url":"https://brightfrontstudio.com/","email":"info@brightfrontstudio.com","description":"Brisbane digital marketing and personal branding agency: Google Ads, Meta ads, SEO, social media, email and landing pages.","areaServed":"Australia","address":{"@type":"PostalAddress","addressLocality":"Brisbane","addressRegion":"QLD","addressCountry":"AU"}}</script>
 </head>
@@ -395,14 +403,14 @@ footer a:hover{color:var(--pink)}
 <header class="hdr" id="hdr">
   <div class="bar">
     <a class="wm" href="index.html" aria-label="brightfront home">br<span class="i">ı</span>ghtfront</a>
-    <nav class="nav" aria-label="Main"><a href="index.html#services">Services</a><a href="index.html#guarantee">Guarantee</a><a href="index.html#about">About</a><a href="index.html#plans">Plans</a><a href="book.html#start">Book a call</a></nav>
+    <nav class="nav" aria-label="Main"><a href="index.html#services">Services</a><a href="index.html#guarantee">Guarantee</a><a href="index.html#about">About</a><a href="index.html#plans">Plans</a><a href="convert.html">Lead conversion</a><a href="book.html#start">Book a call</a></nav>
     <div class="right">
       <a class="circ" href="mailto:info@brightfrontstudio.com" aria-label="Email us"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m3 8 9 6 9-6"/></svg></a>
       <a class="btn btn-pink" href="book.html#start">Get started</a>
       <button class="circ burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mnav"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg></button>
     </div>
   </div>
-  <nav class="mnav" id="mnav" aria-label="Mobile"><a href="index.html#services">Services</a><a href="index.html#guarantee">Guarantee</a><a href="index.html#about">About</a><a href="index.html#plans">Plans</a><a href="index.html#faq">FAQ</a><a href="book.html#start">Get started</a></nav>
+  <nav class="mnav" id="mnav" aria-label="Mobile"><a href="index.html#services">Services</a><a href="index.html#guarantee">Guarantee</a><a href="index.html#about">About</a><a href="index.html#plans">Plans</a><a href="convert.html">Lead conversion</a><a href="index.html#faq">FAQ</a><a href="book.html#start">Get started</a></nav>
 </header>
 
 <main id="top"><span id="main"></span>
@@ -425,20 +433,19 @@ footer a:hover{color:var(--pink)}
   <h2>Your choices</h2>
   <p>You can ask to see, correct or delete the personal information we hold about you, or stop hearing from us, at any time by emailing <a href="mailto:info@brightfrontstudio.com">info@brightfrontstudio.com</a>. If you’re unhappy with how we’ve handled your information, tell us first and we’ll respond within 30 days. You can also contact the Office of the Australian Information Commissioner at oaic.gov.au.</p>
 
+  <h2>brightfront Reply</h2>
+  <p>If you enquire with a business that uses brightfront Reply, we reply on that business’s behalf. We process your name, contact details and messages only to answer your enquiry, pass it to the business and keep a record they can see. Messages are sent through our email and text message providers and written with the help of an AI provider, some of which store data outside Australia. Reply STOP to any text to opt out, or contact the business or us to have your details removed.</p>
+
   <h2>Cookies</h2>
   <p>This website doesn’t use advertising or tracking cookies. If we add analytics or ad tracking later, we’ll update this policy first.</p>
 </article>
 </main>
 
-<footer>
-  <div class="wrap">
-    <div class="f-top">
-      <div><a class="wm" href="index.html" aria-label="brightfront home" style="display:inline-flex">br<span class="i">ı</span>ghtfront</a><p>Personal branding and digital marketing agency in Brisbane, working with clients Australia wide.</p></div>
-      <nav aria-label="Services"><strong>Services</strong><a href="index.html#services">Personal branding</a><a href="index.html#services">Google Ads</a><a href="index.html#services">Meta &amp; Instagram ads</a><a href="index.html#services">SEO</a><a href="index.html#services">Social media</a><a href="index.html#services">Email marketing</a></nav>
-      <nav aria-label="Agency"><strong>Agency</strong><a href="index.html#about">About</a><a href="index.html#plans">Plans</a><a href="book.html#start">Book a call</a></nav>
-      <div><strong>Contact</strong><a href="mailto:info@brightfrontstudio.com">info@brightfrontstudio.com</a><span style="display:block;padding:3px 0">Brisbane, Australia</span><a href="book.html#start">Book a free call</a></div>
-    </div>
-    <div class="f-bot"><span>© <span id="yr">2026</span> brightfront</span><span><a href="portal/" style="display:inline">Client login</a>&nbsp;&nbsp;&nbsp;<a href="privacy.html" style="display:inline">Privacy</a></span></div>
+<footer class="fsm">
+  <div class="wrap fsm-in">
+    <a class="wm" href="index.html" aria-label="brightfront home">br<span class="i">ı</span>ghtfront</a>
+    <nav class="fsm-nav" aria-label="Footer"><a href="index.html#services">Services</a><a href="convert.html">Lead conversion</a><a href="reply.html">AI replies</a><a href="index.html#plans">Plans</a><a href="book.html#start">Book a call</a><a href="mailto:info@brightfrontstudio.com">info@brightfrontstudio.com</a></nav>
+    <span class="fsm-bot"><span>© <span id="yr">2026</span> brightfront · Brisbane</span><a href="portal/">Client login</a><a href="privacy.html">Privacy</a></span>
   </div>
 </footer>
 
