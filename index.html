@@ -577,7 +577,8 @@ footer a:hover{color:var(--pink)}
 @media(max-width:760px){.rx-fig{order:-1;flex-direction:row;justify-content:flex-start}.rx-pic{width:96px}.rx-kicker{font-size:12px}}
 
 /* tilly hero + demo */
-.tl-hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:48px;align-items:center}
+.tl-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center}
+@media(max-width:900px){.hero{padding-top:112px !important}}
 .tl-hero .statement{font-size:clamp(38px,4.6vw,72px)}
 .tl-br{display:none}
 .tl-demo{display:flex;flex-direction:column;align-items:center;gap:14px}
@@ -606,7 +607,7 @@ footer a:hover{color:var(--pink)}
 .tl-input span{flex:1;border:1px solid #D1D1D6;border-radius:18px;padding:6px 12px;font-size:14px;color:#B0B0B5}
 @keyframes tlin{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
 .tl-note{margin:0;text-align:center;font-size:12px;color:rgba(233,230,255,.7)}
-.tl-tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:400px}
+.tl-tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:520px}
 .tl-tabs button{font:inherit;font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.06);color:#E9E6FF;cursor:pointer;transition:background .2s,color .2s}
 .tl-tabs button:hover{background:rgba(255,255,255,.14)}
 .tl-tabs button[aria-selected="true"]{background:#fff;color:var(--navy);border-color:#fff}
@@ -627,6 +628,57 @@ footer a:hover{color:var(--pink)}
 .tl-setup{margin:28px auto 0;max-width:880px;display:flex;gap:24px;align-items:center;justify-content:space-between;padding:24px 28px;border-radius:24px;background:var(--grey);border:1px solid var(--line)}
 .tl-setup b{font-size:28px;color:var(--navy);white-space:nowrap}.tl-setup h3{margin:0 0 4px;font-size:18px}.tl-setup p{margin:0;color:var(--muted);font-size:14.5px}
 @media(max-width:700px){.tl-setup{flex-direction:column;align-items:flex-start}}
+
+/* hero stage: phone + live cards + orbiting logos */
+.tl-stage{position:relative;width:min(100%,560px);display:flex;justify-content:center;padding:34px 0 26px}
+.tl-ring{position:absolute;left:50%;top:50%;width:520px;height:520px;margin:-260px 0 0 -260px;border-radius:50%;border:1px dashed rgba(255,255,255,.14);animation:tlspin 60s linear infinite;pointer-events:none}
+.tl-ring:after{content:"";position:absolute;inset:70px;border-radius:50%;border:1px solid rgba(255,61,127,.16)}
+.tl-glow{position:absolute;left:50%;top:50%;width:420px;height:420px;margin:-210px 0 0 -210px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,61,127,.35),rgba(123,63,242,.12) 60%,transparent);filter:blur(10px);pointer-events:none}
+@keyframes tlspin{to{transform:rotate(360deg)}}
+.tl-orb{position:absolute;width:50px;height:50px;border-radius:16px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 14px 30px rgba(0,0,0,.35);animation:tlbob 5s ease-in-out infinite;z-index:1}
+.tl-orb img{width:26px;height:26px}
+.tl-orb.to1{left:6%;top:0}.tl-orb.to2{right:2%;top:6%;animation-delay:-1.2s}.tl-orb.to3{left:0;top:50%;animation-delay:-2.4s;width:44px;height:44px}.tl-orb.to4{right:-4%;top:58%;animation-delay:-3.1s;width:44px;height:44px}.tl-orb.to5{left:6%;bottom:2%;animation-delay:-.6s}.tl-orb.to6{right:8%;bottom:0;animation-delay:-1.8s}
+.tl-stage .tl-phone{z-index:2}
+.fx{position:absolute;z-index:3;width:196px;background:rgba(255,255,255,.97);color:var(--navy);border-radius:18px;padding:12px 14px;box-shadow:0 22px 50px rgba(0,0,0,.4),0 0 0 1px rgba(11,11,46,.06);font-size:12px;line-height:1.35;transition:opacity .5s,transform .5s cubic-bezier(.22,1,.36,1)}
+.fx h4{margin:0 0 6px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#6B6B8A;display:flex;align-items:center;gap:6px}
+.fx .live{width:7px;height:7px;border-radius:50%;background:#22C55E;box-shadow:0 0 0 0 rgba(34,197,94,.6);animation:tlping 1.6s infinite}
+@keyframes tlping{70%{box-shadow:0 0 0 7px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+.fx-live{left:-56px;top:96px}
+.fx-live .k{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:left}
+.fx-live .k b{display:block;font-size:20px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.fx-live .k span{font-size:10.5px;color:#6B6B8A}
+.fx-live svg{display:block;width:100%;height:34px;margin-top:6px}
+.fx-live .spark{stroke-dasharray:400;stroke-dashoffset:400;animation:tldraw 3s ease forwards}
+@keyframes tldraw{to{stroke-dashoffset:0}}
+.fx-call{right:-56px;top:250px;width:190px}
+.fx-call .wave{display:flex;align-items:center;gap:3px;height:26px;margin:2px 0 6px}
+.fx-call .wave i{flex:1;background:linear-gradient(#FF3D7F,#7B3FF2);border-radius:3px;height:30%;animation:tlwave 1s ease-in-out infinite}
+.fx-call .wave i:nth-child(2n){animation-delay:-.3s}.fx-call .wave i:nth-child(3n){animation-delay:-.55s}.fx-call .wave i:nth-child(5n){animation-delay:-.8s}
+@keyframes tlwave{0%,100%{height:25%}50%{height:100%}}
+.fx-call p{margin:0;color:#3a3a5a}.fx-call b{font-variant-numeric:tabular-nums}
+.fx-ev{left:-56px;bottom:150px;width:214px;display:flex;gap:10px;align-items:center;opacity:0;transform:translateY(14px) scale(.96)}
+.fx-ev.on{opacity:1;transform:none}
+.fx-ev .ic{width:38px;height:38px;border-radius:11px;background:#F3F1F8;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.fx-ev .ic img{width:22px;height:22px}
+.fx-ev b{display:block;font-size:13.5px}.fx-ev span{color:#6B6B8A}
+.fx-ev .tick{margin-left:auto;width:22px;height:22px;border-radius:50%;background:#22C55E;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;flex:0 0 auto}
+.fx-rq{right:-50px;bottom:70px;width:186px;display:flex;gap:10px;align-items:center;opacity:0;transform:translateY(14px) scale(.96)}
+.fx-rq.on{opacity:1;transform:none}
+.fx-rq img{width:22px;height:22px}.fx-rq b{display:block;font-size:13px}.fx-rq span{color:#6B6B8A}
+.fx-rq .st{color:#FFB400;letter-spacing:1px}
+@media(max-width:1180px){.fx-live{left:-10px}.fx-call{right:-10px}.fx-ev{left:-10px}.fx-rq{right:-8px}}
+@media(max-width:600px){
+ .tl-stage{padding:112px 0 84px}
+ .tl-ring{width:380px;height:380px;margin:-190px 0 0 -190px}
+ .fx{width:calc(50% - 5px);padding:9px 11px;font-size:11px;border-radius:15px}
+ .fx h4{font-size:9.5px;margin-bottom:4px}
+ .fx-live{left:0;top:0}.fx-live .k{gap:2px}.fx-live .k b{font-size:16px}.fx-live .k span{font-size:9px}.fx-live svg{height:18px;margin-top:3px}
+ .fx-call{right:0;top:0;width:calc(50% - 5px)}.fx-call .wave{height:30px;margin:8px 0}
+ .fx-ev{left:0;bottom:0;width:calc(58% - 5px)}.fx-ev .ic{width:30px;height:30px}.fx-ev .ic img{width:18px;height:18px}.fx-ev b{font-size:12px}.fx-ev .tick{display:none}
+ .fx-rq{right:0;bottom:0;width:calc(42% - 5px);gap:7px}.fx-rq b{font-size:11px}
+ .tl-orb{display:none}
+}
+@media(prefers-reduced-motion:reduce){.tl-ring,.tl-orb,.fx .live,.fx-call .wave i{animation:none}.fx-live .spark{animation:none;stroke-dashoffset:0}}
 @media(max-width:960px){.tl-hero{grid-template-columns:1fr;gap:36px}.tl-br{display:inline}}
 @media(max-width:480px){.tl-thread{height:340px}.tl-b{font-size:14px}}
 </style>
@@ -674,14 +726,22 @@ footer a:hover{color:var(--pink)}
       <div class="hero-cta"><a class="btn btn-pink" href="book.html#start">Book a demo <svg width="18" height="18"><use href="#arr"/></svg></a><a class="btn hero-ghost" href="#what">What Tilly does</a></div>
     </div>
     <div class="tl-demo" id="tlDemo">
+      <div class="tl-stage">
+      <div class="tl-glow" aria-hidden="true"></div><div class="tl-ring" aria-hidden="true"></div>
+      <span class="tl-orb to1" aria-hidden="true"><img src="assets/logos/google-calendar.svg" alt=""></span><span class="tl-orb to2" aria-hidden="true"><img src="assets/logos/xero.svg" alt=""></span><span class="tl-orb to3" aria-hidden="true"><img src="assets/logos/gmail.svg" alt=""></span><span class="tl-orb to4" aria-hidden="true"><img src="assets/logos/messenger.svg" alt=""></span><span class="tl-orb to5" aria-hidden="true"><img src="assets/logos/facebook.svg" alt=""></span><span class="tl-orb to6" aria-hidden="true"><img src="assets/logos/google.svg" alt=""></span>
+      <div class="fx fx-live" aria-hidden="true"><h4><i class="live"></i>Tilly today</h4><div class="k"><div><b id="kCalls">23</b><span>calls answered</span></div><div><b id="kReplies">61</b><span>replies sent</span></div><div><b id="kBooked">9</b><span>jobs booked</span></div></div><svg viewBox="0 0 200 34" preserveAspectRatio="none"><defs><linearGradient id="spg" x1="0" x2="1"><stop offset="0" stop-color="#7B3FF2"/><stop offset="1" stop-color="#FF3D7F"/></linearGradient></defs><path class="spark" d="M0 30 L20 26 L40 28 L60 19 L80 22 L100 14 L120 16 L140 9 L160 12 L180 5 L200 3" fill="none" stroke="url(#spg)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="fx fx-call" aria-hidden="true"><h4><i class="live"></i><span id="cLbl">Tilly on a call</span></h4><div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><p id="cTxt">Caller from Carindale · <b id="cTime">0:00</b></p></div>
+      <div class="fx fx-ev" id="fxEv" aria-hidden="true"><span class="ic"><img id="evIc" src="assets/logos/google-calendar.svg" alt=""></span><div><b id="evT">Job booked</b><span id="evS">Jess · Today 1:00 pm</span></div><i class="tick">✓</i></div>
+      <div class="fx fx-rq" id="fxRq" aria-hidden="true"><img src="assets/logos/google.svg" alt=""><div><b>Review request sent</b><span class="st">★★★★★</span></div></div>
       <div class="tl-phone">
         <div class="tl-screen">
           <div class="tl-island"></div>
           <div class="tl-status" aria-hidden="true"><span id="tlClock">9:41</span><span><svg width="18" height="11" viewBox="0 0 18 11"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="6" rx="1"/><rect x="10" y="2.5" width="3" height="8.5" rx="1"/><rect x="15" y="0" width="3" height="11" rx="1"/></svg><svg width="16" height="11" viewBox="0 0 16 11" fill="none" stroke="#000" stroke-width="1.7" stroke-linecap="round"><path d="M1.5 4a9.5 9.5 0 0 1 13 0M4 6.7a6 6 0 0 1 8 0"/><circle cx="8" cy="9.3" r="1" fill="#000"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="#000" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="2"/><rect x="24" y="4" width="1.6" height="4" rx=".8" opacity=".4"/></svg></span></div>
-          <div class="tl-ph-top"><svg class="tl-back" width="12" height="20" viewBox="0 0 12 20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2 2 10l8 8"/></svg><div class="tl-av" id="tlAv">SP</div><b id="tlWho">Smith Plumbing</b></div>
+          <div class="tl-ph-top"><svg class="tl-back" width="12" height="20" viewBox="0 0 12 20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2 2 10l8 8"/></svg><div class="tl-av" id="tlAv"><img src="assets/roxy.webp" alt=""></div><b id="tlWho">Tilly · Smith Plumbing</b></div>
           <div class="tl-thread" id="tlThread" aria-live="polite"></div>
           <div class="tl-input" aria-hidden="true"><i>+</i><span>Text Message</span></div>
         </div>
+      </div>
       </div>
       <p class="tl-note" id="tlNote">Example conversation, as your customer sees it.</p>
       <div class="tl-tabs" role="tablist" aria-label="See Tilly in action">
@@ -1018,32 +1078,37 @@ window.addEventListener('load', function () { if (!location.hash) { window.scrol
 <script>
 (function () {
   var S = [
-    { who: 'Smith Plumbing', av: 'SP', m: [['sys', 'Text Message · Today 7:42 am'], ['sys', 'Missed call · 20 seconds ago'], ['out', 'Hi, it’s Tilly from Smith Plumbing. Sorry we missed your call! What can we help you with?'], ['in', 'Hot water’s gone cold. House in Carindale'], ['out', 'Sorry to hear that. Is it gas or electric, and roughly how old is the system?'], ['in', 'Electric, about 12 years old'], ['out', 'Thanks Jess. Dave can come today at 1pm or tomorrow at 8am. Which suits?'], ['in', '1pm today please!'], ['sys ok', '✓ Booked: Jess, Carindale, today 1pm. Dave notified']] },
-    { who: 'Smith Plumbing', av: 'SP', m: [['sys', 'Text Message · Today 10:15 am'], ['sys', 'Quote sent: bathroom renovation · $14,800 · 2 days ago'], ['out', 'Hi Mark, just checking you got our quote for the bathroom renovation. Happy to answer any questions or adjust anything. Just reply here.'], ['in', 'Got it thanks. Could you do it without the heated floor?'], ['out', 'Good question. I’ll get Dave to send you an updated price today.'], ['sys ok', '✓ Passed to Dave with a summary']] },
-    { who: 'Smith Plumbing', av: 'SP', m: [['sys', 'Text Message · Yesterday 2:30 pm'], ['sys', 'Invoice INV-0042 · $1,250.00 · 7 days overdue'], ['out', 'Hi Sam, just following up on invoice INV-0042 for $1,250.00 from Smith Plumbing, now a week overdue. Pay online here: in.xero.com/…'], ['in', 'So sorry, totally forgot. Paying now'], ['sys ok', '✓ Paid in Xero · $1,250.00']] },
-    { who: 'Bug Off Pest Control', av: 'BO', m: [['sys', 'Text Message · Today 9:05 am'], ['sys', '6 months since Kate’s last pest treatment'], ['out', 'Hi Kate, it’s Tilly from Bug Off Pest Control. You’re due for your next pest treatment. Would you like us to book you in?'], ['in', 'Yes please, any day next week'], ['out', 'Great! Tuesday at 9am or Thursday at 1pm?'], ['in', 'Tuesday works'], ['sys ok', '✓ Booked: Kate, Tuesday 9am']] },
-    { who: 'Tilly', av: 'img', note: 'Example: Tilly texting you, the owner, at 6pm.', m: [['sys', 'Text Message · Today 6:00 pm'], ['out', 'Tilly’s wrap-up for Smith Plumbing: 9 new enquiries, 4 booked, 3 missed calls texted back, 2 quotes followed up.'], ['out', 'Money: $2,340 paid, $1,250 overdue. Needs you: Mark (bathroom quote).'], ['in', 'Legend, thanks Tilly 👍']] }
+    { who: 'Tilly · Smith Plumbing', ev: ['google-calendar','Job booked','Jess · Today 1:00 pm',1,4,'Caller from Carindale'], m: [['sys', 'Text Message · Today 7:42 am'], ['sys', 'Missed call · 20 seconds ago'], ['out', 'Hi, it’s Tilly from Smith Plumbing. Sorry we missed your call! What can we help you with?'], ['in', 'Hot water’s gone cold. House in Carindale'], ['out', 'Sorry to hear that. Is it gas or electric, and roughly how old is the system?'], ['in', 'Electric, about 12 years old'], ['out', 'Thanks Jess. Dave can come today at 1pm or tomorrow at 8am. Which suits?'], ['in', '1pm today please!'], ['sys ok', '✓ Booked: Jess, Carindale, today 1pm. Dave notified']] },
+    { who: 'Tilly · Smith Plumbing', ev: ['gmail','Quote followed up','Mark · $14,800 · passed to Dave',0,2,'Quote call-back'], m: [['sys', 'Text Message · Today 10:15 am'], ['sys', 'Quote sent: bathroom renovation · $14,800 · 2 days ago'], ['out', 'Hi Mark, just checking you got our quote for the bathroom renovation. Happy to answer any questions or adjust anything. Just reply here.'], ['in', 'Got it thanks. Could you do it without the heated floor?'], ['out', 'Good question. I’ll get Dave to send you an updated price today.'], ['sys ok', '✓ Passed to Dave with a summary']] },
+    { who: 'Tilly · Smith Plumbing', ev: ['xero','Invoice paid','$1,250.00 · INV-0042',0,1,'Chasing INV-0042'], m: [['sys', 'Text Message · Yesterday 2:30 pm'], ['sys', 'Invoice INV-0042 · $1,250.00 · 7 days overdue'], ['out', 'Hi Sam, just following up on invoice INV-0042 for $1,250.00 from Smith Plumbing, now a week overdue. Pay online here: in.xero.com/…'], ['in', 'So sorry, totally forgot. Paying now'], ['sys ok', '✓ Paid in Xero · $1,250.00']] },
+    { who: 'Tilly · Bug Off Pest Control', ev: ['google-calendar','Rebooked','Kate · Tuesday 9:00 am',1,3,'Rebooking Kate'], m: [['sys', 'Text Message · Today 9:05 am'], ['sys', '6 months since Kate’s last pest treatment'], ['out', 'Hi Kate, it’s Tilly from Bug Off Pest Control. You’re due for your next pest treatment. Would you like us to book you in?'], ['in', 'Yes please, any day next week'], ['out', 'Great! Tuesday at 9am or Thursday at 1pm?'], ['in', 'Tuesday works'], ['sys ok', '✓ Booked: Kate, Tuesday 9am']] },
+    { who: 'Tilly', ev: ['google','Wrap-up sent','9 enquiries · 4 booked · $2,340 in',0,2,'Daily wrap-up'], note: 'Example: Tilly texting you, the owner, at 6pm.', m: [['sys', 'Text Message · Today 6:00 pm'], ['out', 'Tilly’s wrap-up for Smith Plumbing: 9 new enquiries, 4 booked, 3 missed calls texted back, 2 quotes followed up.'], ['out', 'Money: $2,340 paid, $1,250 overdue. Needs you: Mark (bathroom quote).'], ['sys ok', '✓ Wrap-up sent to Dave · 6:00 pm'], ['in', 'Legend, thanks Tilly 👍']] }
   ];
   var box = document.getElementById('tlThread'), who = document.getElementById('tlWho'), tabs = document.querySelectorAll('.tl-tabs button');
   if (!box) return;
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, timers = [], cur = 0, auto = true, seen = false;
-  function clear() { timers.forEach(clearTimeout); timers = []; box.innerHTML = ''; }
+  var fxEv = document.getElementById('fxEv'), fxRq = document.getElementById('fxRq'), K = { c: 23, r: 61, b: 9 }, ct = 0, cti;
+  function setK() { document.getElementById('kCalls').textContent = K.c; document.getElementById('kReplies').textContent = K.r; document.getElementById('kBooked').textContent = K.b; }
+  function bump(el) { el.animate && el.animate([{ transform: 'scale(1.25)', color: '#FF3D7F' }, { transform: 'none' }], { duration: 600 }); }
+  function showEv(e) { document.getElementById('evIc').src = 'assets/logos/' + e[0] + '.svg'; document.getElementById('evT').textContent = e[1]; document.getElementById('evS').textContent = e[2]; fxEv.classList.add('on'); K.b += e[3]; K.r += e[4]; setK(); if (e[3]) bump(document.getElementById('kBooked')); bump(document.getElementById('kReplies')); at(900, function () { fxRq.classList.add('on'); }); }
+  function clear() { timers.forEach(clearTimeout); timers = []; box.innerHTML = ''; if (fxEv) { fxEv.classList.remove('on'); fxRq.classList.remove('on'); } }
+  cti = setInterval(function () { ct = (ct + 1) % 180; var el = document.getElementById('cTime'); if (el) el.textContent = Math.floor(ct / 60) + ':' + ('0' + ct % 60).slice(-2); }, 1000);
   function at(ms, fn) { timers.push(setTimeout(fn, ms)); }
   function bubble(k, t) { var p = document.createElement('p'); p.className = 'tl-b ' + k; p.textContent = t; box.appendChild(p); trim(); }
   function trim() { while (box.scrollHeight > box.clientHeight + 2 && box.children.length > 1) box.removeChild(box.firstChild); }
   function play(n) {
-    clear(); cur = n; who.textContent = S[n].who; document.getElementById('tlNote').textContent = S[n].note || 'Example conversation, as your customer sees it.'; var av = document.getElementById('tlAv'); if (S[n].av === 'img') av.innerHTML = '<img src="assets/roxy.webp" alt="">'; else av.textContent = S[n].av;
+    clear(); cur = n; who.textContent = S[n].who; document.getElementById('cTxt').firstChild.nodeValue = S[n].ev[5] + ' · '; ct = 0; if (n === 0) { K.c++; setK(); bump(document.getElementById('kCalls')); } document.getElementById('tlNote').textContent = S[n].note || 'Example conversation, as your customer sees it.';
     tabs.forEach(function (b, i) { b.setAttribute('aria-selected', i === n ? 'true' : 'false'); });
-    if (reduce) { S[n].m.forEach(function (x) { bubble(x[0], x[1]); }); return; }
+    if (reduce) { S[n].m.forEach(function (x) { bubble(x[0], x[1]); }); showEv(S[n].ev); return; }
     var t = 300;
     S[n].m.forEach(function (x) {
       if (x[0] === 'out') { at(t, function () { var ty = document.createElement('div'); ty.className = 'tl-typing'; ty.innerHTML = '<i></i><i></i><i></i>'; box.appendChild(ty); trim(); }); t += 1100; at(t, function () { var ty = box.querySelector('.tl-typing'); if (ty) ty.remove(); bubble(x[0], x[1]); }); t += 900; }
-      else { at(t, function () { bubble(x[0], x[1]); }); t += x[0] === 'in' ? 1300 : 800; }
+      else { at(t, function () { bubble(x[0], x[1]); if (x[0] === 'sys ok') showEv(S[n].ev); }); t += x[0] === 'in' ? 1300 : 800; }
     });
     at(t + 2600, function () { if (auto) play((cur + 1) % S.length); });
   }
   tabs.forEach(function (b) { b.addEventListener('click', function () { auto = false; play(+b.dataset.s); }); });
-  if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { if (es[0].isIntersecting && !seen) { seen = true; play(0); } }, { threshold: .3 }).observe(box);
+  if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { if (es[0].isIntersecting && !seen) { seen = true; play(0); } }, { threshold: .1 }).observe(box);
   else play(0);
 })();
 </script>
