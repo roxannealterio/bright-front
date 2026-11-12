@@ -10,7 +10,7 @@ document.addEventListener('click',function(e){var a=e.target.closest&&e.target.c
 <meta name="referrer" content="strict-origin-when-cross-origin">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Tilly: the AI office admin for trades and home services | brightfront</title>
+<title>Frontos: the AI front office for service businesses. Meet Tilly.</title>
 <meta name="description" content="Tilly is an AI admin for trades and home service businesses. She answers every call, text and message, chases quotes and overdue invoices, and texts you a nightly wrap-up.">
 <meta property="og:title" content="Meet Tilly, the office admin you can’t hire">
 <meta property="og:description" content="Tilly answers every enquiry, chases your quotes and overdue invoices, and texts you a wrap-up every night.">
@@ -637,6 +637,109 @@ footer a:hover{color:var(--pink)}
 .tl-setup b{font-size:28px;color:var(--navy);white-space:nowrap}.tl-setup h3{margin:0 0 4px;font-size:18px}.tl-setup p{margin:0;color:var(--muted);font-size:14.5px}
 @media(max-width:700px){.tl-setup{flex-direction:column;align-items:flex-start}}
 
+
+/* platform */
+.pf-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.pf{position:relative;padding:26px 22px;border-radius:24px;background:#fff;border:1px solid var(--line);box-shadow:0 14px 34px rgba(11,11,46,.06);display:flex;flex-direction:column;gap:10px}
+.pf .ic{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#FF3D7F,#7B3FF2);color:#fff}
+.pf h3{margin:6px 0 0;font-size:19px}.pf p{margin:0;color:var(--muted);font-size:14.5px;line-height:1.5}
+.pf .tag{position:absolute;top:18px;right:18px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:999px;background:#E8F7EE;color:#15803D}
+.pf .tag.beta{background:#FFF4E0;color:#B45309}
+.pf.star{background:var(--navy);color:#fff;border-color:var(--navy)}.pf.star h3{color:#fff}.pf.star p{color:#C9C9E6}
+.pf.star .pic{width:46px;height:46px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px #FF3D7F}
+@media(max-width:1000px){.pf-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.pf-grid{grid-template-columns:1fr}}
+
+/* platform tabs (Invoca-style) */
+.band .sub{max-width:640px;line-height:1.55 !important;font-size:17px}
+.pt-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
+.pt-tabs button{font:inherit;font-weight:700;font-size:14.5px;padding:11px 18px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--navy);cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .2s}
+.pt-tabs button[aria-selected="true"]{background:var(--navy);color:#fff;border-color:var(--navy);box-shadow:0 10px 24px rgba(11,11,46,.18)}
+.pt-tabs .tg{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:#FFF4E0;color:#B45309}
+.pt-panel{display:none;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:48px;align-items:center}
+.pt-panel.on{display:grid;animation:tlin .45s ease both}
+.pt-copy h3{font-size:clamp(26px,2.6vw,38px);line-height:1.1;letter-spacing:-.03em;margin:0 0 12px}
+.pt-copy p{color:var(--muted);font-size:17px;margin:0 0 18px}
+.pt-copy ul{list-style:none;margin:0 0 24px;padding:0;display:grid;gap:10px}
+.pt-copy li{display:flex;gap:10px;align-items:flex-start;font-weight:600;color:var(--navy)}
+.pt-copy li svg{color:var(--pink);flex:0 0 auto;margin-top:4px}
+.ui{position:relative;background:#fff;border-radius:22px;border:1px solid var(--line);box-shadow:0 30px 70px rgba(11,11,46,.14);overflow:hidden;font-size:13.5px;color:var(--navy)}
+.ui-bar{display:flex;align-items:center;gap:6px;padding:12px 16px;border-bottom:1px solid var(--line);background:#FBFAFD}
+.ui-bar i{width:10px;height:10px;border-radius:50%;background:#E4E1EC}.ui-bar b{margin-left:10px;font-size:12.5px;color:var(--muted);font-weight:700}
+.ui-body{padding:18px 18px 34px}
+.ui-ex{position:absolute;right:14px;bottom:12px;font-size:11px;color:var(--muted)}
+.ui-row{display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px}
+.ui-row+.ui-row{margin-top:4px}.ui-row.hot{background:#FFF0F5}
+.ui-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;flex:0 0 auto}
+.ui-row .t{flex:1;min-width:0}.ui-row .t b{display:block}.ui-row .t span{display:block;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pill{font-size:11px;font-weight:800;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.pill.g{background:#E8F7EE;color:#15803D}.pill.p{background:#FFE8F0;color:#C2185B}.pill.b{background:#EAF0FF;color:#3555D4}.pill.y{background:#FFF4E0;color:#B45309}
+.ui-call{display:grid;gap:12px}
+.ui-call .top{display:flex;align-items:center;gap:12px}.ui-call .top .t b,.ui-call .top .t span{display:block}
+.ui-call .wv{display:flex;align-items:center;gap:3px;height:34px}.ui-call .wv i{flex:1;border-radius:3px;background:linear-gradient(#FF3D7F,#7B3FF2);height:30%;animation:tlwave 1s ease-in-out infinite}
+.ui-call .wv i:nth-child(2n){animation-delay:-.3s}.ui-call .wv i:nth-child(3n){animation-delay:-.6s}
+.ui-call .ln{padding:10px 12px;border-radius:12px;background:#F4F2F8;max-width:88%}.ui-call .ln.ai{background:#FFF0F5;margin-left:auto}
+.ui-call .ln small{display:block;font-weight:800;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.ui-bars{display:grid;gap:12px}
+.ui-bars .r{display:grid;grid-template-columns:110px 1fr 36px;align-items:center;gap:10px;font-weight:700}
+.ui-bars .tr{height:12px;border-radius:999px;background:#F1EEF6;overflow:hidden}.ui-bars .tr span{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#7B3FF2,#FF3D7F);transform-origin:left;animation:grow 1s cubic-bezier(.22,1,.36,1) both}
+@keyframes grow{from{transform:scaleX(0)}}
+.ui-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.ui-kpis div{padding:12px;border-radius:14px;background:#FBFAFD;border:1px solid var(--line)}.ui-kpis b{display:block;font-size:22px;letter-spacing:-.02em}.ui-kpis span{color:var(--muted);font-size:12px}
+.ui-tl{list-style:none;margin:0;padding:0 0 0 18px;border-left:2px dashed #E4E1EC;display:grid;gap:14px}
+.ui-tl li{position:relative}.ui-tl li:before{content:"";position:absolute;left:-25px;top:4px;width:12px;height:12px;border-radius:50%;background:#fff;border:3px solid #C9C3D8}
+.ui-tl li.ok:before{border-color:#22C55E;background:#22C55E}.ui-tl li.now:before{border-color:#FF3D7F}
+.ui-tl b{display:block}.ui-tl span{color:var(--muted)}
+@media(max-width:900px){.pt-panel{grid-template-columns:1fr;gap:26px}.pt-tabs{flex-wrap:nowrap;overflow-x:auto;margin:0 -20px 22px;padding:0 20px 4px;scrollbar-width:none}.pt-tabs button{flex:0 0 auto}}
+/* industries with photos */
+.ind-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.ind{position:relative;border-radius:26px;overflow:hidden;aspect-ratio:3/4;background:#111;color:#fff;isolation:isolate}
+.ind img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;transition:transform .6s}
+.ind:hover img{transform:scale(1.05)}
+.ind:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,11,46,0) 40%,rgba(11,11,46,.85));z-index:-1}
+.ind .cap{position:absolute;left:20px;right:20px;bottom:20px}
+.ind .cap b{display:block;font-size:20px;letter-spacing:-.02em}.ind .cap span{font-size:13.5px;color:#E3E0F3}
+.ind .soon{position:absolute;top:16px;left:16px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.9);color:var(--navy)}
+@media(max-width:900px){.ind-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* boss modes */
+#trust{background:var(--navy) !important;color:#fff}
+#trust .shead h2{color:#fff}#trust .shead .lede{color:#C9C9E6}
+.bm{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:48px;align-items:center}
+.bm-modes{display:grid;gap:12px}
+.bm-modes button{all:unset;cursor:pointer;display:grid;grid-template-columns:44px 1fr;gap:4px 16px;align-items:center;padding:20px 22px;border-radius:22px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);transition:all .25s}
+.bm-modes button:hover{background:rgba(255,255,255,.09)}
+.bm-modes button:focus-visible{outline:3px solid var(--pink);outline-offset:3px}
+.bm-modes .n{grid-row:span 2;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;background:rgba(255,255,255,.1);color:#fff}
+.bm-modes b{font-size:18px;color:#fff}.bm-modes span.d{color:#C9C9E6;font-size:14.5px}
+.bm-modes small{display:block;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#FF8FB5;margin-bottom:2px}
+.bm-modes button[aria-pressed="true"]{background:#fff;border-color:#fff;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.bm-modes button[aria-pressed="true"] .n{background:var(--pink)}
+.bm-modes button[aria-pressed="true"] b{color:var(--navy)}.bm-modes button[aria-pressed="true"] span.d{color:var(--muted)}.bm-modes button[aria-pressed="true"] small{color:var(--pink)}
+.bm-view{position:relative;background:#fff;color:var(--navy);border-radius:26px;padding:22px;box-shadow:0 30px 80px rgba(0,0,0,.45);min-height:360px}
+.bm-view .hd{display:flex;align-items:center;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:16px}
+.bm-view .hd img{width:40px;height:40px;border-radius:50%;object-fit:cover}
+.bm-view .hd b{display:block}.bm-view .hd span{color:var(--muted);font-size:13px}
+.bm-pane{display:none;gap:12px}.bm-pane.on{display:grid;animation:tlin .4s ease both}
+.bm-msg{padding:12px 14px;border-radius:16px;background:#F4F2F8;font-size:14.5px;max-width:92%}
+.bm-msg.t{background:#FFF0F5;margin-left:auto}
+.bm-msg small{display:block;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.bm-act{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.bm-act span{font-size:13px;font-weight:800;padding:9px 14px;border-radius:999px;background:var(--navy);color:#fff}
+.bm-act span.o{background:#fff;color:var(--navy);border:1px solid var(--line)}
+.bm-st{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#15803D}.bm-st.w{color:#B45309}
+.bm-st i{width:8px;height:8px;border-radius:50%;background:currentColor}
+.bm-promise{margin:36px 0 0;display:flex;gap:14px;align-items:center;padding:18px 22px;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#E6E4F5;font-size:16px}
+.bm-promise svg{flex:0 0 auto;color:#FF8FB5}
+@media(max-width:900px){.bm{grid-template-columns:1fr;gap:26px}.bm-view{min-height:0}}
+/* voice demo button */
+.vdemo{display:inline-flex;align-items:center;gap:12px;margin:0 0 20px;padding:10px 18px 10px 10px;border-radius:999px;border:1px solid var(--line);background:#fff;font:inherit;font-weight:700;color:var(--navy);cursor:pointer;box-shadow:0 8px 20px rgba(11,11,46,.08)}
+.vdemo .pl{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#FF3D7F,#7B3FF2);display:flex;align-items:center;justify-content:center;color:#fff}
+.vdemo.on .pl{animation:tlping 1.4s infinite}
+.vnote{display:block;font-size:12px;color:var(--muted);margin:-12px 0 18px}
+#pricing{padding-bottom:40px !important}
+.cta-wrap{padding-top:0 !important}
+.cta h2{word-spacing:.12em}
 /* hero stage: phone + live cards + orbiting logos */
 .tl-stage{position:relative;width:min(100%,560px);display:flex;justify-content:center;padding:34px 0 26px}
 .tl-ring{position:absolute;left:50%;top:50%;width:520px;height:520px;margin:-260px 0 0 -260px;border-radius:50%;border:1px dashed rgba(255,255,255,.14);animation:tlspin 60s linear infinite;pointer-events:none}
@@ -690,7 +793,7 @@ footer a:hover{color:var(--pink)}
 @media(max-width:960px){.tl-hero{grid-template-columns:1fr;gap:36px}.tl-br{display:inline}}
 @media(max-width:480px){.tl-thread{height:340px}.tl-b{font-size:14px}}
 </style>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"brightfront","url":"https://brightfrontstudio.com/","email":"info@brightfrontstudio.com","description":"brightfront makes Tilly, an AI office admin for trades and home service businesses. She answers enquiries, texts back missed calls, chases quotes and overdue invoices.","areaServed":"Australia","address":{"@type":"PostalAddress","addressLocality":"Brisbane","addressRegion":"QLD","addressCountry":"AU"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"Frontos","url":"https://brightfrontstudio.com/","email":"info@brightfrontstudio.com","description":"Frontos is the AI front office. Tilly, its AI office admin, works for trades and home service businesses. She answers enquiries, texts back missed calls, chases quotes and overdue invoices.","areaServed":"Australia","address":{"@type":"PostalAddress","addressLocality":"Brisbane","addressRegion":"QLD","addressCountry":"AU"}}</script>
 </head>
 <body>
 
@@ -712,15 +815,15 @@ footer a:hover{color:var(--pink)}
 <a class="skip" href="#main">Skip to content</a>
 <header class="hdr" id="hdr">
   <div class="bar">
-    <a class="wm" href="index.html" aria-label="brightfront home">br<span class="i">ı</span>ghtfront</a>
-    <nav class="nav" aria-label="Main"><a href="index.html#what">What Tilly does</a><a href="index.html#who">Who it’s for</a><a href="index.html#works">Integrations</a><a href="index.html#pricing">Pricing</a><a href="index.html#faq">FAQ</a></nav>
+    <a class="wm" href="index.html" aria-label="Frontos home">front<span class="i">o</span>s</a>
+    <nav class="nav" aria-label="Main"><a href="index.html#platform">Platform</a><a href="index.html#what">What Tilly does</a><a href="index.html#pricing">Pricing</a><a href="index.html#faq">FAQ</a></nav>
     <div class="right">
       <a class="circ" href="mailto:info@brightfrontstudio.com" aria-label="Email us"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m3 8 9 6 9-6"/></svg></a>
       <a class="btn btn-pink" href="book.html#start">Book a demo</a>
       <button class="circ burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mnav"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg></button>
     </div>
   </div>
-  <nav class="mnav" id="mnav" aria-label="Mobile"><a href="index.html#what">What Tilly does</a><a href="index.html#works">Integrations</a><a href="index.html#who">Who it’s for</a><a href="index.html#pricing">Pricing</a><a href="index.html#faq">FAQ</a><div class="mn-tilly"><img src="assets/roxy.webp" alt="" width="52" height="52"><div><b>Hi, I’m Tilly.</b><span>I answer your calls, texts and enquiries day and night, chase your quotes and invoices, and text you a wrap-up every evening.</span></div></div><div class="mn-foot"><a class="mn-login" href="portal/">Client login</a><a class="mn-cta" href="book.html#start">Book a free demo</a></div></nav>
+  <nav class="mnav" id="mnav" aria-label="Mobile"><a href="index.html#what">What Tilly does</a><a href="index.html#platform">Platform</a><a href="index.html#works">Integrations</a><a href="index.html#pricing">Pricing</a><a href="index.html#faq">FAQ</a><div class="mn-tilly"><img src="assets/roxy.webp" alt="" width="52" height="52"><div><b>Hi, I’m Tilly.</b><span>I answer your calls, texts and enquiries day and night, chase your quotes and invoices, and text you a wrap-up every evening.</span></div></div><div class="mn-foot"><a class="mn-login" href="portal/">Client login</a><a class="mn-cta" href="book.html#start">Book a free demo</a></div></nav>
 </header>
 
 <main id="top"><span id="main"></span>
@@ -728,9 +831,9 @@ footer a:hover{color:var(--pink)}
 <section class="hero" style="border-radius:0">
   <div class="wrap tl-hero" style="padding-bottom:8px">
     <div>
-      <p class="rx-kicker">Tilly, by brightfront · For trades and home services</p>
+      <p class="rx-kicker">The AI front office</p>
       <h1 class="statement" aria-label="Meet Tilly. She handles your missed calls, quotes, invoices, rebookings and paperwork.">Meet Tilly. <br>She handles your <br class="tl-br"><span class="rot" id="rot" aria-hidden="true"><span class="on">missed calls.</span><span>quotes.</span><span>invoices.</span><span>rebookings.</span><span>paperwork.</span></span></h1>
-      <p class="hero-sub">The office admin you can’t hire. Tilly answers every call, text and message, chases your quotes and overdue invoices, and texts you a wrap-up every night. You get your evenings back, and you get paid faster.</p>
+      <p class="hero-sub">Frontos answers every call and enquiry in seconds, books the job, and follows up your quotes and invoices. No missed work. No late nights on admin.</p>
       <div class="hero-cta"><a class="btn btn-pink" href="book.html#start">Book a demo <svg width="18" height="18"><use href="#arr"/></svg></a><a class="btn hero-ghost" href="#what">What Tilly does</a></div>
     </div>
     <div class="tl-demo" id="tlDemo">
@@ -761,8 +864,8 @@ footer a:hover{color:var(--pink)}
 
 <div class="band" style="border-radius:0 0 48px 48px !important;padding-top:56px !important">
   <div class="wrap reveal">
-    <p>You didn’t start a business <mark>to do paperwork at 9pm.</mark></p>
-    <p class="sub">There’s more work than tradies to do it, and good admin staff are just as hard to find. So the quotes, invoices, follow-ups and call-backs end up on your phone at night. Tilly takes them off your hands.</p>
+    <p>Every missed call is <mark>a job for your competitor.</mark></p>
+    <p class="sub">When customers can’t reach you, they call the next business on the list. Most never call back. Frontos makes sure they reach you first, every time.</p>
     <div class="rx-stats">
       <div><b>32%</b><span>of small builders spend more than 10 hours a week on red tape</span><small>HIA Small Business Conditions Survey 2026</small></div>
       <div><b>27%</b><span>of calls to home service businesses go unanswered</span><small>Invoca home services research</small></div>
@@ -771,80 +874,142 @@ footer a:hover{color:var(--pink)}
   </div>
 </div>
 
-<section id="works" style="background:#fff">
+
+
+
+
+<section id="works" style="background:#fff;padding-bottom:30px">
   <div class="wrap">
-    <div class="shead reveal"><h2>Works with the tools you already use.</h2><p class="lede">Tilly plugs into your calendar, job software and accounts, and answers wherever customers reach you. Anything else connects through Zapier or Make.</p></div>
+    <div class="shead reveal"><h2>Works with the tools you already run on.</h2><p class="lede">Plugs into your calendar, accounts and inbox.</p></div>
     <div class="tl-row reveal"><h3>Built in</h3><div class="tl-marq"><ul class="tl-logos" aria-label="Built-in integrations"><li><span class="lg"><img src="assets/logos/xero.svg" alt="" width="26" height="26" loading="lazy"></span><span>Xero</span></li><li><span class="lg"><img src="assets/logos/google-calendar.svg" alt="" width="26" height="26" loading="lazy"></span><span>Google Calendar</span></li><li><span class="lg"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v10H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8 11h8M8 14h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span>ServiceM8</span></li><li><span class="lg"><img src="assets/logos/gmail.svg" alt="" width="26" height="26" loading="lazy"></span><span>Gmail</span></li><li><span class="lg"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span>Text messages</span></li><li><span class="lg"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span>Phone calls</span></li><li><span class="lg"><img src="assets/logos/facebook.svg" alt="" width="26" height="26" loading="lazy"></span><span>Facebook</span></li><li><span class="lg"><img src="assets/logos/messenger.svg" alt="" width="26" height="26" loading="lazy"></span><span>Messenger</span></li><li><span class="lg"><img src="assets/logos/instagram.svg" alt="" width="26" height="26" loading="lazy"></span><span>Instagram</span></li><li><span class="lg"><img src="assets/logos/google.svg" alt="" width="26" height="26" loading="lazy"></span><span>Google reviews</span></li><li><span class="lg"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 9h10M7 13h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span>Website forms</span></li></ul></div></div>
     <div class="tl-row reveal"><h3>Through Zapier or Make</h3><div class="tl-marq rev"><ul class="tl-logos" aria-label="Integrations through Zapier or Make"><li><span class="lg"><img src="assets/logos/zapier.svg" alt="" width="26" height="26" loading="lazy"></span><span>Zapier</span></li><li><span class="lg"><img src="assets/logos/make.svg" alt="" width="26" height="26" loading="lazy"></span><span>Make</span></li><li><span class="lg"><img src="assets/logos/hubspot.svg" alt="" width="26" height="26" loading="lazy"></span><span>HubSpot</span></li><li><span class="lg"><img src="assets/logos/mailchimp.svg" alt="" width="26" height="26" loading="lazy"></span><span>Mailchimp</span></li><li><span class="lg"><img src="assets/logos/calendly.svg" alt="" width="26" height="26" loading="lazy"></span><span>Calendly</span></li><li><span class="lg"><img src="assets/logos/googlesheets.svg" alt="" width="26" height="26" loading="lazy"></span><span>Google Sheets</span></li><li><span class="lg"><img src="assets/logos/stripe.svg" alt="" width="26" height="26" loading="lazy"></span><span>Stripe</span></li><li><span class="lg"><img src="assets/logos/shopify.svg" alt="" width="26" height="26" loading="lazy"></span><span>Shopify</span></li><li><span class="lg"><img src="assets/logos/wordpress.svg" alt="" width="26" height="26" loading="lazy"></span><span>WordPress</span></li><li><span class="lg"><img src="assets/logos/wix.svg" alt="" width="26" height="26" loading="lazy"></span><span>Wix</span></li><li><span class="lg"><img src="assets/logos/squarespace.svg" alt="" width="26" height="26" loading="lazy"></span><span>Squarespace</span></li></ul></div></div>
     <script>document.querySelectorAll('.tl-marq .tl-logos').forEach(function(u){Array.prototype.slice.call(u.children).forEach(function(li){var c=li.cloneNode(true);c.setAttribute('aria-hidden','true');u.appendChild(c);});});</script>
   </div>
 </section>
 
-<section class="grey" id="what">
+<section id="platform" style="background:var(--grey)">
   <div class="wrap">
-    <div class="shead reveal"><h2>What Tilly does for you.</h2><p class="lede">Like having someone in the office all day, every day, for less than a day’s wages a month.</p></div>
-    <div class="svc-grid">
-      <article class="svc reveal"><h3>Answers every enquiry</h3><p>Website forms, emails, texts, Facebook and Instagram messages all get a reply in under a minute, day or night, in your business’s name.</p><ul class="cl"><li><svg width="14" height="14"><use href="#ck"/></svg>Asks your questions one at a time</li><li><svg width="14" height="14"><use href="#ck"/></svg>Offers your free times to book</li><li><svg width="14" height="14"><use href="#ck"/></svg>Hands you the lead with a summary</li></ul></article>
-      <article class="svc reveal"><h3>Texts back missed calls</h3><p>Your phone rings first. If you don’t pick up in 20 seconds, Tilly texts the caller straight away and finds out what they need.</p><ul class="cl"><li><svg width="14" height="14"><use href="#ck"/></svg>Text sent within seconds</li><li><svg width="14" height="14"><use href="#ck"/></svg>Asks about the job and suburb</li><li><svg width="14" height="14"><use href="#ck"/></svg>Mobiles only, never landlines</li></ul></article>
-      <article class="svc reveal"><h3>Sorts the jobs worth taking</h3><p>When you’re booked out, Tilly finds out what each job is, so you can take the good ones and politely pencil the rest in for later.</p><ul class="cl"><li><svg width="14" height="14"><use href="#ck"/></svg>Job type, size and suburb up front</li><li><svg width="14" height="14"><use href="#ck"/></svg>No one is left hanging</li><li><svg width="14" height="14"><use href="#ck"/></svg>Your reputation stays intact</li></ul></article>
-      <article class="svc reveal"><h3>Chases your quotes</h3><p>Tap “Quote sent” and Tilly follows up 2, 5 and 10 days later, until the customer replies or you tell her to stop.</p><ul class="cl"><li><svg width="14" height="14"><use href="#ck"/></svg>Friendly, never pushy</li><li><svg width="14" height="14"><use href="#ck"/></svg>Stops as soon as they reply</li><li><svg width="14" height="14"><use href="#ck"/></svg>Replies come straight to you</li></ul></article>
-      <article class="svc reveal"><h3>Gets your invoices paid</h3><p>Connect Xero and Tilly sends polite reminders 1, 7 and 14 days after an invoice is due, with the link to pay online.</p><ul class="cl"><li><svg width="14" height="14"><use href="#ck"/></svg>Text or email, weekdays only</li><li><svg width="14" height="14"><use href="#ck"/></svg>Stops when they pay or reply</li><li><svg width="14" height="14"><use href="#ck"/></svg>No awkward money chats for you</li></ul></article>
-      <article class="svc reveal"><h3>Brings regulars back</h3><p>For work that comes round again, like pest treatments, cleans, house washes and services, Tilly reminds customers when they’re due and books them in.</p><ul class="cl"><li><svg width="14" height="14"><use href="#ck"/></svg>You set the gap per job</li><li><svg width="14" height="14"><use href="#ck"/></svg>Repeat work without the ring-around</li><li><svg width="14" height="14"><use href="#ck"/></svg>Replies come back to Tilly</li></ul></article>
-      <article class="svc reveal"><h3>Asks for reviews</h3><p>After a job, send a review request in one tap, so more locals find you on Google.</p><ul class="cl"><li><svg width="14" height="14"><use href="#ck"/></svg>Text or email</li><li><svg width="14" height="14"><use href="#ck"/></svg>Your Google review link</li><li><svg width="14" height="14"><use href="#ck"/></svg>More five-star reviews</li></ul></article>
-      <article class="svc reveal"><h3>Texts you a nightly wrap-up</h3><p>One text at the end of the day: new enquiries, jobs booked, missed calls handled, money paid, what’s overdue and who needs you.</p><ul class="cl"><li><svg width="14" height="14"><use href="#ck"/></svg>Pick the time you want it</li><li><svg width="14" height="14"><use href="#ck"/></svg>Skips quiet days</li><li><svg width="14" height="14"><use href="#ck"/></svg>Links to your full inbox</li></ul></article>
-      <article class="svc reveal"><h3>Works with your tools</h3><p>Tilly offers your free times from Google Calendar, adds jobs to ServiceM8 and creates customers and invoices in Xero.</p><ul class="cl"><li><svg width="14" height="14"><use href="#ck"/></svg>Google Calendar</li><li><svg width="14" height="14"><use href="#ck"/></svg>ServiceM8 and Xero</li><li><svg width="14" height="14"><use href="#ck"/></svg>Most other apps through Zapier</li></ul></article>
+    <div class="shead reveal"><h2>One front office. Run by AI.</h2><p class="lede">One system that captures every enquiry, books the work and gets you paid.</p></div>
+    <div class="pt-tabs reveal" role="tablist" aria-label="Frontos products">
+      <button role="tab" aria-selected="true" data-pt="0">Tilly</button><button role="tab" aria-selected="false" data-pt="1">Frontos Voice <span class="tg">Beta</span></button><button role="tab" aria-selected="false" data-pt="2">Frontos Calls</button><button role="tab" aria-selected="false" data-pt="3">Frontos Follow-up</button>
+    </div>
+    <div class="pt-panel on" data-pp="0">
+      <div class="pt-copy"><h3>Every enquiry answered in seconds.</h3><p>Texts, emails, website forms and DMs all land in one inbox, and Tilly replies to each one in your business’s name.</p><ul><li><svg width="16" height="16"><use href="#ck"/></svg>Asks your questions, one at a time</li><li><svg width="16" height="16"><use href="#ck"/></svg>Offers your real free times</li><li><svg width="16" height="16"><use href="#ck"/></svg>Hands you the lead with a summary</li></ul><a class="btn btn-navy" href="book.html#start">See Tilly in a demo</a></div>
+      <div class="ui"><div class="ui-bar"><i></i><i></i><i></i><b>Inbox</b></div><div class="ui-body">
+        <div class="ui-row hot"><span class="ui-av" style="background:#FF3D7F">SK</span><div class="t"><b>Sarah K. · Text</b><span>Blocked kitchen drain, Wilston. Booked today 3pm</span></div><span class="pill g">Booked</span></div>
+        <div class="ui-row"><span class="ui-av" style="background:#7B3FF2">TR</span><div class="t"><b>Tom R. · Website form</b><span>Bathroom renovation quote, Newmarket</span></div><span class="pill b">Tilly replying</span></div>
+        <div class="ui-row"><span class="ui-av" style="background:#0EA5E9">JM</span><div class="t"><b>Jess M. · Phone call</b><span>Hot water system, Carindale. Booked 1pm</span></div><span class="pill g">Booked</span></div>
+        <div class="ui-row"><span class="ui-av" style="background:#F59E0B">PN</span><div class="t"><b>Priya N. · Instagram</b><span>Leaking tap, wants a price first</span></div><span class="pill p">Needs you</span></div>
+      </div><span class="ui-ex">Example data</span></div>
+    </div>
+    <div class="pt-panel" data-pp="1">
+      <div class="pt-copy"><h3>Tilly answers your phone.</h3><p>A natural Australian voice that talks to callers, answers questions and books the job. The whole call lands in your inbox.</p><ul><li><svg width="16" height="16"><use href="#ck"/></svg>Answers every call, or only the ones you miss</li><li><svg width="16" height="16"><use href="#ck"/></svg>Books the job while they’re on the line</li><li><svg width="16" height="16"><use href="#ck"/></svg>Texts them a recap after</li></ul><a class="btn btn-navy" href="book.html#start">Hear Tilly in a demo</a></div>
+      <div class="ui"><div class="ui-bar"><i></i><i></i><i></i><b>Live call</b></div><div class="ui-body ui-call">
+        <div class="top"><span class="ui-av" style="background:#0EA5E9">JM</span><div class="t"><b>Jess M. · 0412 ••• 381</b><span style="color:var(--muted)">On the line with Tilly · 1:42</span></div><span class="pill y" style="margin-left:auto">Live</span></div>
+        <div class="wv"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="ln"><small>Caller</small>Hi, my hot water’s gone cold. I’m in Carindale.</div>
+        <div class="ln ai"><small>Tilly</small>Sorry to hear that. Is it gas or electric, and how old is it?</div>
+        <div class="ln"><small>Caller</small>Electric, about twelve years.</div>
+        <div class="ln ai"><small>Tilly</small>We can come today at 1pm or tomorrow at 8am. Which suits?</div>
+      </div><span class="ui-ex">Example call</span></div>
+    </div>
+    <div class="pt-panel" data-pp="2">
+      <div class="pt-copy"><h3>Know which ads ring your phone.</h3><p>Give every ad, van and flyer its own number. Every call is logged against where it came from, so you know what to spend more on.</p><ul><li><svg width="16" height="16"><use href="#ck"/></svg>A number for each ad or sign</li><li><svg width="16" height="16"><use href="#ck"/></svg>Calls and leads counted by source</li><li><svg width="16" height="16"><use href="#ck"/></svg>Calls still ring straight to you</li></ul><a class="btn btn-navy" href="book.html#start">Set up call tracking</a></div>
+      <div class="ui"><div class="ui-bar"><i></i><i></i><i></i><b>Calls by source · last 30 days</b></div><div class="ui-body">
+        <div class="ui-kpis"><div><b>81</b><span>calls</span></div><div><b>34</b><span>jobs booked</span></div><div><b>Google Ads</b><span>best source</span></div></div>
+        <div class="ui-bars">
+          <div class="r"><span>Google Ads</span><span class="tr"><span style="width:100%"></span></span><span>42</span></div>
+          <div class="r"><span>Van signage</span><span class="tr"><span style="width:43%;animation-delay:.1s"></span></span><span>18</span></div>
+          <div class="r"><span>Facebook</span><span class="tr"><span style="width:36%;animation-delay:.2s"></span></span><span>15</span></div>
+          <div class="r"><span>Flyers</span><span class="tr"><span style="width:14%;animation-delay:.3s"></span></span><span>6</span></div>
+        </div>
+      </div><span class="ui-ex">Example data</span></div>
+    </div>
+    <div class="pt-panel" data-pp="3">
+      <div class="pt-copy"><h3>Never chase a quote or invoice again.</h3><p>Tilly follows up quotes, reminds people about overdue Xero invoices and books repeat work, then texts you a wrap-up every night.</p><ul><li><svg width="16" height="16"><use href="#ck"/></svg>Quote follow-ups on day 2, 5 and 10</li><li><svg width="16" height="16"><use href="#ck"/></svg>Xero invoice reminders with a pay link</li><li><svg width="16" height="16"><use href="#ck"/></svg>Stops the moment they reply</li></ul><a class="btn btn-navy" href="book.html#start">See it in a demo</a></div>
+      <div class="ui"><div class="ui-bar"><i></i><i></i><i></i><b>Follow-up · Mark D., bathroom quote $14,800</b></div><div class="ui-body">
+        <ol class="ui-tl">
+          <li class="ok"><b>Quote sent</b><span>Monday · from your job software</span></li>
+          <li class="ok"><b>Day 2 · Tilly checked in</b><span>“Just checking you got our quote…”</span></li>
+          <li class="ok"><b>Mark replied</b><span>“Could you do it without the heated floor?”</span></li>
+          <li class="now"><b>Handed to you</b><span>Summary sent to Dave · <span class="pill g">Job won</span></span></li>
+        </ol>
+      </div><span class="ui-ex">Example data</span></div>
     </div>
   </div>
 </section>
 
 <section id="who" style="background:#fff">
   <div class="wrap">
-    <div class="shead reveal"><h2>Built for businesses that work on the tools.</h2><p class="lede">If you’re out on jobs while the phone rings, and your work runs on enquiry, quote, job and invoice, Tilly fits.</p></div>
-    <ul class="rx-who reveal">
-      <li>Electricians</li><li>Plumbers and gasfitters</li><li>Builders and carpenters</li><li>Air conditioning and solar</li><li>Pest control</li><li>House, roof and solar panel washing</li><li>Cleaners</li><li>Lawn, garden and landscaping</li><li>Handymen and property maintenance</li><li>Painters</li><li>Fencing and concreting</li><li>Pool services</li>
-    </ul>
+    <div class="shead reveal"><h2>Built for service businesses.</h2><p class="lede">For businesses whose best work happens away from the desk.</p></div>
+    <div class="ind-grid"><article class="ind reveal"><img src="assets/p-trades.jpg" alt="" loading="lazy" width="720" height="964"><div class="cap"><b>Trades</b><span>Electricians, plumbers, air con</span></div></article><article class="ind reveal"><img src="assets/img11.jpg" alt="" loading="lazy" width="720" height="964"><div class="cap"><b>Home services</b><span>Pest control, cleaning, house washing</span></div></article><article class="ind reveal"><img src="assets/p-builders.jpg" alt="" loading="lazy" width="720" height="964"><div class="cap"><b>Builders and renovators</b><span>Quotes, site visits, variations</span></div></article><article class="ind reveal"><img src="assets/img10.jpg" alt="" loading="lazy" width="720" height="964"><span class=soon>Coming soon</span><div class="cap"><b>Clinics and salons</b><span>Bookings and reminders</span></div></article></div>
   </div>
 </section>
 
-<section id="trust" class="grey">
+<section class="grey" id="what">
   <div class="wrap">
-    <div class="shead reveal"><h2>You stay the boss.</h2><p class="lede">Choose how much Tilly sends on her own. Change it any time in your portal.</p></div>
-    <ol class="cv-steps">
-      <li class="reveal"><span class="cv-n">Careful</span><h3>Every reply waits for your OK</h3><p>Tilly writes it, texts you that it’s ready, and you tap send. Great for your first few weeks.</p></li>
-      <li class="reveal"><span class="cv-n">Balanced</span><h3>Routine replies go straight out</h3><p>Greetings, questions and booking times send instantly. Anything about prices or the job waits for you.</p></li>
-      <li class="reveal cv-hot"><span class="cv-n">Hands-free</span><h3>Tilly handles it all</h3><p>She replies to everything and hands the lead to you once they’re ready to book or need a person.</p></li>
-    </ol>
-    <p class="basic" style="margin-top:26px">Tilly never makes up prices, availability or promises. If she doesn’t know, she says you’ll be in touch and passes it to you.</p>
+    <div class="shead reveal"><h2>What Tilly does.</h2><p class="lede">The work of a full-time office admin, at a fraction of the cost.</p></div>
+    <div class="svc-grid"><article class="svc reveal"><h3>Answers every enquiry</h3><p>Forms, emails, texts and DMs, replied to in under a minute.</p></article><article class="svc reveal"><h3>Texts back missed calls</h3><p>Miss a call and Tilly texts them within seconds.</p></article><article class="svc reveal"><h3>Books the job</h3><p>Offers your free times and puts it in your calendar.</p></article><article class="svc reveal"><h3>Chases your quotes</h3><p>Friendly follow-ups until they reply.</p></article><article class="svc reveal"><h3>Gets invoices paid</h3><p>Polite Xero reminders with a link to pay.</p></article><article class="svc reveal"><h3>Brings regulars back</h3><p>Reminds repeat customers when they’re due.</p></article></div>
+  </div>
+</section>
+
+
+
+<section id="trust">
+  <div class="wrap">
+    <div class="shead reveal"><h2>You stay the boss.</h2><p class="lede">Choose how much Tilly does on her own. Change it any time.</p></div>
+    <div class="bm reveal">
+      <div class="bm-modes" role="group" aria-label="How much Tilly does"><button type="button" data-bm="0" aria-pressed="true"><span class="n">1</span><span><small>Careful</small><b>You approve every reply</b></span><span class="d">Tilly drafts. You tap send.</span></button><button type="button" data-bm="1" aria-pressed="false"><span class="n">2</span><span><small>Balanced</small><b>Routine replies go out</b></span><span class="d">Prices and job details wait for you.</span></button><button type="button" data-bm="2" aria-pressed="false"><span class="n">3</span><span><small>Hands-free</small><b>Tilly handles it all</b></span><span class="d">She books the job and hands you the lead.</span></button></div>
+      <div class="bm-view" aria-live="polite">
+        <div class="hd"><img src="assets/roxy.webp" alt="" width="40" height="40"><div><b>Tilly · Smith Plumbing</b><span>New enquiry from Sarah K. · Wilston</span></div></div>
+        <div class="bm-msg"><small>Sarah</small>Hi, my kitchen sink is blocked. How much to come out today?</div>
+        <div class="bm-pane on" data-bp="0">
+          <div class="bm-msg t"><small>Tilly’s draft</small>Hi Sarah, sorry to hear that! Our call-out is $99. Dave can come at 3pm today. Would that suit?</div>
+          <div class="bm-st w"><i></i>Waiting for your OK</div>
+          <div class="bm-act"><span>Approve and send</span><span class="o">Edit</span></div>
+        </div>
+        <div class="bm-pane" data-bp="1">
+          <div class="bm-msg t"><small>Tilly · sent</small>Hi Sarah, thanks for getting in touch! Is it just the kitchen sink, or are other drains slow too?</div>
+          <div class="bm-st w"><i></i>Price question held for you: “How much to come out today?”</div>
+          <div class="bm-act"><span>Reply with price</span><span class="o">Let Tilly answer</span></div>
+        </div>
+        <div class="bm-pane" data-bp="2">
+          <div class="bm-msg t"><small>Tilly · sent</small>Hi Sarah, sorry to hear that! Our call-out is $99, and Dave can be there at 3pm today. Shall I book you in?</div>
+          <div class="bm-msg"><small>Sarah</small>Yes please!</div>
+          <div class="bm-st"><i></i>Booked for 3pm today. Dave has the details.</div>
+        </div>
+      </div>
+    </div>
+    <p class="bm-promise reveal"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6l-8-3z"/><path d="m9 12 2 2 4-4" stroke-linecap="round"/></svg>Tilly only uses the prices and details you give her. If she’s not sure, she asks you first.</p>
   </div>
 </section>
 
 <section id="pricing" style="background:#fff">
   <div class="wrap">
-    <div class="shead reveal"><h2>Simple monthly pricing.</h2><p class="lede">A one-off setup fee, then month to month with 30 days’ notice. Prices are in Australian dollars and exclude GST. Texts are included up to fair use.</p></div>
+    <div class="shead reveal"><h2>Simple monthly pricing.</h2><p class="lede">Month to month. No lock-in. Prices exclude GST.</p></div>
     <div class="plan-grid">
-      <article class="plan reveal"><div class="phead"><span class="tier">Online enquiries</span><h3>Starter</h3><div class="price"><b>$297</b><span>/month</span></div><p class="plan-setup">+ $490 one-off setup</p><p>For businesses that mostly get enquiries through their website, email and socials.</p></div>
+      <article class="plan reveal"><div class="phead"><span class="tier">Online enquiries</span><h3>Starter</h3><div class="price"><b>$297</b><span>/month</span></div><p class="plan-setup">+ $490 one-off setup</p></div>
         <ul><li><svg width="14" height="14"><use href="#ck"/></svg>Replies to forms, email and Facebook leads</li><li><svg width="14" height="14"><use href="#ck"/></svg>Quote follow-ups by email</li><li><svg width="14" height="14"><use href="#ck"/></svg>Nightly wrap-up by email</li><li><svg width="14" height="14"><use href="#ck"/></svg>Up to 100 leads a month</li><li><svg width="14" height="14"><use href="#ck"/></svg>Every conversation in your portal</li></ul>
         <a class="btn btn-navy" href="book.html#start">Book a demo</a></article>
-      <article class="plan pop reveal"><div class="phead"><span class="tier">Most popular</span><h3>Growth</h3><div class="price"><b>$497</b><span>/month</span></div><p class="plan-setup">+ $490 one-off setup</p><p>The full admin. Your own Australian number, so Tilly can text, catch missed calls and chase money.</p></div>
+      <article class="plan pop reveal"><div class="phead"><span class="tier">Most popular</span><h3>Growth</h3><div class="price"><b>$497</b><span>/month</span></div><p class="plan-setup">+ $490 one-off setup</p></div>
         <ul><li><svg width="14" height="14"><use href="#ck"/></svg>Everything in Starter</li><li><svg width="14" height="14"><use href="#ck"/></svg>Missed-call text-back</li><li><svg width="14" height="14"><use href="#ck"/></svg>Two-way texts with customers</li><li><svg width="14" height="14"><use href="#ck"/></svg>Overdue invoice reminders from Xero</li><li><svg width="14" height="14"><use href="#ck"/></svg>Rebooking reminders for repeat work</li><li><svg width="14" height="14"><use href="#ck"/></svg>Nightly wrap-up by text</li><li><svg width="14" height="14"><use href="#ck"/></svg>Up to 300 leads a month</li></ul>
         <a class="btn btn-pink" href="book.html#start">Book a demo</a></article>
-      <article class="plan reveal"><div class="phead"><span class="tier">For teams</span><h3>Team</h3><div class="price"><b>$797</b><span>/month</span></div><p class="plan-setup">+ $990 one-off setup</p><p>For businesses with an office, several crews or more than one location.</p></div>
+      <article class="plan reveal"><div class="phead"><span class="tier">For teams</span><h3>Team</h3><div class="price"><b>$797</b><span>/month</span></div><p class="plan-setup">+ $990 one-off setup</p></div>
         <ul><li><svg width="14" height="14"><use href="#ck"/></svg>Everything in Growth</li><li><svg width="14" height="14"><use href="#ck"/></svg>Unlimited leads, within fair use</li><li><svg width="14" height="14"><use href="#ck"/></svg>Up to 5 team members get handovers</li><li><svg width="14" height="14"><use href="#ck"/></svg>Separate numbers per location</li><li><svg width="14" height="14"><use href="#ck"/></svg>Emails sent from your own domain</li><li><svg width="14" height="14"><use href="#ck"/></svg>Priority support</li></ul>
         <a class="btn btn-navy" href="book.html#start">Book a demo</a></article>
     </div>
-    <div class="tl-setup reveal"><div><h3>Setup, done for you</h3><p>We learn your business, write Tilly’s questions and replies, connect your forms, calendar and Xero, set up your Australian number and test everything before she goes live.</p></div><b>$490<small style="font-size:14px;color:var(--muted);font-weight:700"> once</small></b></div>
-    <p class="setup">Team plan setup is $990, as it covers several numbers, locations and team members.</p>
+    <div class="tl-setup reveal"><div><h3>Setup, done for you</h3><p>We set Tilly up, connect your tools and test everything before she goes live.</p></div><b>$490<small style="font-size:14px;color:var(--muted);font-weight:700"> once</small></b></div>
   </div>
 </section>
 
-<section id="contact" class="cta-wrap" style="background:var(--grey)">
+<section id="contact" class="cta-wrap">
   <div class="cta cta-mini reveal">
     <div>
       <h2>Get Tilly <b>started.</b></h2>
       <ol class="start">
-        <li><b>Book a 15-minute demo</b><span>Call your Tilly number and miss it on purpose. You’ll get the text on your phone while we talk.</span></li>
-        <li><b>Tell Tilly about your business</b><span>Your services, area, the questions to ask, and how you follow up quotes and invoices.</span></li>
-        <li><b>Go live in a week</b><span>Start in Careful mode, then let her do more once you trust her.</span></li>
+        <li><b>Book a 15-minute demo</b><span>See Tilly work on your own phone.</span></li>
+        <li><b>Tell us about your business</b><span>Your services, area and prices.</span></li>
+        <li><b>Go live</b><span>Start careful, then let her do more.</span></li>
       </ol>
     </div>
     <a class="btn btn-pink" href="book.html#start">Book a demo <svg width="18" height="18"><use href="#arr"/></svg></a>
@@ -870,9 +1035,9 @@ footer a:hover{color:var(--pink)}
 
 <footer class="fsm">
   <div class="wrap fsm-in">
-    <a class="wm" href="index.html" aria-label="brightfront home">br<span class="i">ı</span>ghtfront</a>
+    <a class="wm" href="index.html" aria-label="Frontos home">front<span class="i">o</span>s</a>
     <nav class="fsm-nav" aria-label="Footer"><a href="index.html">Meet Tilly</a><a href="index.html#what">What she does</a><a href="index.html#pricing">Pricing</a><a href="index.html#faq">FAQ</a><a href="book.html#start">Book a demo</a><a href="mailto:info@brightfrontstudio.com">info@brightfrontstudio.com</a></nav>
-    <span class="fsm-bot"><span>© <span id="yr">2026</span> brightfront · Brisbane</span><a href="portal/">Client login</a><a href="privacy.html">Privacy</a></span>
+    <span class="fsm-bot"><span>© <span id="yr">2026</span> Frontos · Brisbane</span><a href="portal/">Client login</a><a href="privacy.html">Privacy</a></span>
   </div>
 </footer>
 
@@ -880,7 +1045,7 @@ footer a:hover{color:var(--pink)}
 /* ===== SETTINGS: fill these in before going live ===== */
 var FORM_ENDPOINT = "https://formspree.io/f/mwlvvozo";  // e.g. "https://formspree.io/f/xxxxxxx" so bookings are emailed to you. Empty = shows the confirmation only.
 
-var AI_HOOK = "https://cupsusqjcgefmfhdznmo.supabase.co/functions/v1/reply/hook?key=331a1a146ef79b4650b943a0abbff547&source=Website%20form";  // brightfront Reply: every enquiry also gets an instant AI reply and lands in the portal
+var AI_HOOK = "https://cupsusqjcgefmfhdznmo.supabase.co/functions/v1/reply/hook?key=331a1a146ef79b4650b943a0abbff547&source=Website%20form";  // Tilly: every enquiry also gets an instant AI reply and lands in the portal
 /* ===================================================== */
 var SERVICES = [];
 (function () {
@@ -1031,7 +1196,7 @@ var SERVICES = [];
       var t = pickedTime.match(/(\d+):(\d+)(am|pm)/), h = (+t[1] % 12) + (t[3] === 'pm' ? 12 : 0);
       var st = new Date(picked); st.setHours(h, +t[2], 0, 0); var en = new Date(st.getTime() + 15 * 60000);
       var f = function (d) { return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, ''); };
-      return 'data:text/calendar;charset=utf-8,' + encodeURIComponent('BEGIN:VCALENDAR\r\nVERSION:2.0\r\nBEGIN:VEVENT\r\nDTSTART:' + f(st) + '\r\nDTEND:' + f(en) + '\r\nSUMMARY:brightfront strategy call\r\nDESCRIPTION:Free 15-minute strategy call with brightfront\r\nEND:VEVENT\r\nEND:VCALENDAR');
+      return 'data:text/calendar;charset=utf-8,' + encodeURIComponent('BEGIN:VCALENDAR\r\nVERSION:2.0\r\nBEGIN:VEVENT\r\nDTSTART:' + f(st) + '\r\nDTEND:' + f(en) + '\r\nSUMMARY:Frontos demo call\r\nDESCRIPTION:Free 15-minute Tilly demo with Frontos\r\nEND:VEVENT\r\nEND:VCALENDAR');
     }
     prev.addEventListener('click', function () { view.setMonth(view.getMonth() - 1); render(); });
     next.addEventListener('click', function () { view.setMonth(view.getMonth() + 1); render(); });
@@ -1123,5 +1288,11 @@ window.addEventListener('load', function () { if (!location.hash) { window.scrol
 <a href="#top" class="totop" id="totop" aria-label="Back to top"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>
 <style>.totop{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:55;width:48px;height:48px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px rgba(11,11,46,.28);opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .25s,transform .25s}.totop.on{opacity:1;transform:none;pointer-events:auto}@media(hover:hover){.totop:hover{background:#DB2468}}@media(max-width:900px){.totop{bottom:calc(92px + env(safe-area-inset-bottom,0px));right:14px;width:46px;height:46px}}body.menu-open .totop{opacity:0;pointer-events:none}</style>
 <script>(function(){var t=document.getElementById('totop');if(!t)return;function u(){t.classList.toggle('on',scrollY>innerHeight*1.2)}addEventListener('scroll',u,{passive:true});u();t.addEventListener('click',function(e){e.preventDefault();window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});});})();</script>
+<script>(function(){var t=document.querySelectorAll('.pt-tabs button'),p=document.querySelectorAll('.pt-panel'),cur=0,auto=setInterval(function(){go((cur+1)%t.length)},7000);function go(n){cur=n;t.forEach(function(b,i){b.setAttribute('aria-selected',i===n?'true':'false')});p.forEach(function(x,i){x.classList.toggle('on',i===n)})}t.forEach(function(b,i){b.addEventListener('click',function(){clearInterval(auto);go(i)})});if(matchMedia('(prefers-reduced-motion: reduce)').matches)clearInterval(auto);})();</script>
+<script>(function(){
+var b=document.querySelectorAll('.bm-modes button'),p=document.querySelectorAll('.bm-pane'),c=0,t=setInterval(function(){go((c+1)%3)},6000);
+function go(n){c=n;b.forEach(function(x,i){x.setAttribute('aria-pressed',i===n?'true':'false')});p.forEach(function(x,i){x.classList.toggle('on',i===n)})}
+b.forEach(function(x,i){x.addEventListener('click',function(){clearInterval(t);go(i)})});if(matchMedia('(prefers-reduced-motion: reduce)').matches)clearInterval(t);
+})();</script>
 </body>
 </html>
