@@ -10,7 +10,7 @@
 //   /reply/email   public   inbound email (Postmark, Mailgun, SendGrid, Cloudflare). ?key=INTAKE_KEY
 //   /reply/voice   public   Twilio "a call comes in" webhook: rings the owner, then texts back missed calls. Twilio signature checked.
 //   /reply/voice_done public Twilio <Dial> result callback for /voice. Twilio signature checked.
-//   /reply/cron    private  hourly jobs (quote chasing, daily owner summary). Needs the x-cron-key header = CRON_SECRET.
+//   /reply/cron    private  hourly jobs (quote chasing, Xero invoice reminders, daily owner summary). Needs the x-cron-key header = CRON_SECRET.
 //
 // Secrets (Supabase -> Edge Functions -> Secrets):
 //   ANTHROPIC_API_KEY             required
@@ -502,6 +502,102 @@ async function chaseQuotes() {
   return sent;
 }
 
+// Chase unpaid Xero invoices: friendly reminders 1, 7 and 14 days after the due date, weekdays 9am to 5pm Brisbane time
+const INV_DAYS = [1, 7, 14];
+const xeroDate = (d?: string) => (d ? Date.parse(String(d).slice(0, 10) + "T00:00:00+10:00") : NaN);
+const money = (n: number) => "$" + Number(n || 0).toLocaleString("en-AU", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const auDay = (t: number) => new Intl.DateTimeFormat("en-AU", { timeZone: "Australia/Brisbane", day: "numeric", month: "short" }).format(new Date(t));
+async function chaseInvoices() {
+  const h = bneHour(), wd = bneNow({ weekday: "short" });
+  if (h < 9 || h >= 17 || wd === "Sat" || wd === "Sun") return 0;
+  const { data: its } = await db.from("integrations").select("*").eq("provider", "xero").eq("status", "connected");
+  let sent = 0;
+  for (const it of its || []) {
+    if (it.config?.chase_invoices === false || !it.config?.tenant_id) continue;
+    const s = await settingsFor(it.client_id);
+    if (!s.enabled) continue;
+    const H = { "Xero-tenant-id": it.config.tenant_id };
+    try {
+      const where = encodeURIComponent('Type=="ACCREC"&&AmountDue>0');
+      const { j } = await api(it, `https://api.xero.com/api.xro/2.0/Invoices?Statuses=AUTHORISED&where=${where}&order=DueDate&page=1`, "GET", undefined, H);
+      const invs = (j.Invoices || []).filter((v: any) => Date.now() >= xeroDate(v.DueDateString) + INV_DAYS[0] * 86400000);
+      if (!invs.length) continue;
+      const { data: rows } = await db.from("invoice_chases").select("*").eq("client_id", it.client_id).in("invoice_id", invs.map((v: any) => v.InvoiceID));
+      const byId: Record<string, any> = Object.fromEntries((rows || []).map((r: any) => [r.invoice_id, r]));
+      let n = 0;
+      for (const v of invs) {
+        if (n >= 15) break; // stay well inside Xero's rate limit
+        const row = byId[v.InvoiceID], step = row?.step ?? 0;
+        if (step >= INV_DAYS.length || row?.stopped) continue;
+        const due = xeroDate(v.DueDateString);
+        if (Date.now() < due + INV_DAYS[step] * 86400000) continue;
+        n++;
+        const { j: cj } = await api(it, `https://api.xero.com/api.xro/2.0/Contacts/${v.Contact.ContactID}`, "GET", undefined, H);
+        const c = cj.Contacts?.[0] || {};
+        const mob = (c.Phones || []).find((p: any) => p.PhoneType === "MOBILE" && p.PhoneNumber);
+        const phone = auPhone(mob ? `${mob.PhoneAreaCode || ""}${mob.PhoneNumber}` : null);
+        const email = validEmail(c.EmailAddress) ? c.EmailAddress : null;
+        const ch = phone && AU_MOBILE.test(phone) && s.sms_enabled !== false && (s.sms_number || env("TWILIO_FROM")) ? "sms" : email && s.email_enabled !== false ? "email" : null;
+        const mark = (patch: Record<string, unknown>) => db.from("invoice_chases").upsert({ client_id: it.client_id, invoice_id: v.InvoiceID, invoice_number: v.InvoiceNumber, contact_name: clip(c.Name || v.Contact?.Name, 120), amount_due: v.AmountDue, due_date: String(v.DueDateString || "").slice(0, 10) || null, step, ...patch }, { onConflict: "client_id,invoice_id" });
+        if (!ch) { await mark({ stopped: true, note: "No mobile or email in Xero" }); continue; }
+        const contact = ch === "sms" ? phone! : email!;
+        let { data: conv } = await db.from("conversations").select("*").eq("client_id", it.client_id).eq("channel", ch).eq("contact", contact).order("last_message_at", { ascending: false }).limit(1).maybeSingle();
+        if (conv?.status === "opted_out") { await mark({ stopped: true, note: "Opted out" }); continue; }
+        // They replied after the last reminder: the owner is handling it, so don't keep nagging
+        if (conv && row?.last_sent_at) { const { data: back } = await db.from("messages").select("id").eq("conversation_id", conv.id).eq("direction", "in").gte("created_at", row.last_sent_at).limit(1); if (back?.length) { await mark({ stopped: true, note: "Customer replied" }); continue; } }
+        if (!conv) {
+          let { data: lead } = await db.from("leads").select("*").eq("client_id", it.client_id).eq("integration_refs->>xero_contact", v.Contact.ContactID).limit(1).maybeSingle();
+          if (!lead) ({ data: lead } = await db.from("leads").insert({ client_id: it.client_id, name: clip(c.Name || "Xero customer", 120), phone: phone || null, email: email || null, source: "Xero invoice", status: "won", integration_refs: { xero_contact: v.Contact.ContactID } }).select().single());
+          ({ data: conv } = await db.from("conversations").insert({ client_id: it.client_id, lead_id: lead.id, channel: ch, contact, status: "human", origin: "invoice" }).select().single());
+        }
+        let link = "";
+        try { const { j: oj } = await api(it, `https://api.xero.com/api.xro/2.0/Invoices/${v.InvoiceID}/OnlineInvoice`, "GET", undefined, H); link = oj.OnlineInvoices?.[0]?.OnlineInvoiceUrl || ""; } catch { /* no online link */ }
+        const nm = firstName(c.FirstName || c.Name), hi = `Hi${nm ? " " + nm : ""}`, biz = s.business_name || "us";
+        const what = `invoice ${v.InvoiceNumber || ""} for ${money(v.AmountDue)}`.replace("  ", " ");
+        const T = [
+          `${hi}, a friendly reminder from ${biz} that ${what} was due on ${auDay(due)}.${link ? " You can view and pay it here: " + link : ""} If you've already paid, thank you and please ignore this.`,
+          `${hi}, just following up on ${what} from ${biz}, now a week overdue.${link ? " Pay online here: " + link : ""} If there's a problem with it, reply here and we'll sort it out.`,
+          `${hi}, ${what} from ${biz} is now two weeks overdue.${link ? " You can pay it here: " + link : ""} Please reply to let us know when we can expect payment.`,
+        ];
+        let text = T[step];
+        if (ch === "sms") text += " Reply STOP to opt out.";
+        else text += `\n\n${s.sign_off || s.business_name || ""}`;
+        try {
+          await deliver(conv, s, clip(text, ch === "sms" ? 600 : 4000), "ai", `Invoice ${v.InvoiceNumber || ""} from ${biz}`.replace("  ", " "));
+          if (conv.status !== "human") await db.from("conversations").update({ status: "human" }).eq("id", conv.id);
+          await mark({ step: step + 1, last_sent_at: new Date().toISOString(), channel: ch });
+          await logInt(it, null, `Payment reminder ${step + 1} of 3 sent for ${v.InvoiceNumber || "invoice"} (${money(v.AmountDue)})`, true);
+          sent++;
+        } catch (e) { await mark({ stopped: true, note: clip((e as Error).message, 200) }); }
+      }
+    } catch (e) { const m = String((e as Error).message || e); await logInt(it, null, "Invoice check failed", false, m); await logSys("warn", "xero", m, it.client_id); }
+  }
+  return sent;
+}
+
+// Money lines for the daily wrap-up: paid in the last day and what's still overdue
+async function xeroDigest(clientId: string) {
+  const { data: it } = await db.from("integrations").select("*").eq("client_id", clientId).eq("provider", "xero").eq("status", "connected").maybeSingle();
+  if (!it?.config?.tenant_id) return "";
+  const H = { "Xero-tenant-id": it.config.tenant_id };
+  try {
+    const since = new Date(Date.now() - 24 * 3600000);
+    const where = encodeURIComponent('Type=="ACCREC"');
+    const [{ j: paid }, { j: open }] = await Promise.all([
+      api(it, `https://api.xero.com/api.xro/2.0/Invoices?Statuses=PAID&where=${where}&page=1`, "GET", undefined, { ...H, "If-Modified-Since": since.toUTCString() }),
+      api(it, `https://api.xero.com/api.xro/2.0/Invoices?Statuses=AUTHORISED&where=${encodeURIComponent('Type=="ACCREC"&&AmountDue>0')}&page=1`, "GET", undefined, H),
+    ]);
+    const paidAt = (v: any) => Number(String(v.FullyPaidOnDate || "").match(/\d{10,}/)?.[0] || 0) || xeroDate(v.FullyPaidOnDateString);
+    const p = (paid.Invoices || []).filter((v: any) => paidAt(v) >= since.getTime() - 12 * 3600000);
+    const od = (open.Invoices || []).filter((v: any) => Date.now() > xeroDate(v.DueDateString) + 86400000);
+    const parts = [
+      p.length && `${money(p.reduce((a: number, v: any) => a + Number(v.Total || 0), 0))} paid (${p.length} ${p.length === 1 ? "invoice" : "invoices"})`,
+      od.length && `${money(od.reduce((a: number, v: any) => a + Number(v.AmountDue || 0), 0))} overdue`,
+    ].filter(Boolean);
+    return parts.length ? ` Money: ${parts.join(", ")}.` : "";
+  } catch (e) { console.error("xero digest", e); return ""; }
+}
+
 // One text (or email) to the owner each evening: what came in, what's booked, what needs them
 async function dailySummaries() {
   const h = bneHour(), today = bneDate();
@@ -512,7 +608,7 @@ async function dailySummaries() {
     const since = new Date(Date.now() - 24 * 3600000).toISOString(), cid = s.client_id;
     const cnt = (q: any) => q.then((r: any) => r.count || 0);
     const [leads, booked, missed, chased, drafts, human] = await Promise.all([
-      cnt(db.from("leads").select("id", { count: "exact", head: true }).eq("client_id", cid).gte("created_at", since)),
+      cnt(db.from("leads").select("id", { count: "exact", head: true }).eq("client_id", cid).neq("source", "Xero invoice").gte("created_at", since)),
       cnt(db.from("lead_events").select("id", { count: "exact", head: true }).eq("client_id", cid).eq("to_status", "booked").gte("created_at", since)),
       cnt(db.from("conversations").select("id", { count: "exact", head: true }).eq("client_id", cid).eq("origin", "missed_call").gte("created_at", since)),
       cnt(db.from("leads").select("id", { count: "exact", head: true }).eq("client_id", cid).gte("last_chased_at", since)),
@@ -520,7 +616,8 @@ async function dailySummaries() {
       db.from("conversations").select("leads(name), contact").eq("client_id", cid).eq("status", "human").gte("last_message_at", since).order("last_message_at", { ascending: false }).limit(5).then((r: any) => r.data || []),
     ]);
     await db.from("reply_settings").update({ last_summary_on: today }).eq("client_id", cid);
-    if (!leads && !booked && !missed && !chased && !drafts && !human.length) continue; // quiet day: no text
+    const cash = await xeroDigest(cid);
+    if (!leads && !booked && !missed && !chased && !drafts && !human.length && !cash) continue; // quiet day: no text
     const parts = [
       `${leads} new ${leads === 1 ? "enquiry" : "enquiries"}`,
       booked && `${booked} booked`,
@@ -531,6 +628,7 @@ async function dailySummaries() {
     const text = `${s.assistant_name || "Your assistant"}'s wrap-up for ${s.business_name || "today"}: ${parts}.`
       + (names.length ? ` Needs you: ${names.join(", ")}${human.length > 3 ? " and more" : ""}.` : "")
       + (drafts ? ` ${drafts} ${drafts === 1 ? "reply is" : "replies are"} waiting for your OK.` : "")
+      + cash
       + ` ${PORTAL_URL}`;
     try { if (await alertOwner(s, text, `Today's leads: ${parts}`)) sent++; } catch (e) { await logSys("warn", "summary", `Daily summary failed: ${(e as Error).message}`, cid); }
   }
@@ -905,7 +1003,8 @@ Deno.serve(async (req) => {
       if (!env("CRON_SECRET") || req.headers.get("x-cron-key") !== env("CRON_SECRET")) return json({ ok: false, error: "Not allowed" }, 403);
       const chased = await chaseQuotes().catch(async (e) => { await logSys("error", "quote-chase", String((e as Error).message || e)); return -1; });
       const summaries = await dailySummaries().catch(async (e) => { await logSys("error", "summary", String((e as Error).message || e)); return -1; });
-      return json({ ok: true, chased, summaries });
+      const invoices = await chaseInvoices().catch(async (e) => { await logSys("error", "invoice-chase", String((e as Error).message || e)); return -1; });
+      return json({ ok: true, chased, invoices, summaries });
     }
 
     if (route === "send") {
