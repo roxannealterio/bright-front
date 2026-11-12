@@ -421,8 +421,8 @@ function renderLogin(mode = 'in', msg = '') {
   <section class="login-side" aria-label="About the portal">
     ${WM()}
     <div>
-      <h1>Your marketing, in one place.</h1>
-      <ul><li>Live results against your 40% guarantee</li><li>Approve posts and ads in one tap</li><li>Send requests, track progress, pay invoices</li><li>Share access and brand files securely</li></ul>
+      <h1>Tilly’s office, in one place.</h1>
+      <ul><li>Every enquiry, call and text Tilly handled for you</li><li>Approve replies, chase quotes and track invoices</li><li>See what’s booked, what’s paid and who needs you</li><li>Change what Tilly says, any time</li></ul>
     </div>
     <p class="small" style="color:#8C8CB0;position:relative;z-index:1;margin:0">Need help? <a href="mailto:${esc(SUPPORT())}" style="color:#fff">${esc(SUPPORT())}</a></p>
   </section>
