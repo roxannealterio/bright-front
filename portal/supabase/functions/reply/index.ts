@@ -49,12 +49,17 @@ async function callAI(body: Record<string, unknown>) {
   }
   throw new Error(last || "AI unavailable");
 }
-function parseJson(text: string) { try { return JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1)); } catch { return null; } }
+function parseJson(text: string) {
+  try { return JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1)); } catch { /* try to recover a cut-off reply */ }
+  const m = text.match(/"reply"\s*:\s*"((?:[^"\\]|\\.)*)"/);
+  if (m) { try { return { reply: JSON.parse('"' + m[1] + '"'), handoff: /"handoff"\s*:\s*true/.test(text), status: (text.match(/"status"\s*:\s*"(new|follow_up|booked)"/) || [])[1] || "follow_up", summary: "" }; } catch { /* fall through */ } }
+  return null;
+}
 
 // Only links the business gave us may appear in a reply
 function safeLinks(t: string, s: Record<string, any>) {
   const allowed = [s.booking_url, s.website, s.review_url].filter(Boolean).map((u: string) => { try { return new URL(u).host.replace(/^www\./, ""); } catch { return ""; } }).filter(Boolean);
-  return t.replace(/\bhttps?:\/\/[^\s)>\]]+/gi, (u) => { try { return allowed.includes(new URL(u).host.replace(/^www\./, "")) ? u : ""; } catch { return ""; } }).replace(/\s{2,}/g, " ").trim();
+  return t.replace(/\bhttps?:\/\/[^\s)>\]]+/gi, (u) => { try { return allowed.includes(new URL(u).host.replace(/^www\./, "")) ? u : ""; } catch { return ""; } }).replace(/[ \t]{2,}/g, " ").replace(/\n{3,}/g, "\n\n").trim();
 }
 
 /* ---------- logging and alerts ---------- */
@@ -220,10 +225,11 @@ async function aiReply(s: Settings, channel: string, history: Turn[], lead: Reco
   messages[0].content = context + "\n\n" + messages[0].content;
   if (messages[messages.length - 1].role !== "user") messages.push({ role: "user", content: "(No new message. Write the next message.)" });
 
-  const text = await callAI({ max_tokens: 500, system: systemPrompt(s, channel, first), messages });
+  const text = await callAI({ max_tokens: 1200, system: systemPrompt(s, channel, first), messages });
   const out: any = parseJson(text) || { reply: text, handoff: true, status: "follow_up", summary: "AI reply could not be read. Check this conversation." };
-  let reply = clip(safeLinks(String(out.reply || ""), s), channel === "sms" ? 480 : isDm(channel) ? 900 : 2000);
-  if (!reply) throw new Error("AI returned an empty reply");
+  const raw = out.reply ?? out.message ?? out.text ?? out.response ?? (typeof out === "string" ? out : "");
+  let reply = clip(safeLinks(String(raw || ""), s), channel === "sms" ? 480 : isDm(channel) ? 900 : 2000);
+  if (!reply) throw new Error(`AI returned an empty reply. Raw: ${clip(text, 300) || "(nothing)"}`);
   if (channel === "sms" && first && !/STOP/i.test(reply)) reply += " Reply STOP to opt out.";
   return { reply, handoff: !!out.handoff, status: ["new", "follow_up", "booked"].includes(out.status) ? out.status : "follow_up", summary: clip(out.summary, 400) };
 }

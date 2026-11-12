@@ -2,7 +2,7 @@
 <html lang="en-AU">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io; frame-src 'none'; object-src 'none'; base-uri 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://formspree.io https://cupsusqjcgefmfhdznmo.supabase.co; form-action 'self' https://formspree.io; frame-src 'none'; object-src 'none'; base-uri 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -723,6 +723,7 @@ var REVIEWS = [          // paste real Google reviews here; the tabs update auto
   { name: '[Client name]', role: '[Fitness coach, suburb]', business: '[Client business 2]', text: '[Paste a second real client review here.]' },
   { name: '[Client name]', role: '[Mortgage broker, suburb]', business: '[Client business 3]', text: '[Paste a third real client review here.]' }
 ];
+var AI_HOOK = "https://cupsusqjcgefmfhdznmo.supabase.co/functions/v1/reply/hook?key=331a1a146ef79b4650b943a0abbff547&source=Website%20form";  // brightfront Reply: every enquiry also gets an instant AI reply and lands in the portal
 /* ===================================================== */
 var SERVICES = [
   { name: 'Personal branding', flag: 'Our specialty', desc: 'When you’re the reason people buy, we build the profile, the content and the positioning around you, so enquiries arrive already half sold.', items: ['Positioning and brand story', 'Content shoots and editing', 'Instagram, LinkedIn and TikTok profiles', 'Founder-led video', 'Google Business Profile', 'Monthly content plan'] },
@@ -821,11 +822,17 @@ var SERVICES = [
 
   // forms
   function valid(f) { var bad = Array.prototype.find.call(f.querySelectorAll('[required]'), function (i) { return !i.checkValidity(); }); if (bad) { bad.reportValidity ? bad.reportValidity() : bad.focus(); return false; } return true; }
+  function toAI(f) {
+    if (!AI_HOOK) return;
+    var o = {}; new FormData(f).forEach(function (v, k) { if (v && k.charAt(0) !== '_') o[k] = String(v).slice(0, 1000); });
+    o.page = location.pathname;
+    try { fetch(AI_HOOK, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(o), keepalive: true }).catch(function () {}); } catch (e) {}
+  }
   function send(f, done, label) {
     if (!FORM_ENDPOINT) { var body = []; new FormData(f).forEach(function (v, k) { if (v) body.push(k + ': ' + v); }); location.href = 'mailto:info@brightfrontstudio.com?subject=' + encodeURIComponent('Strategy call request') + '&body=' + encodeURIComponent(body.join('\n')); done(true); return; }
     var b = f.querySelector('[type=submit]'); b.disabled = true; b.textContent = 'Sending…';
     fetch(FORM_ENDPOINT, { method: 'POST', body: new FormData(f), headers: { Accept: 'application/json' } })
-      .then(function (r) { if (!r.ok) throw 0; done(); })
+      .then(function (r) { if (!r.ok) throw 0; toAI(f); done(); })
       .catch(function () { b.disabled = false; b.textContent = label; var p = f.querySelector('.err') || document.createElement('p'); p.className = 'err'; p.style.color = '#C0285E'; p.style.fontWeight = '600'; p.textContent = 'Your request didn’t send. Check your connection and try again, or email info@brightfrontstudio.com.'; f.appendChild(p); });
   }
 
