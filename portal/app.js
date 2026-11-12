@@ -55,9 +55,9 @@ function demoData() {
   const weeks = (base) => base.map((l, i) => ({ id: uid(), week_start: d(-7 * (base.length - 1 - i)).slice(0, 10), leads: l[0], booked_calls: l[1], ad_spend: l[2] }));
   return {
     clients: [
-      { id: c1, name: 'Sample Realty', industry: 'Real estate', plan: 'Keep it growing', baseline_cpl: 39.8, guarantee_start: d(-47).slice(0, 10), monthly_budget: 2500, status: 'active' },
-      { id: c2, name: 'Sample Fitness Co', industry: 'Fitness coach', plan: 'Keep it moving', baseline_cpl: 45, guarantee_start: d(-30).slice(0, 10), monthly_budget: 1500, status: 'active' },
-      { id: c3, name: 'Sample Skin Clinic', industry: 'Beauty clinic', plan: 'Keep it growing', baseline_cpl: 95, guarantee_start: d(-61).slice(0, 10), monthly_budget: 3000, status: 'active' }
+      { id: c1, name: 'Sample Realty', industry: 'Real estate', plan: 'Tilly Team', baseline_cpl: 39.8, guarantee_start: d(-47).slice(0, 10), monthly_budget: 2500, status: 'active' },
+      { id: c2, name: 'Sample Fitness Co', industry: 'Fitness coach', plan: 'Tilly Growth', baseline_cpl: 45, guarantee_start: d(-30).slice(0, 10), monthly_budget: 1500, status: 'active' },
+      { id: c3, name: 'Sample Skin Clinic', industry: 'Beauty clinic', plan: 'Tilly Team', baseline_cpl: 95, guarantee_start: d(-61).slice(0, 10), monthly_budget: 3000, status: 'active' }
     ],
     metrics: {
       [c1]: weeks([[9, 3, 410], [11, 4, 430], [10, 4, 420], [13, 5, 450], [15, 6, 470], [14, 5, 455], [17, 7, 480], [19, 8, 490], [18, 7, 470], [21, 9, 505]]),
@@ -88,12 +88,12 @@ function demoData() {
       [c3]: []
     },
     invoices: {
-      [c1]: [{ id: uid(), number: 'BF-0012', description: 'Keep it growing · monthly fee', amount: null, issued_on: d(-4).slice(0, 10), due_date: d(3).slice(0, 10), status: 'due', pay_url: '' }, { id: uid(), number: 'BF-0011', description: 'Keep it growing · monthly fee', amount: null, issued_on: d(-34).slice(0, 10), due_date: d(-27).slice(0, 10), status: 'paid' }, { id: uid(), number: 'BF-0010', description: 'Set-up and onboarding', amount: null, issued_on: d(-55).slice(0, 10), due_date: d(-48).slice(0, 10), status: 'paid' }],
-      [c2]: [{ id: uid(), number: 'BF-0013', description: 'Keep it moving · monthly fee', amount: null, issued_on: d(-2).slice(0, 10), due_date: d(5).slice(0, 10), status: 'due' }], [c3]: []
+      [c1]: [{ id: uid(), number: 'BF-0012', description: 'Tilly Team · monthly fee', amount: null, issued_on: d(-4).slice(0, 10), due_date: d(3).slice(0, 10), status: 'due', pay_url: '' }, { id: uid(), number: 'BF-0011', description: 'Tilly Team · monthly fee', amount: null, issued_on: d(-34).slice(0, 10), due_date: d(-27).slice(0, 10), status: 'paid' }, { id: uid(), number: 'BF-0010', description: 'Set-up and onboarding', amount: null, issued_on: d(-55).slice(0, 10), due_date: d(-48).slice(0, 10), status: 'paid' }],
+      [c2]: [{ id: uid(), number: 'BF-0013', description: 'Tilly Growth · monthly fee', amount: null, issued_on: d(-2).slice(0, 10), due_date: d(5).slice(0, 10), status: 'due' }], [c3]: []
     },
     steps: {
-      [c1]: [['Sign your agreement', '', true], ['Kick-off call', '', true], ['Give us Google Ads access', '', true], ['Give us Meta Business access', 'Takes 2 minutes. We’ll walk you through it.', false], ['Google Analytics & Search Console', 'Add info@brightfrontstudio.com as a user.', false], ['Upload your brand assets', 'Logo, photos, colours and fonts.', false]].map(([title, detail, done], i) => ({ id: uid(), title, detail, done, sort: i })),
-      [c2]: [['Sign your agreement', '', true], ['Kick-off call', '', true], ['Give us Meta Business access', '', true], ['Upload your brand assets', '', true]].map(([title, detail, done], i) => ({ id: uid(), title, detail, done, sort: i })),
+      [c1]: [['Sign your agreement', '', true], ['Setup call', '', true], ['Tell Tilly about your business', '', true], ['Set up your Tilly number', 'Forward unanswered calls to your Tilly number. Takes 2 minutes.', false], ['Connect your calendar', 'So Tilly can offer your real free times.', false], ['Connect Xero (optional)', 'So Tilly can chase overdue invoices.', false]].map(([title, detail, done], i) => ({ id: uid(), title, detail, done, sort: i })),
+      [c2]: [['Sign your agreement', '', true], ['Setup call', '', true], ['Tell Tilly about your business', '', true], ['Set up your Tilly number', '', true]].map(([title, detail, done], i) => ({ id: uid(), title, detail, done, sort: i })),
       [c3]: [['Sign your agreement', '', true], ['Kick-off call', '', false]].map(([title, detail, done], i) => ({ id: uid(), title, detail, done, sort: i }))
     },
     extra: (() => {
@@ -111,7 +111,7 @@ function demoData() {
       return { leads, calls, reviews, reqs, creatives, reports };
     })(),
     reply: {
-      [c1]: { client_id: c1, enabled: true, business_name: 'Sample Realty', about: 'Residential sales and appraisals in Brisbane’s inner north. Free appraisals. Open homes Saturdays.', questions: 'Are you buying or selling?\nWhich suburb?\nWhen are you hoping to move?', booking_url: 'https://calendly.com/sample-realty/appraisal', hours: 'Mon to Sat, 8am to 6pm', tone: 'Warm, friendly and to the point', handoff_email: 'agent@samplerealty.com.au', handoff_phone: '', sms_enabled: true, email_enabled: true, sms_number: '+61400000000', intake_key: 'demo-key-c1', assistant_name: 'Roxy', sign_off: 'Roxy, Sample Realty', brand_color: '#1F6F5C', website: 'https://samplerealty.com.au', logo_url: '' }
+      [c1]: { client_id: c1, enabled: true, business_name: 'Sample Realty', about: 'Residential sales and appraisals in Brisbane’s inner north. Free appraisals. Open homes Saturdays.', questions: 'Are you buying or selling?\nWhich suburb?\nWhen are you hoping to move?', booking_url: 'https://calendly.com/sample-realty/appraisal', hours: 'Mon to Sat, 8am to 6pm', tone: 'Warm, friendly and to the point', handoff_email: 'agent@samplerealty.com.au', handoff_phone: '', sms_enabled: true, email_enabled: true, sms_number: '+61400000000', intake_key: 'demo-key-c1', assistant_name: 'Tilly', sign_off: 'Tilly, Sample Realty', brand_color: '#1F6F5C', website: 'https://samplerealty.com.au', logo_url: '' }
     },
     convs: {
       [c1]: [
@@ -332,6 +332,7 @@ async function load() {
   const [calls, reviews, reqs, creatives, reports] = await Promise.all([safe(api.calls(c)), safe(api.reviews(c)), safe(api.reviewRequests(c)), safe(api.creatives(c)), safe(api.reports(c))]);
   Object.assign(state.data, { calls, reviews, reqs, creatives, reports });
   if (state.view === 'replies' || state.view === 'dashboard') { state.data.convs = await api.conversations(c).catch(() => []); }
+  if (state.view === 'dashboard') state.data.reply = await api.replySettings(c).catch(() => null);
   if (state.view === 'invoices') {
     state.billMonth ||= new Date().toISOString().slice(0, 7);
     const [plan, bev] = await Promise.all([api.billingPlan(c).catch(() => null), api.billable(c, state.billMonth).catch(() => [])]);
@@ -475,18 +476,13 @@ function render() {
   const c = counts(); const me = state.me;
   const clientNav = state.clientId ? `
     ${isAgency() ? `<div class="nav-label">${esc(client()?.name || 'Client')}</div>` : ''}
-    ${navBtn('dashboard', 'Results', 'dash')}
-    <div class="nav-label">Leads</div>
+    ${navBtn('dashboard', 'Home', 'dash')}
+    <div class="nav-label">Tilly</div>
     ${navBtn('replies', 'Inbox', 'inbox', c.needYou)}
-    ${navBtn('leads', 'Leads & pipeline', 'leads')}
-    ${navBtn('calls', 'Calls', 'phone')}
-    ${navBtn('channels', 'Connections', 'plug')}
-    <div class="nav-label">Marketing</div>
-    ${navBtn('ads', 'Ads & creative', 'image')}
+    ${navBtn('leads', 'Leads & jobs', 'leads')}
     ${navBtn('reviews', 'Reviews', 'star', c.unreplied)}
-    ${navBtn('reports', 'Monthly reports', 'report')}
+    ${navBtn('channels', 'Connections', 'plug')}
     <div class="nav-label">Account</div>
-    ${navBtn('approvals', 'Approvals', 'check', c.approvals)}
     ${navBtn('requests', 'Requests', 'chat', c.requests)}
     ${navBtn('invoices', 'Invoices', 'doc')}
     ${navBtn('onboarding', 'Onboarding & files', 'flag', c.steps)}` : '';
@@ -569,44 +565,50 @@ const VIEWS = {
     return head('Agency', 'All clients', 'Every client at a glance: results, what’s waiting, and who needs a nudge.', `<button class="btn btn-ghost" data-act="csvAll">${ic('down', 16)} All leads (CSV)</button><button class="btn btn-pink" data-act="newClient">${ic('plus', 16)} Add client</button>`) + `<div id="ov"><div class="card empty">Loading clients…</div></div>`;
   },
   dashboard() {
-    const cl = client(); const d = state.data; const s = stats(cl, d.metrics);
-    const bars = d.metrics.slice(-10); const max = Math.max(1, ...bars.map((m) => m.leads));
-    const pct = s.uplift == null ? 0 : Math.max(0, Math.min(100, (s.uplift / 40) * 100));
-    const waiting = d.posts.filter((p) => p.status === 'waiting').length, steps = d.steps.filter((x) => !x.done), due = d.invoices.filter((i) => i.status !== 'paid');
+    const d = state.data, convs = d.convs || [], DAY = 86400000, since = Date.now() - 30 * DAY;
+    const all = d.leads.filter((l) => l.source !== 'Xero invoice'), L = all.filter((l) => Date.parse(l.created_at) >= since);
+    const rep = L.filter((l) => l.first_reply_seconds != null), avg = rep.length ? rep.reduce((a, l) => a + l.first_reply_seconds, 0) / rep.length : null;
+    const missed = convs.filter((v) => v.origin === 'missed_call' && Date.parse(v.created_at || v.last_message_at) >= since).length;
+    const booked = L.filter((l) => ['booked', 'won'].includes(l.status)).length;
+    const chasing = all.filter((l) => l.quoted_at && (l.chase_step ?? 0) < 3 && !['won', 'lost', 'booked'].includes(l.status));
+    const chaseVal = chasing.reduce((a, l) => a + (+l.value || 0), 0);
+    const rebooks = all.filter((l) => l.rebook_at), drafts = convs.filter((v) => v.pending_draft).length, withYou = convs.filter((v) => v.status === 'human').length;
+    const steps = d.steps.filter((x) => !x.done), due = d.invoices.filter((i) => i.status !== 'paid');
+    const weeks = Array.from({ length: 8 }, (_, k) => { const end = Date.now() - (7 - k) * 7 * DAY, start = end - 7 * DAY; return { label: fmtDate(new Date(start).toISOString(), { day: 'numeric', month: 'numeric' }), value: all.filter((l) => { const t = Date.parse(l.created_at); return t >= start && t < end; }).length }; });
+    const wmax = Math.max(1, ...weeks.map((w) => w.value));
     const attn = [
-      waiting && [`${waiting} ${waiting === 1 ? 'post is' : 'posts are'} waiting for your approval`, 'approvals', 'Review'],
+      drafts && [`${drafts} ${drafts === 1 ? 'reply is' : 'replies are'} waiting for your OK`, 'replies', 'Review'],
+      withYou && [`${withYou} ${withYou === 1 ? 'conversation needs' : 'conversations need'} you`, 'replies', 'Open'],
       steps[0] && [steps[0].title, 'onboarding', 'Do it now'],
       due[0] && [`Invoice ${due[0].number} due ${fmtDate(due[0].due_date)}`, 'invoices', 'View']
     ].filter(Boolean);
-    return head(isAgency() ? cl.name : `Hi ${esc((state.me.full_name || '').split(' ')[0] || 'there')}`, 'Your results', 'Last 4 weeks. Every number comes from your own ad accounts.', `${isAgency() ? `<button class="btn btn-ghost" data-act="addMetric">${ic('plus', 16)} Add week</button>` : ''}<button class="btn btn-pink" data-go="requests">New request</button>`) + `
+    const name = esc(state.data.reply?.assistant_name || 'Tilly');
+    return head(isAgency() ? client().name : `Hi ${esc((state.me.full_name || '').split(' ')[0] || 'there')}`, `What ${name} did for you`, 'Last 30 days.', `<button class="btn btn-ghost" data-act="csvLeads">${ic('down', 16)} Download leads</button>`) + `
     <section class="grid g4" aria-label="Key numbers">
-      <div class="card kpi"><span class="lab">Leads</span><span class="val">${s.leads}</span><span class="delta ${s.leadsDelta >= 0 ? 'up' : 'down'}">${s.leadsDelta == null ? 'First month' : (s.leadsDelta >= 0 ? '▲ ' : '▼ ') + Math.abs(s.leadsDelta).toFixed(0) + '% vs previous 4 weeks'}</span></div>
-      <div class="card kpi"><span class="lab">Cost per lead</span><span class="val">${s.cpl == null ? '—' : money(s.cpl)}</span><span class="delta ${s.uplift >= 0 ? 'up' : 'down'}">${cl.baseline_cpl ? 'Baseline ' + money(cl.baseline_cpl) : 'No baseline set'}</span></div>
-      <div class="card kpi"><span class="lab">Booked calls</span><span class="val">${s.calls}</span><span class="delta muted">${s.book == null ? '—' : s.book.toFixed(0) + '% of leads booked'}</span></div>
-      <div class="card kpi"><span class="lab">Ad spend</span><span class="val">${money0(s.spend)}</span><span class="delta muted">${cl.monthly_budget ? 'Budget ' + money0(cl.monthly_budget) + '/month' : ''}</span></div>
+      <div class="card kpi"><span class="lab">Enquiries answered</span><span class="val">${L.length}</span><span class="delta muted">${rep.length ? Math.round((100 * rep.filter((l) => l.first_reply_seconds <= 60).length) / rep.length) + '% within a minute' : 'No enquiries yet'}</span></div>
+      <div class="card kpi"><span class="lab">Average first reply</span><span class="val">${secs(avg)}</span><span class="delta muted">Day or night</span></div>
+      <div class="card kpi"><span class="lab">Missed calls texted back</span><span class="val">${missed}</span><span class="delta muted">Callers who’d have rung someone else</span></div>
+      <div class="card kpi"><span class="lab">Jobs booked</span><span class="val">${booked}</span><span class="delta muted">${L.length ? Math.round((100 * booked) / L.length) + '% of enquiries' : '—'}</span></div>
     </section>
     <section class="grid g2" style="margin-top:16px">
-      <div class="card guar">
-        <div class="card-head" style="margin-bottom:8px"><h2>40% uplift guarantee</h2><span class="small muted">${s.day == null ? 'Not started' : `Day ${s.day} of 90`}</span></div>
-        <p class="muted" style="margin:0 0 14px">Cost per lead vs your agreed baseline${cl.baseline_cpl ? ` of ${money(cl.baseline_cpl)}` : ''}.</p>
-        <div class="row" style="align-items:baseline;margin-bottom:14px"><span class="big">${s.uplift == null ? '—' : Math.round(s.uplift) + '%'}</span><span class="muted">${s.uplift == null ? 'Waiting on first results' : s.uplift >= 0 ? 'lower cost per lead' : 'higher than baseline'}</span></div>
-        <div class="bar" role="img" aria-label="${Math.round(pct)}% of the 40% target"><i style="width:${pct}%"></i></div>
-        <p class="small muted" style="margin:10px 0 0">Target: 40% by day 90, measured in your own accounts.</p>
+      <div class="card"><div class="card-head"><h2>Following up for you</h2></div>
+        <ul class="list">
+          <li><span><b>${chasing.length}</b> ${chasing.length === 1 ? 'quote' : 'quotes'} being chased${chaseVal ? ` · ${money0(chaseVal)}` : ''}</span><button class="btn btn-ghost btn-sm" data-go="leads">See leads</button></li>
+          <li><span><b>${rebooks.length}</b> ${rebooks.length === 1 ? 'customer' : 'customers'} due a rebooking reminder</span><button class="btn btn-ghost btn-sm" data-go="leads">See leads</button></li>
+          <li><span>Overdue invoices from Xero</span><button class="btn btn-ghost btn-sm" data-go="channels">Connections</button></li>
+        </ul>
       </div>
-      <div class="card">
-        <div class="card-head"><h2>Leads per week</h2><span class="small muted">Last ${bars.length} weeks</span></div>
-        ${bars.length ? `<div class="chart" role="img" aria-label="Leads per week: ${bars.map((b) => b.leads).join(', ')}">${bars.map((b) => `<div class="col"><span class="v">${b.leads}</span><div class="b" style="height:${Math.max(4, (b.leads / max) * 130)}px"></div><span class="lbl">${fmtDate(b.week_start, { day: 'numeric', month: 'numeric' })}</span></div>`).join('')}</div>` : '<p class="empty">Results appear here after your first full week.</p>'}
+      <div class="card"><div class="card-head"><h2>Enquiries per week</h2><span class="small muted">Last 8 weeks</span></div>
+        <div class="chart" role="img" aria-label="Enquiries per week: ${weeks.map((w) => w.value).join(', ')}">${weeks.map((w) => `<div class="col"><span class="v">${w.value}</span><div class="b" style="height:${Math.max(4, (w.value / wmax) * 130)}px"></div><span class="lbl">${w.label}</span></div>`).join('')}</div>
       </div>
     </section>
     <section class="grid g2" style="margin-top:16px">
       <div class="card"><div class="card-head"><h2>Needs your attention</h2></div>
         ${attn.length ? `<ul class="list">${attn.map(([t, v, a]) => `<li><span style="font-weight:600">${esc(t)}</span><button class="btn btn-ghost btn-sm" data-go="${v}">${a}</button></li>`).join('')}</ul>` : '<p class="empty">You’re all caught up.</p>'}
       </div>
-      <div class="card"><div class="card-head"><h2>Latest leads</h2><button class="btn btn-ghost btn-sm" data-go="leads">See all</button></div>${leadTable(d.leads.slice(0, 5), false)}</div>
-    </section>
-    ${analytics(d)}`;
+      <div class="card"><div class="card-head"><h2>Latest enquiries</h2><button class="btn btn-ghost btn-sm" data-go="leads">See all</button></div>${leadTable(d.leads.slice(0, 5), false)}</div>
+    </section>`;
   },
-
 
   leads() {
     const d = state.data; const L = d.leads; const mode = state.leadMode || 'table';
@@ -796,7 +798,7 @@ const VIEWS = {
         <label><input type="checkbox" name="quote_chase_enabled" ${r.quote_chase_enabled !== false ? 'checked' : ''}> Follow up quotes 2, 5 and 10 days after you send them</label>
         <label><input type="checkbox" name="daily_summary_enabled" ${r.daily_summary_enabled !== false ? 'checked' : ''}> Send me a daily wrap-up</label></fieldset>
       <div class="two"><label class="lab">Ring this mobile first<span class="small muted">Calls to your business number ring here. If you don’t answer in 20 seconds, the caller gets a text.</span><input class="field" name="forward_phone" type="tel" maxlength="20" placeholder="04…" value="${esc(r.forward_phone || '')}"></label><label class="lab">Daily wrap-up time<span class="small muted">Sent to your alerts mobile, or by email.</span><select class="field" name="daily_summary_hour">${Array.from({ length: 18 }, (_, i) => i + 5).map((h) => `<option value="${h}" ${(r.daily_summary_hour ?? 18) === h ? 'selected' : ''}>${((h + 11) % 12) + 1}${h < 12 ? 'am' : 'pm'}</option>`).join('')}</select></label></div>
-      <label class="lab">Missed-call text (optional)<span class="small muted">Leave empty for: “Hi, it’s Roxy from your business. Sorry we missed your call! What can we help you with?” Use {business} and {name}.</span><textarea class="field" name="missed_call_text" maxlength="400" style="min-height:70px">${esc(r.missed_call_text || '')}</textarea></label>
+      <label class="lab">Missed-call text (optional)<span class="small muted">Leave empty for: “Hi, it’s Tilly from your business. Sorry we missed your call! What can we help you with?” Use {business} and {name}.</span><textarea class="field" name="missed_call_text" maxlength="400" style="min-height:70px">${esc(r.missed_call_text || '')}</textarea></label>
       <h2 style="margin-top:10px">Repeat work</h2><p class="muted small" style="margin:0">For jobs that come round again, like pest treatments, cleans, house washes and services.</p>
       <fieldset class="rp-ch"><legend class="lab">Rebooking</legend><label><input type="checkbox" name="rebook_enabled" ${r.rebook_enabled !== false ? 'checked' : ''}> Remind customers when they’re due again</label></fieldset>
       <div class="two"><label class="lab">Usual gap between jobs<span class="small muted">When you mark a job Won, the reminder is set for this long after. You can change it per customer.</span><select class="field" name="rebook_default_days">${[[0, 'Off'],[30, '1 month'],[61, '2 months'],[91, '3 months'],[122, '4 months'],[183, '6 months'],[365, '12 months']].map(([v, l]) => `<option value="${v}" ${(r.rebook_default_days || 0) === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label><label class="lab">Rebooking text (optional)<span class="small muted">Use {name}, {business} and {job}. Leave empty for a friendly default.</span><textarea class="field" name="rebook_text" maxlength="400" style="min-height:70px">${esc(r.rebook_text || '')}</textarea></label></div>
@@ -805,7 +807,7 @@ const VIEWS = {
       <h2 style="margin-top:10px">Branding</h2><p class="muted small" style="margin:0">Leads only ever see your business. Every text and email uses your name, logo and colours.</p>
       <div class="rp-brand">
         <div class="rp-bfields">
-          <div class="two"><label class="lab">Assistant name (optional)<input class="field" name="assistant_name" maxlength="30" placeholder="e.g. Roxy" value="${esc(r.assistant_name || '')}"></label><label class="lab">Email sign-off<input class="field" name="sign_off" maxlength="80" placeholder="e.g. Ava, Sample Realty" value="${esc(r.sign_off || '')}"></label></div>
+          <div class="two"><label class="lab">Assistant name (optional)<input class="field" name="assistant_name" maxlength="30" placeholder="e.g. Tilly" value="${esc(r.assistant_name || '')}"></label><label class="lab">Email sign-off<input class="field" name="sign_off" maxlength="80" placeholder="e.g. Tilly, Smith Plumbing" value="${esc(r.sign_off || '')}"></label></div>
           <div class="two"><label class="lab">Brand colour<span class="rp-color"><input type="color" name="brand_color" value="${esc(/^#[0-9a-f]{6}$/i.test(r.brand_color || '') ? r.brand_color : '#0B0B2E')}" aria-label="Brand colour"><span class="small muted" id="rpColTxt">${esc(r.brand_color || '#0B0B2E')}</span></span></label><label class="lab">Website<input class="field" name="website" type="url" maxlength="200" placeholder="https://…" value="${esc(r.website || '')}"></label></div>
           <label class="lab">Review link<span class="small muted">Your Google review link, sent with review requests.</span><input class="field" name="review_url" type="url" maxlength="400" placeholder="https://g.page/r/…/review" value="${esc(r.review_url || '')}"></label>
           <label class="lab">Logo link<span class="small muted">A link to your logo image (PNG or JPG, https). Leave empty to use your business name.</span><input class="field" name="logo_url" type="url" maxlength="400" placeholder="https://yoursite.com.au/logo.png" value="${esc(r.logo_url || '')}"></label>
@@ -1095,14 +1097,20 @@ function postCard(p, comments) {
 /* ---------------- agency overview (async) ---------------- */
 async function fillOverview() {
   const box = document.getElementById('ov'); if (!box) return;
-  const rows = await Promise.all(state.clients.map(async (cl) => { const [m, p, r, inv] = await Promise.all([api.metrics(cl.id), api.posts(cl.id), api.requests(cl.id), api.invoices(cl.id)]); const s = stats(cl, m); return { cl, s, waiting: p.filter((x) => x.status === 'waiting').length, open: r.filter((x) => x.status !== 'done').length, due: inv.filter((x) => x.status !== 'paid').length, h: health(cl, s) }; }));
+  const PRICE = { 'Tilly Starter': 297, 'Tilly Growth': 497, 'Tilly Team': 797 }, since = Date.now() - 30 * 86400000;
+  const rows = await Promise.all(state.clients.map(async (cl) => {
+    const [leads, convs, r, inv, rs] = await Promise.all([api.leads(cl.id).catch(() => []), api.conversations(cl.id).catch(() => []), api.requests(cl.id).catch(() => []), api.invoices(cl.id).catch(() => []), api.replySettings(cl.id).catch(() => null)]);
+    const L = leads.filter((l) => l.source !== 'Xero invoice' && Date.parse(l.created_at) >= since), rep = L.filter((l) => l.first_reply_seconds != null);
+    const due = inv.filter((x) => x.status !== 'paid').length, live = !!rs?.enabled, drafts = convs.filter((v) => v.pending_draft).length;
+    return { cl, leads: L.length, avg: rep.length ? rep.reduce((a, l) => a + l.first_reply_seconds, 0) / rep.length : null, drafts, withYou: convs.filter((v) => v.status === 'human').length, open: r.filter((x) => x.status !== 'done').length, due, live, mrr: cl.status === 'active' ? PRICE[cl.plan] || 0 : 0, h: !live || due ? 'attention' : 'ontrack' };
+  }));
   const tot = (k) => rows.reduce((a, r) => a + r[k], 0);
-  const risk = rows.filter((r) => r.h === 'attention');
+  const off = rows.filter((r) => !r.live);
   box.innerHTML = `
-  <section class="grid g4"><div class="card kpi"><span class="lab">Active clients</span><span class="val">${rows.filter((r) => r.cl.status === 'active').length}</span></div><div class="card kpi"><span class="lab">Approvals waiting</span><span class="val">${tot('waiting')}</span></div><div class="card kpi"><span class="lab">Open requests</span><span class="val">${tot('open')}</span></div><div class="card kpi"><span class="lab">Unpaid invoices</span><span class="val">${tot('due')}</span></div></section>
-  ${risk.length ? `<section class="card guar" style="margin-top:16px"><h2 style="margin-bottom:6px">Guarantee watch</h2>${risk.map((r) => `<p class="muted" style="margin:6px 0">${esc(r.cl.name)} is at ${r.s.uplift == null ? '—' : Math.round(r.s.uplift) + '%'} uplift on day ${r.s.day} of 90. <button class="btn btn-pink btn-sm" data-open="${esc(r.cl.id)}" style="margin-left:6px">Open</button></p>`).join('')}</section>` : ''}
-  <section class="card" style="margin-top:16px"><div class="card-head"><h2>Clients</h2></div><div class="tbl-wrap"><table><thead><tr><th scope="col">Client</th><th scope="col">Plan</th><th scope="col">Leads (4 wks)</th><th scope="col">Cost per lead</th><th scope="col">Guarantee</th><th scope="col">Waiting</th><th scope="col">Health</th><th scope="col"><span class="sr">Open</span></th></tr></thead><tbody>
-  ${rows.map((r) => `<tr><td><b>${esc(r.cl.name)}</b><div class="small muted">${esc(r.cl.industry || '')}</div></td><td>${esc(r.cl.plan || '')}</td><td><b>${r.s.leads}</b></td><td>${r.s.cpl == null ? '—' : money(r.s.cpl)}</td><td>${r.s.uplift == null ? '—' : Math.round(r.s.uplift) + '% · day ' + r.s.day}</td><td>${r.waiting} approvals · ${r.open} requests</td><td>${pill(r.h)}</td><td style="text-align:right"><button class="btn btn-ghost btn-sm" data-open="${esc(r.cl.id)}">Open</button></td></tr>`).join('') || '<tr><td colspan="8" class="empty">No clients yet. Add your first one.</td></tr>'}
+  <section class="grid g4"><div class="card kpi"><span class="lab">Active clients</span><span class="val">${rows.filter((r) => r.cl.status === 'active').length}</span></div><div class="card kpi"><span class="lab">Monthly revenue</span><span class="val">${money0(tot('mrr'))}</span><span class="delta muted">From plan prices, ex GST</span></div><div class="card kpi"><span class="lab">Open requests</span><span class="val">${tot('open')}</span></div><div class="card kpi"><span class="lab">Unpaid invoices</span><span class="val">${tot('due')}</span></div></section>
+  ${off.length ? `<section class="card guar" style="margin-top:16px"><h2 style="margin-bottom:6px">Tilly isn’t switched on</h2>${off.map((r) => `<p class="muted" style="margin:6px 0">${esc(r.cl.name)}: finish setup so Tilly starts replying. <button class="btn btn-pink btn-sm" data-open="${esc(r.cl.id)}" style="margin-left:6px">Open</button></p>`).join('')}</section>` : ''}
+  <section class="card" style="margin-top:16px"><div class="card-head"><h2>Clients</h2></div><div class="tbl-wrap"><table><thead><tr><th scope="col">Client</th><th scope="col">Plan</th><th scope="col">Enquiries (30 days)</th><th scope="col">Avg first reply</th><th scope="col">Waiting</th><th scope="col">Health</th><th scope="col"><span class="sr">Open</span></th></tr></thead><tbody>
+  ${rows.map((r) => `<tr><td><b>${esc(r.cl.name)}</b><div class="small muted">${esc(r.cl.industry || '')}</div></td><td>${esc(r.cl.plan || '')}</td><td><b>${r.leads}</b></td><td>${secs(r.avg)}</td><td>${r.drafts} to approve · ${r.withYou} with them · ${r.open} requests</td><td>${pill(r.h)}</td><td style="text-align:right"><button class="btn btn-ghost btn-sm" data-open="${esc(r.cl.id)}">Open</button></td></tr>`).join('')}
   </tbody></table></div></section>
   <section class="card" style="margin-top:16px"><h2 style="margin-bottom:8px">Give a client access</h2><p class="muted small" style="margin:0 0 12px">Ask them to create an account on this portal with their email, then link it to their business here.</p>
   <form id="assignForm" class="row" novalidate><label class="sr" for="asEmail">Client email</label><input class="field" id="asEmail" name="email" type="email" placeholder="client@business.com.au" required style="flex:1 1 220px"><label class="sr" for="asClient">Business</label><select class="field" id="asClient" name="client" style="flex:1 1 180px">${state.clients.map((c) => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('')}</select><button class="btn btn-navy" type="submit">Link account</button></form></section>`;
@@ -1126,12 +1134,12 @@ function dialog(title, fields, onSave) {
 const F = (label, name, type = 'text', extra = '') => `<label class="lab">${label}<input class="field" name="${name}" type="${type}" ${extra}></label>`;
 const today = () => new Date().toISOString().slice(0, 10);
 const ACTS = {
-  newClient: () => dialog('Add client', `${F('Business name', 'name', 'text', 'required')}<div class="two">${F('Industry', 'industry', 'text', 'list="indList"')}<datalist id="indList">${Object.keys(TEMPLATES).map((k) => `<option value="${esc(k)}">`).join('')}</datalist><label class="lab">Plan<select class="field" name="plan"><option>Keep it live</option><option selected>Keep it moving</option><option>Keep it growing</option></select></label></div><div class="two">${F('Baseline cost per lead ($)', 'baseline_cpl', 'number', 'step="0.01" min="0"')}${F('Guarantee start', 'guarantee_start', 'date')}</div>${F('Monthly ad budget ($)', 'monthly_budget', 'number', 'step="1" min="0"')}`,
-    async (o) => { const n = await api.addClient({ name: o.name, industry: o.industry || null, plan: o.plan, baseline_cpl: o.baseline_cpl || null, guarantee_start: o.guarantee_start || null, monthly_budget: o.monthly_budget || null }); state.clients = await api.clients(); for (const [i, t] of ['Sign your agreement', 'Kick-off call', 'Give us Google Ads access', 'Give us Meta Business access', 'Google Analytics & Search Console', 'Upload your brand assets'].entries()) await api.addStep(n.id, { title: t, sort: i }); }),
+  newClient: () => dialog('Add client', `${F('Business name', 'name', 'text', 'required')}<div class="two">${F('Industry', 'industry', 'text', 'list="indList"')}<datalist id="indList">${Object.keys(TEMPLATES).map((k) => `<option value="${esc(k)}">`).join('')}</datalist><label class="lab">Plan<select class="field" name="plan"><option>Tilly Starter</option><option selected>Tilly Growth</option><option>Tilly Team</option></select></label></div>`,
+    async (o) => { const n = await api.addClient({ name: o.name, industry: o.industry || null, plan: o.plan }); state.clients = await api.clients(); for (const [i, t] of ['Sign your agreement', 'Setup call', 'Tell Tilly about your business', 'Set up your Tilly number', 'Connect your calendar', 'Connect Xero (optional)'].entries()) await api.addStep(n.id, { title: t, sort: i }); }),
   addMetric: () => dialog('Add a week of results', `${F('Week starting', 'week_start', 'date', `required value="${today()}"`)}<div class="two">${F('Leads', 'leads', 'number', 'min="0" required')}${F('Booked calls', 'booked_calls', 'number', 'min="0" required')}</div>${F('Ad spend ($)', 'ad_spend', 'number', 'step="0.01" min="0" required')}`, (o) => api.addMetric(state.clientId, { week_start: o.week_start, leads: +o.leads, booked_calls: +o.booked_calls, ad_spend: +o.ad_spend })),
   addLead: () => dialog('Add lead', `${F('Name', 'name', 'text', 'required')}<div class="two">${F('Source', 'source', 'text', 'placeholder="Google Ads"')}${F('Enquiry', 'enquiry')}</div>`, (o) => api.addLead(state.clientId, { name: o.name, source: o.source, enquiry: o.enquiry, status: 'new' })),
   addPost: () => dialog('Add post for approval', `<div class="two"><label class="lab">Channel<select class="field" name="channel"><option>Instagram Reel</option><option>Instagram post</option><option>Instagram carousel</option><option>Meta ad</option><option>Google Ads</option><option>Google Business</option><option>TikTok</option><option>Email</option></select></label>${F('Goes live', 'scheduled_for', 'datetime-local', 'required')}</div>${F('Title', 'title', 'text', 'required')}<label class="lab">Caption<textarea class="field" name="caption"></textarea></label>`, (o) => api.addPost(state.clientId, { channel: o.channel, title: o.title, caption: o.caption, scheduled_for: new Date(o.scheduled_for).toISOString(), status: 'waiting' })),
-  addInvoice: () => dialog('New invoice', `<div class="two">${F('Invoice number', 'number', 'text', 'required placeholder="BF-0014"')}${F('Amount ($)', 'amount', 'number', 'step="0.01" min="0" required')}</div>${F('Description', 'description', 'text', 'placeholder="Keep it growing · monthly fee"')}<div class="two">${F('Issued', 'issued_on', 'date', `value="${today()}"`)}${F('Due', 'due_date', 'date', 'required')}</div>${F('Payment link (optional)', 'pay_url', 'url', 'placeholder="https://buy.stripe.com/…"')}`, (o) => api.addInvoice(state.clientId, { number: o.number, amount: +o.amount, description: o.description, issued_on: o.issued_on, due_date: o.due_date, pay_url: o.pay_url || null, status: 'due' })),
+  addInvoice: () => dialog('New invoice', `<div class="two">${F('Invoice number', 'number', 'text', 'required placeholder="BF-0014"')}${F('Amount ($)', 'amount', 'number', 'step="0.01" min="0" required')}</div>${F('Description', 'description', 'text', 'placeholder="Tilly Growth · monthly fee"')}<div class="two">${F('Issued', 'issued_on', 'date', `value="${today()}"`)}${F('Due', 'due_date', 'date', 'required')}</div>${F('Payment link (optional)', 'pay_url', 'url', 'placeholder="https://buy.stripe.com/…"')}`, (o) => api.addInvoice(state.clientId, { number: o.number, amount: +o.amount, description: o.description, issued_on: o.issued_on, due_date: o.due_date, pay_url: o.pay_url || null, status: 'due' })),
   refreshReplies: () => reload(),
   async csvLeads() { try { const rows = await api.allLeads(state.clientId); if (!rows.length) return toast('No leads to download yet.'); downloadCsv(rows, `${slug(client()?.name)}-leads-${today()}.csv`); toast(`Downloaded ${rows.length} lead${rows.length === 1 ? '' : 's'}.`); } catch (e) { toast(e.message); } },
   async csvAll() { try { const rows = await api.everyLead(); if (!rows.length) return toast('No leads yet.'); downloadCsv(rows, `brightfront-all-leads-${today()}.csv`, true); toast(`Downloaded ${rows.length} leads.`); } catch (e) { toast(e.message); } },

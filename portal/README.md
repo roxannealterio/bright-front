@@ -40,7 +40,7 @@ Each client only ever sees their own business. This is enforced by the database 
    https://cupsusqjcgefmfhdznmo.supabase.co/functions/v1/reply/sms (HTTP POST), and put the number (+61...) in the client's Lead replies settings.
 5. Lead forms POST to https://cupsusqjcgefmfhdznmo.supabase.co/functions/v1/reply/intake?key=CLIENT_KEY with name, email, phone, message, source.
 
-## Roxy, the admin (v6)
+## Tilly, the admin (v6)
 
 Missed-call text-back, quote chasing, a daily owner wrap-up and draft-approve mode.
 
@@ -55,5 +55,5 @@ Missed-call text-back, quote chasing, a daily owner wrap-up and draft-approve mo
 
 Notes
 - Missed calls are only texted back to Australian mobiles (04...), never landlines.
-- If a client keeps their own number and forwards unanswered calls to the Roxy number, leave "Ring this mobile first" empty, or the call will loop back to them.
+- If a client keeps their own number and forwards unanswered calls to the Tilly number, leave "Ring this mobile first" empty, or the call will loop back to them.
 - Quote follow-ups send 2, 5 and 10 days after "Quote sent", 9am to 6pm Brisbane time, and stop when the customer replies.
