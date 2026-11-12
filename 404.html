@@ -64,7 +64,7 @@ h3{font-size:22px;line-height:1.25;font-weight:700;letter-spacing:-.01em}
 
 /* header: floating navy bar with white pill nav */
 .hdr{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:0;right:0;z-index:60;padding:0 16px}
-.hdr::before{content:"";position:fixed;left:0;right:0;top:-80px;height:calc(92px + env(safe-area-inset-top,0px));background:var(--navy);z-index:-1;pointer-events:none}
+@media(max-width:900px){.hdr{top:0;padding:0}.hdr .bar{border-radius:0 0 22px 22px;height:auto;min-height:60px;padding:calc(env(safe-area-inset-top,0px) + 8px) 12px 8px 20px}.mnav{margin:8px 12px 0}}
 .bar{max-width:1400px;margin:0 auto;background:var(--navy);border-radius:22px;display:flex;align-items:center;justify-content:space-between;gap:16px;height:68px;padding:0 12px 0 24px;box-shadow:0 12px 30px rgba(11,11,46,.22)}
 .bar .wm{font-size:27px}
 .nav{display:flex;gap:2px;background:#fff;border-radius:999px;padding:5px}
