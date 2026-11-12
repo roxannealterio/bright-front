@@ -830,7 +830,12 @@ var SERVICES = [
         answers[name] = vals.join(', ');
         next.disabled = !vals.length;
       });
-      next.addEventListener('click', function () { if (name === 'showup') show(answers.showup === 'Absolutely' ? 8 : 9); else show(n + 1); });
+      next.addEventListener('click', function () {
+        if (name !== 'showup') return show(n + 1);
+        var small = answers.budget === 'Under $1,000', q9 = document.querySelector('#fnContact .fn-q');
+        if (q9) q9.textContent = small ? 'Thanks! Where should we send your growth plan?' : 'No problem. Where should we send your growth plan?';
+        show(answers.showup === 'Absolutely' && !small ? 8 : 9);
+      });
     });
     function addAnswers(form) {
       form.querySelectorAll('input[data-q]').forEach(function (i) { i.remove(); });

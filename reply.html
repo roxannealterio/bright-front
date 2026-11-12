@@ -971,5 +971,8 @@ window.addEventListener('load', function () { if (!location.hash) { window.scrol
   btn.addEventListener('click',play);
 })();
 </script>
+<a href="#top" class="totop" id="totop" aria-label="Back to top"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>
+<style>.totop{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:55;width:48px;height:48px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px rgba(11,11,46,.28);opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .25s,transform .25s}.totop.on{opacity:1;transform:none;pointer-events:auto}.totop:hover{background:#DB2468}body.menu-open .totop{opacity:0;pointer-events:none}</style>
+<script>(function(){var t=document.getElementById('totop');if(!t)return;function u(){t.classList.toggle('on',scrollY>innerHeight*1.2)}addEventListener('scroll',u,{passive:true});u();t.addEventListener('click',function(e){e.preventDefault();window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});});})();</script>
 </body>
 </html>
