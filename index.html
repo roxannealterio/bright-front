@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io; frame-src 'none'; object-src 'none'; base-uri 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>brightfront | Brisbane Lead Generation &amp; Conversion Agency</title>
 <meta name="description" content="We bring in the leads, answer every one in under a minute, and our sales team turns them into booked appointments and paying clients. Brisbane based, working Australia wide.">
 <meta property="og:title" content="brightfront | Be the name they call first">
@@ -64,7 +64,8 @@ h3{font-size:22px;line-height:1.25;font-weight:700;letter-spacing:-.01em}
 .wm:hover .i::before{transform:translateX(-50%) rotate(90deg) scale(1.15)}
 
 /* header: floating navy bar with white pill nav */
-.hdr{position:fixed;top:12px;left:0;right:0;z-index:60;padding:0 16px}
+.hdr{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:0;right:0;z-index:60;padding:0 16px}
+.hdr::before{content:"";position:fixed;left:0;right:0;top:-80px;height:calc(92px + env(safe-area-inset-top,0px));background:var(--navy);z-index:-1;pointer-events:none}
 .bar{max-width:1400px;margin:0 auto;background:var(--navy);border-radius:22px;display:flex;align-items:center;justify-content:space-between;gap:16px;height:68px;padding:0 12px 0 24px;box-shadow:0 12px 30px rgba(11,11,46,.22)}
 .bar .wm{font-size:27px}
 .nav{display:flex;gap:2px;background:#fff;border-radius:999px;padding:5px}
@@ -418,7 +419,7 @@ footer a:hover{color:var(--pink)}
 .svc > p{color:var(--muted);font-size:15.5px;line-height:1.55;flex:1;margin:0}
 .svc .tags{margin-top:6px}.svc .tags li{background:var(--grey);font-size:13px;padding:6px 12px}
 @media(max-width:900px){.svc-feature{grid-template-columns:1fr;padding:14px 14px 30px;gap:22px}.svc-copy{padding:0 12px}.svc-img{aspect-ratio:1/1;border-radius:999px 999px 20px 20px}
-.svc-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 -32px;padding:0 32px 6px;gap:14px}.svc-grid::-webkit-scrollbar{display:none}.svc{flex:0 0 min(82%,340px);scroll-snap-align:center}}
+.svc-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 -32px;padding:0 32px 6px;gap:14px;align-items:flex-start}.svc-grid::-webkit-scrollbar{display:none}.svc{flex:0 0 min(82%,340px);scroll-snap-align:center}}
 /* why us */
 .why-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 .why{background:#fff;border-radius:28px;padding:30px}
@@ -491,10 +492,13 @@ footer a:hover{color:var(--pink)}
 @media(max-width:860px){.fsm-in{flex-direction:column;align-items:flex-start}.fsm-nav a,.fsm-bot a{padding:7px 0}}
 .works{padding:56px 0}.works h2{font-size:clamp(28px,3vw,40px)}.works p.lede{margin:10px 0 0;max-width:620px}
 .works ul{list-style:none;margin:28px 0 0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
-.works li{height:76px;border:1px solid var(--line);border-radius:16px;background:#fff;display:grid;place-items:center;padding:12px 16px}
-.works li img{max-width:100%;max-height:34px;object-fit:contain}.works li span{font-weight:700;color:var(--navy);font-size:15px;text-align:center}
+.works li{min-height:96px;border:1px solid var(--line);border-radius:16px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px 12px;transition:border-color .2s,transform .2s}
+.works li:hover{border-color:var(--navy);transform:translateY(-2px)}
+.works li img{width:32px;height:32px;display:block}.works li span{font-weight:700;color:var(--navy);font-size:14px;text-align:center;line-height:1.2}
+.works .mono{width:32px;height:32px;border-radius:9px;background:var(--navy);color:#fff;font-style:normal;font-weight:800;font-size:13px;display:grid;place-items:center;letter-spacing:-.02em}
 .works .fine{font-size:13px;color:var(--muted);margin:14px 0 0}
-@media(max-width:800px){.works ul{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:800px){.works ul{grid-template-columns:repeat(2,minmax(0,1fr))}.works li{min-height:88px}}
+@media(prefers-reduced-motion:reduce){.works li{transition:none}.works li:hover{transform:none}}
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"brightfront","url":"https://brightfrontstudio.com/","email":"info@brightfrontstudio.com","description":"Brisbane digital marketing and personal branding agency: Google Ads, Meta ads, SEO, social media, email and landing pages.","areaServed":"Australia","address":{"@type":"PostalAddress","addressLocality":"Brisbane","addressRegion":"QLD","addressCountry":"AU"}}</script>
 </head>
@@ -587,7 +591,7 @@ footer a:hover{color:var(--pink)}
   <div class="wrap reveal">
     <h2>Works with the tools you already use.</h2>
     <p class="lede">Leads come in from your ads, website, inbox and socials. Booked and won jobs flow straight into your calendar, job system and accounts.</p>
-    <ul aria-label="Integrations"><li><img src="assets/logos/facebook.svg" alt="Facebook" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'Facebook'}))"></li><li><img src="assets/logos/instagram.svg" alt="Instagram" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'Instagram'}))"></li><li><img src="assets/logos/google-ads.svg" alt="Google Ads" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'Google Ads'}))"></li><li><img src="assets/logos/xero.svg" alt="Xero" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'Xero'}))"></li><li><img src="assets/logos/servicem8.svg" alt="ServiceM8" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'ServiceM8'}))"></li><li><img src="assets/logos/cliniko.svg" alt="Cliniko" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'Cliniko'}))"></li><li><img src="assets/logos/google-calendar.svg" alt="Google Calendar" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'Google Calendar'}))"></li><li><img src="assets/logos/calendly.svg" alt="Calendly" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'Calendly'}))"></li><li><img src="assets/logos/zapier.svg" alt="Zapier" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'Zapier'}))"></li><li><img src="assets/logos/make.svg" alt="Make" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'Make'}))"></li></ul>
+    <ul aria-label="Integrations"><li><img src="assets/logos/facebook.svg" alt=""  width="32" height="32"><span>Facebook</span></li><li><img src="assets/logos/instagram.svg" alt=""  width="32" height="32"><span>Instagram</span></li><li><img src="assets/logos/google-ads.svg" alt=""  width="32" height="32"><span>Google Ads</span></li><li><img src="assets/logos/xero.svg" alt=""  width="32" height="32"><span>Xero</span></li><li><i class="mono" aria-hidden="true">M8</i><span>ServiceM8</span></li><li><i class="mono" aria-hidden="true">C</i><span>Cliniko</span></li><li><img src="assets/logos/google-calendar.svg" alt=""  width="32" height="32"><span>Google Calendar</span></li><li><img src="assets/logos/calendly.svg" alt=""  width="32" height="32"><span>Calendly</span></li><li><img src="assets/logos/zapier.svg" alt=""  width="32" height="32"><span>Zapier</span></li><li><img src="assets/logos/make.svg" alt=""  width="32" height="32"><span>Make</span></li></ul>
     <p class="fine">Plus 7,000+ more apps through Zapier and Make. All trademarks belong to their owners.</p>
   </div>
 </section>

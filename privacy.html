@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io; frame-src 'none'; object-src 'none'; base-uri 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Privacy policy | brightfront</title>
 <meta name="description" content="How brightfront collects, uses and protects your personal information.">
 <meta property="og:title" content="brightfront | Be the name they call first">
@@ -64,7 +64,8 @@ h3{font-size:22px;line-height:1.25;font-weight:700;letter-spacing:-.01em}
 .wm:hover .i::before{transform:translateX(-50%) rotate(90deg) scale(1.15)}
 
 /* header: floating navy bar with white pill nav */
-.hdr{position:fixed;top:12px;left:0;right:0;z-index:60;padding:0 16px}
+.hdr{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:0;right:0;z-index:60;padding:0 16px}
+.hdr::before{content:"";position:fixed;left:0;right:0;top:-80px;height:calc(92px + env(safe-area-inset-top,0px));background:var(--navy);z-index:-1;pointer-events:none}
 .bar{max-width:1400px;margin:0 auto;background:var(--navy);border-radius:22px;display:flex;align-items:center;justify-content:space-between;gap:16px;height:68px;padding:0 12px 0 24px;box-shadow:0 12px 30px rgba(11,11,46,.22)}
 .bar .wm{font-size:27px}
 .nav{display:flex;gap:2px;background:#fff;border-radius:999px;padding:5px}
