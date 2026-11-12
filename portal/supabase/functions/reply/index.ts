@@ -22,7 +22,7 @@
 //   SERVICEM8_CLIENT_ID, SERVICEM8_CLIENT_SECRET   for ServiceM8
 //   GCAL_CLIENT_ID, GCAL_CLIENT_SECRET    for Google Calendar (can be the same Google OAuth client as sign-in)
 //   STRIPE_SECRET_KEY (optional)        to email clients a pay-online invoice each month
-//   CRON_SECRET                   for Roxy's hourly jobs (any long random string; the same value goes in v6.sql)
+//   CRON_SECRET                   for Tilly's hourly jobs (any long random string; the same value goes in v6.sql)
 //   optional: RESEND_API_KEY (send from each client's own domain), AI_MODEL, SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_FROM, TWILIO_FROM
 // SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are provided by Supabase automatically.
 
@@ -407,7 +407,7 @@ async function newLead(s: Settings, input: Record<string, string>) {
   return { ok: true, lead_id: lead.id, replied: true, channel };
 }
 
-/* ---------- Roxy, the admin: drafts, owner alerts, missed calls, quote chasing, daily summary ---------- */
+/* ---------- Tilly, the admin: drafts, owner alerts, missed calls, quote chasing, daily summary ---------- */
 const bneNow = (o: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat(o.year ? "en-CA" : "en-AU", { timeZone: "Australia/Brisbane", ...o }).format(new Date());
 const bneHour = () => Number(bneNow({ hour: "numeric", hourCycle: "h23" }));
 const bneDate = () => bneNow({ year: "numeric", month: "2-digit", day: "2-digit" });
