@@ -486,7 +486,7 @@ legend.fn-q{margin-bottom:22px}legend.fn-q + .fn-sub{margin-top:-14px}
       </fieldset>
       <fieldset class="fn-step" data-step="3" data-name="business" hidden>
         <legend class="fn-q">What best describes your business?</legend>
-        <div class="opts" role="group"><label class="opt"><input type="radio" name="business" value="Real estate"><span>Real estate</span></label><label class="opt"><input type="radio" name="business" value="Fitness coach or studio"><span>Fitness coach or studio</span></label><label class="opt"><input type="radio" name="business" value="Mortgage or finance broker"><span>Mortgage or finance broker</span></label><label class="opt"><input type="radio" name="business" value="Car dealer or car sales"><span>Car dealer or car sales</span></label><label class="opt"><input type="radio" name="business" value="E-commerce brand"><span>E-commerce brand</span></label><label class="opt"><input type="radio" name="business" value="Beauty or aesthetics clinic"><span>Beauty or aesthetics clinic</span></label><label class="opt"><input type="radio" name="business" value="Trades or home services"><span>Trades or home services</span></label><label class="opt"><input type="radio" name="business" value="Hospitality"><span>Café, restaurant or bar</span></label><label class="opt"><input type="radio" name="business" value="Childcare, school or classes"><span>Childcare, school or classes</span></label><label class="opt"><input type="radio" name="business" value="Something else"><span>Something else</span></label></div>
+        <div class="opts" role="group"><label class="opt"><input type="radio" name="business" value="Real estate"><span>Real estate</span></label><label class="opt"><input type="radio" name="business" value="Fitness coach or studio"><span>Fitness coach or studio</span></label><label class="opt"><input type="radio" name="business" value="Mortgage or finance broker"><span>Mortgage or finance broker</span></label><label class="opt"><input type="radio" name="business" value="Car dealer or car sales"><span>Car dealer or car sales</span></label><label class="opt"><input type="radio" name="business" value="E-commerce brand"><span>E-commerce brand</span></label><label class="opt"><input type="radio" name="business" value="Beauty or aesthetics clinic"><span>Beauty or aesthetics clinic</span></label><label class="opt"><input type="radio" name="business" value="Trades or home services"><span>Trades or home services</span></label><label class="opt"><input type="radio" name="business" value="NDIS or disability support"><span>NDIS or disability support</span></label><label class="opt"><input type="radio" name="business" value="Hospitality"><span>Café, restaurant or bar</span></label><label class="opt"><input type="radio" name="business" value="Childcare, school or classes"><span>Childcare, school or classes</span></label><label class="opt"><input type="radio" name="business" value="Something else"><span>Something else</span></label></div>
         
         <button type="button" class="btn btn-pink fn-next" disabled>Next <svg class="ar" width="18" height="18"><use href="#arr"/></svg></button>
       </fieldset>
@@ -740,6 +740,9 @@ var SERVICES = [
       prev.disabled = view <= new Date(today.getFullYear(), today.getMonth(), 1);
       next.disabled = new Date(view.getFullYear(), view.getMonth() + 1, 1) > last;
     }
+    // Brisbane is UTC+10 all year: build the real moment of a slot regardless of the visitor's timezone
+    function bne(d, h, mi) { return new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), h - 10, mi)); }
+    function ymd(d) { return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
     function seeded(n) { var x = Math.sin(n) * 10000; return x - Math.floor(x); }
     function showTimes() {
       document.getElementById('timeTitle').textContent = picked.toLocaleDateString('en-AU', fmtLong);
@@ -747,7 +750,7 @@ var SERVICES = [
       for (var m = START_HOUR * 60; m < END_HOUR * 60; m += SLOT_MIN) {
         var h = Math.floor(m / 60), mi = m % 60, label = ((h + 11) % 12 + 1) + ':' + (mi < 10 ? '0' : '') + mi + (h < 12 ? 'am' : 'pm');
         var b = document.createElement('button'); b.type = 'button'; b.textContent = label;
-        var slotAt = new Date(picked); slotAt.setHours(h, mi, 0, 0);
+        var slotAt = bne(picked, h, mi);
         if (slotAt.getTime() < Date.now() + 2 * 3600000) { b.disabled = true; b.setAttribute('aria-label', label + ', unavailable'); }
         else (function (lab) { b.addEventListener('click', function () { pickedTime = lab; showForm(); }); })(label);
         box.appendChild(b);
@@ -757,13 +760,14 @@ var SERVICES = [
     function showForm() {
       var dl = picked.toLocaleDateString('en-AU', fmtLong);
       document.getElementById('bkSummary').innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>' + dl + ' <span>at ' + pickedTime + '</span>';
-      document.getElementById('fDate').value = picked.toISOString().slice(0, 10);
+      document.getElementById('fDate').value = ymd(picked);
+      form.querySelector('[name=_subject]').value = 'New strategy call booking: ' + dl + ', ' + pickedTime + ' Brisbane time';
       document.getElementById('fTime').value = pickedTime;
       step(2); form.querySelector('[name=name]').focus();
     }
     function callTimes() {
       var t = pickedTime.match(/(\d+):(\d+)(am|pm)/), h = (+t[1] % 12) + (t[3] === 'pm' ? 12 : 0);
-      var st = new Date(picked); st.setHours(h, +t[2], 0, 0); var en = new Date(st.getTime() + 15 * 60000);
+      var st = bne(picked, h, +t[2]); var en = new Date(st.getTime() + 15 * 60000);
       var f = function (d) { return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, ''); };
       return { st: f(st), en: f(en) };
     }
@@ -782,7 +786,7 @@ var SERVICES = [
     }
     function outlook() {
       var t = pickedTime.match(/(\d+):(\d+)(am|pm)/), h = (+t[1] % 12) + (t[3] === 'pm' ? 12 : 0);
-      var st = new Date(picked); st.setHours(h, +t[2], 0, 0); var en = new Date(st.getTime() + 15 * 60000);
+      var st = bne(picked, h, +t[2]); var en = new Date(st.getTime() + 15 * 60000);
       return 'https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent&subject=' + encodeURIComponent(CAL_TITLE) + '&startdt=' + encodeURIComponent(st.toISOString()) + '&enddt=' + encodeURIComponent(en.toISOString()) + '&body=' + encodeURIComponent(CAL_DESC);
     }
     prev.addEventListener('click', function () { view.setMonth(view.getMonth() - 1); render(); });
