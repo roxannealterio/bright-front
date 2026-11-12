@@ -50,6 +50,7 @@ Missed-call text-back, quote chasing, a daily owner wrap-up and draft-approve mo
 4. Redeploy the `reply` Edge Function from `supabase/functions/reply/index.ts`.
 5. Twilio, for each client's number: set **A call comes in** to `https://cupsusqjcgefmfhdznmo.supabase.co/functions/v1/reply/voice` (HTTP POST). Keep **A message comes in** on `/reply/sms`.
 6. In the portal, Inbox -> What it says -> **Admin jobs**: choose how replies go out, add the owner's mobile under "Ring this mobile first" and "Mobile for alerts".
+7. Xero invoice chasing (v7): run `supabase/v7.sql`. Once a client's Xero is connected, overdue invoices get reminders 1, 7 and 14 days after the due date (weekdays 9am to 5pm Brisbane), by text if the Xero contact has a mobile, otherwise email, with Xero's online payment link. Reminders stop when the invoice is paid or the customer replies. Turn it off per client under Integrations -> Xero.
 
 Notes
 - Missed calls are only texted back to Australian mobiles (04...), never landlines.
