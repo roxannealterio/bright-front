@@ -2,6 +2,9 @@
 <html lang="en-AU">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https://cupsusqjcgefmfhdznmo.supabase.co wss://cupsusqjcgefmfhdznmo.supabase.co https://cdn.jsdelivr.net; form-action 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Client portal | brightfront</title>
 <meta name="robots" content="noindex">
@@ -283,13 +286,15 @@ dialog.profile form{display:flex;flex-direction:column;gap:14px}
 .ch-card{display:flex;flex-direction:column;gap:12px}.ch-card .card-head{margin:0}.ch-form{display:flex;flex-direction:column;gap:12px}
 .ch-card .row .field{flex:1;min-width:0}.ch-card .card-head{flex-wrap:nowrap}.ch-card .card-head>.pill{flex-shrink:0;white-space:nowrap}
 .lg{width:40px;height:40px;border-radius:10px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;overflow:hidden;flex-shrink:0}.lg img{max-width:30px;max-height:30px}.lg.txt{background:var(--navy)}.lg.txt::after{content:attr(data-name);font-size:14px;font-weight:800;color:#fff}
+.wm-img{max-height:34px;max-width:180px;display:block}.wm-p{font-size:24px;letter-spacing:-.02em}
+.bill-k{margin-top:12px;gap:12px}.bill-k>div{display:flex;flex-direction:column;gap:2px;background:var(--bg,#F6F4F1);border-radius:12px;padding:12px 14px}.bill-k b{font-size:22px}
 @media (max-width:900px){.ch-flow{grid-template-columns:1fr}.ch-arrow{transform:rotate(90deg);justify-self:start}}
 </style>
 </head>
 <body>
 <div id="app" aria-live="polite"></div>
 <div class="toast" id="toast" role="status"></div>
-<script src="config.js?v=20261112c"></script>
-<script type="module" src="app.js?v=20261112c"></script>
+<script src="config.js?v=20261112e"></script>
+<script type="module" src="app.js?v=20261112e"></script>
 </body>
 </html>

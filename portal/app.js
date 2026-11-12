@@ -1,3 +1,4 @@
+if (window.top !== window.self && /(^|\.)brightfrontstudio\.com$/.test(location.hostname)) { try { window.top.location = window.location.href; } catch { document.documentElement.style.display = 'none'; } }
 // brightfront client portal
 // Runs on Supabase when config.js has keys, otherwise in demo mode with sample data.
 const CFG = window.BF_CONFIG || {};
@@ -132,7 +133,7 @@ function demoData() {
 let sb = null;
 const api = {};
 if (LIVE) {
-  const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
+  const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.104.1/+esm');
   sb = createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY);
   const q = async (p) => { const { data, error } = await p; if (error) throw error; return data; };
   Object.assign(api, {
@@ -218,7 +219,18 @@ if (LIVE) {
     },
     sendMsg(id, body) { return api.replyFn({ action: 'send', conversation_id: id, body }); },
     testLead(c, o) { return api.replyFn({ action: 'test', client_id: c, ...o }); },
-    async assign(email, c) { const r = await q(sb.from('profiles').update({ client_id: c, role: 'client' }).eq('email', email.trim().toLowerCase()).select()); if (!r.length) throw new Error('No portal account with that email yet. Ask them to sign up first.'); }
+    assign: (email, c) => q(sb.rpc('assign_user', { p_email: email, p_client: c })),
+    assignPartner: (email, a) => q(sb.rpc('assign_user', { p_email: email, p_agency: a })),
+    async brand() { const r = await q(sb.rpc('my_brand')); return r?.[0] || null; },
+    async brandBySlug(slug) { const r = await q(sb.rpc('brand_by_slug', { p_slug: slug })); return r?.[0] || null; },
+    agencies: () => q(sb.from('agencies').select('*').order('name')),
+    saveAgency: (o) => o.id ? q(sb.from('agencies').update(o).eq('id', o.id)) : q(sb.from('agencies').insert(o)),
+    sysEvents: () => q(sb.from('system_events').select('*, clients(name)').gte('created_at', new Date(Date.now() - 7 * 86400e3).toISOString()).order('created_at', { ascending: false }).limit(50)),
+    billingPlan: (c) => q(sb.from('billing_plans').select('*').eq('client_id', c).maybeSingle()),
+    saveBillingPlan: (c, o) => q(sb.from('billing_plans').upsert({ ...o, client_id: c, updated_at: new Date().toISOString() }, { onConflict: 'client_id' })),
+    billable(c, m) { const a = new Date(m + '-01T00:00:00+10:00'), b = new Date(a); b.setMonth(b.getMonth() + 1); return q(sb.from('billable_events').select('*, leads(name)').eq('client_id', c).gte('occurred_at', a.toISOString()).lt('occurred_at', b.toISOString()).order('occurred_at', { ascending: false })); },
+    setBillable: (id, status) => q(sb.from('billable_events').update({ status }).eq('id', id)),
+    billMonth(c, month) { return api.replyFn({ action: 'bill_month', client_id: c, month }); }
   });
 } else {
   const D = demoData(); let who = null;
@@ -248,7 +260,16 @@ if (LIVE) {
     addInvoice(c, o) { D.invoices[c].unshift({ id: uid(), ...o }); return ok(); },
     setInvoice(id, status) { Object.values(D.invoices).flat().forEach((i) => { if (i.id === id) i.status = status; }); return ok(); },
     addStep(c, o) { D.steps[c].push({ id: uid(), done: false, ...o }); return ok(); },
-    assign() { return ok(); },
+    assign() { return ok(); }, assignPartner() { return ok(); },
+    brand: () => ok(null), brandBySlug: () => ok(null),
+    agencies: () => ok(D.agencies ||= [{ id: 'a1', name: 'Northside Digital', slug: 'northside', brand_color: '#1F6FEB', support_email: 'hello@northside.example', wholesale_fee: 149, status: 'active' }]),
+    saveAgency(o) { const a = (D.agencies ||= []); if (o.id) Object.assign(a.find((x) => x.id === o.id), o); else a.push({ id: uid(), status: 'active', ...o }); return ok(); },
+    sysEvents: () => ok([{ id: 1, level: 'warn', source: 'xero', message: 'Xero 401: token expired. Reconnect Xero for this client.', created_at: new Date(Date.now() - 5400e3).toISOString(), clients: { name: 'Sample Realty' } }]),
+    billingPlan: (c) => ok((D.plans ||= { c1: { client_id: 'c1', active: true, monthly_fee: 990, per_booking: 45, per_won: 0, won_percent: 0, billing_email: 'accounts@example.com' } })[c] || null),
+    saveBillingPlan(c, o) { (D.plans ||= {})[c] = { ...(D.plans[c] || {}), ...o, client_id: c }; return ok(); },
+    billable: (c) => ok(c === 'c1' ? (D.bev ||= D.extra.leads.filter((l) => ['booked', 'won'].includes(l.status)).map((l, i) => ({ id: 'b' + i, kind: 'booking', amount: 45, status: 'billable', occurred_at: l.created_at, leads: { name: l.name } }))) : []),
+    setBillable(id, status) { (D.bev || []).forEach((e) => { if (e.id === id) e.status = status; }); return ok(); },
+    billMonth: () => ok({ ok: true, note: 'Invoice created. In the live portal it’s emailed with a pay-online link.' }),
     replySettings: (c) => ok(D.reply[c] || null),
     calls: (c) => ok(c === 'c1' ? D.extra.calls : []),
     addCall(c, o) { D.extra.calls.unshift({ id: uid(), called_at: new Date().toISOString(), ...o }); return ok(); },
@@ -289,10 +310,15 @@ if (LIVE) {
 
 /* ---------------- state + routing ---------------- */
 const state = { me: null, clients: [], clientId: null, view: 'dashboard', data: {}, postTab: 'waiting', openPost: null, convId: null, msgs: [], replyTab: 'inbox' };
-const isAgency = () => state.me?.role === 'agency';
+const isAgency = () => ['agency', 'partner'].includes(state.me?.role);
+const isOwner = () => state.me?.role === 'agency';
+const SUPPORT = () => state.brand?.support_email || CFG.SUPPORT_EMAIL;
+const WM = () => state.brand ? (state.brand.logo_url ? `<img class="wm-img" src="${esc(state.brand.logo_url)}" alt="${esc(state.brand.name)}">` : `<span class="wm wm-p">${esc(state.brand.name)}</span>`) : '<span class="wm" aria-label="brightfront">br<span class="wi">ı</span>ghtfront</span>';
+function applyBrand() { const c = state.brand?.brand_color; if (c && /^#[0-9a-f]{6}$/i.test(c)) document.documentElement.style.setProperty('--pink', c); }
 const client = () => state.clients.find((c) => c.id === state.clientId);
 
 async function load() {
+  if (state.view === 'partners') { state.data = { agencies: await api.agencies().catch(() => []) }; return; }
   const c = state.clientId; if (!c) { state.data = {}; return; }
   const [metrics, leads, posts, comments, requests, invoices, steps, files] = await Promise.all([api.metrics(c), api.leads(c), api.posts(c), api.comments(c), api.requests(c), api.invoices(c), api.steps(c), api.files(c)]);
   state.data = { metrics, leads, posts, comments, requests, invoices, steps, files };
@@ -300,6 +326,11 @@ async function load() {
   const [calls, reviews, reqs, creatives, reports] = await Promise.all([safe(api.calls(c)), safe(api.reviews(c)), safe(api.reviewRequests(c)), safe(api.creatives(c)), safe(api.reports(c))]);
   Object.assign(state.data, { calls, reviews, reqs, creatives, reports });
   if (state.view === 'replies' || state.view === 'dashboard') { state.data.convs = await api.conversations(c).catch(() => []); }
+  if (state.view === 'invoices') {
+    state.billMonth ||= new Date().toISOString().slice(0, 7);
+    const [plan, bev] = await Promise.all([api.billingPlan(c).catch(() => null), api.billable(c, state.billMonth).catch(() => [])]);
+    Object.assign(state.data, { plan, bev });
+  }
   if (state.view === 'channels') {
     const [reply, cs, conn, ints, ilog] = await Promise.all([api.replySettings(c).catch(() => null), api.connStatus(c).catch(() => null), isAgency() ? api.conn(c).catch(() => null) : Promise.resolve(null), (isAgency() ? api.ints(c) : api.intStatus(c)).catch(() => []), api.intLog(c).catch(() => [])]);
     Object.assign(state.data, { reply, cs, conn, ints, ilog });
@@ -317,10 +348,12 @@ async function boot() {
     if (!s) return renderLogin();
     state.me = await api.me();
     if (!state.me) return renderLogin();
+    if (LIVE && ['agency', 'partner'].includes(state.me.role)) { const need = await mfaNeeded(); if (need) return renderMfa(need); }
+    state.brand = await api.brand().catch(() => null); applyBrand();
     state.clients = await api.clients();
     if (isAgency()) { state.view = state.view === 'dashboard' && !state.clientId ? 'overview' : state.view; }
     else { state.clientId = state.me.client_id; if (!state.clientId) return renderPending(); }
-    if (isAgency() && !state.clientId && state.view !== 'overview') state.view = 'overview';
+    if (isAgency() && !state.clientId && !['overview', 'partners'].includes(state.view)) state.view = 'overview';
     const ret = new URLSearchParams(location.search).get('integration');
     if (ret) { history.replaceState(null, '', location.pathname); if (isAgency() && state.clients.length) { state.clientId = state.clientId || sessionStorage.getItem('bfClient') || null; if (state.clientId) state.view = 'channels'; } }
     await load(); render();
@@ -329,16 +362,62 @@ async function boot() {
 }
 function go(view, clientId) { if (clientId !== undefined) state.clientId = clientId; state.view = view; state.openPost = null; load().then(render).then(() => { window.scrollTo(0, 0); document.querySelector('.main h1')?.focus({ preventScroll: true }); }); }
 
+/* ---------------- two-step login (required for agency and partner staff) ---------------- */
+async function mfaNeeded() {
+  const { data, error } = await sb.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (error) throw error;
+  if (data.currentLevel === 'aal2') return null;
+  return data.nextLevel === 'aal2' ? 'verify' : 'enroll';
+}
+async function renderMfa(mode, msg = '') {
+  let qr = '', secret = '', factorId = '';
+  if (mode === 'enroll') {
+    const { data: fl } = await sb.auth.mfa.listFactors();
+    for (const f of (fl?.all || []).filter((x) => x.status !== 'verified')) await sb.auth.mfa.unenroll({ factorId: f.id }).catch(() => {});
+    const { data, error } = await sb.auth.mfa.enroll({ factorType: 'totp', friendlyName: 'Authenticator ' + new Date().toISOString().slice(0, 16) });
+    if (error) return renderError(error);
+    factorId = data.id; qr = data.totp.qr_code; secret = data.totp.secret;
+  } else {
+    const { data } = await sb.auth.mfa.listFactors();
+    factorId = (data?.totp || [])[0]?.id;
+    if (!factorId) return renderMfa('enroll');
+  }
+  $app.innerHTML = `<div class="login"><section class="login-side" aria-label="About"><span class="wm-wrap">${WM()}</span><div><h1>Keep every client safe.</h1><ul><li>Staff accounts can see every client, so they need a second step.</li><li>Use Google Authenticator, Microsoft Authenticator or 1Password.</li><li>It takes about a minute, once.</li></ul></div><p class="small" style="color:#8C8CB0;margin:0">Need help? <a href="mailto:${esc(SUPPORT())}" style="color:#fff">${esc(SUPPORT())}</a></p></section>
+  <main class="login-main"><form class="login-box" id="mfaForm" novalidate>
+    <h2 tabindex="-1">${mode === 'enroll' ? 'Set up two-step login' : 'Enter your 6-digit code'}</h2>
+    ${mode === 'enroll' ? `<p class="muted" style="margin:0">1. Open your authenticator app and scan this code.</p><img src="${esc(qr)}" alt="QR code for your authenticator app" width="180" height="180" style="align-self:center;background:#fff;border-radius:12px;padding:8px"><p class="small muted" style="margin:0">Can’t scan it? Enter this key instead: <code style="user-select:all;word-break:break-all">${esc(secret)}</code></p><p class="muted" style="margin:0">2. Type the 6-digit code it shows.</p>` : '<p class="muted" style="margin:0">Open your authenticator app and type the code for this portal.</p>'}
+    <label class="lab">Code<input class="field" name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required style="font-size:22px;letter-spacing:.3em;text-align:center"></label>
+    ${msg ? `<p role="alert" style="margin:0;font-weight:600;color:var(--pinkd)">${esc(msg)}</p>` : ''}
+    <button class="btn btn-pink" type="submit">${mode === 'enroll' ? 'Turn on and continue' : 'Continue'}</button>
+    <button class="btn btn-ghost" type="button" id="mfaOut">Log out</button>
+  </form></main></div>`;
+  const f = document.getElementById('mfaForm'); f.code.focus();
+  document.getElementById('mfaOut').onclick = async () => { await api.signOut(); renderLogin(); };
+  f.onsubmit = async (e) => {
+    e.preventDefault(); const code = f.code.value.replace(/\D/g, '');
+    if (code.length !== 6) return f.code.reportValidity();
+    const btn = f.querySelector('[type=submit]'); btn.disabled = true;
+    const { error } = await sb.auth.mfa.challengeAndVerify({ factorId, code });
+    if (error) { btn.disabled = false; f.code.value = ''; const p = f.querySelector('[role=alert]') || f.insertBefore(Object.assign(document.createElement('p'), { role: 'alert' }), btn); p.setAttribute('role', 'alert'); p.style.cssText = 'margin:0;font-weight:600;color:var(--pinkd)'; p.textContent = 'That code didn’t work. Check the time on your phone and try the newest code.'; return f.code.focus(); }
+    toast(mode === 'enroll' ? 'Two-step login is on.' : 'Verified'); boot();
+  };
+}
+
 /* ---------------- login ---------------- */
+async function loginBrand() {
+  const slug = new URLSearchParams(location.search).get('a');
+  if (slug && LIVE && !state.brand) { state.brand = await api.brandBySlug(slug).catch(() => null); applyBrand(); if (state.brand) renderLogin(); }
+}
 function renderLogin(mode = 'in', msg = '') {
+  if (!renderLogin.once) { renderLogin.once = true; loginBrand(); }
   $app.innerHTML = `<div class="login">
   <section class="login-side" aria-label="About the portal">
-    <span class="wm" aria-label="brightfront">br<span class="wi">ı</span>ghtfront</span>
+    ${WM()}
     <div>
       <h1>Your marketing, in one place.</h1>
       <ul><li>Live results against your 40% guarantee</li><li>Approve posts and ads in one tap</li><li>Send requests, track progress, pay invoices</li><li>Share access and brand files securely</li></ul>
     </div>
-    <p class="small" style="color:#8C8CB0;position:relative;z-index:1;margin:0">Need help? <a href="mailto:${esc(CFG.SUPPORT_EMAIL)}" style="color:#fff">${esc(CFG.SUPPORT_EMAIL)}</a></p>
+    <p class="small" style="color:#8C8CB0;position:relative;z-index:1;margin:0">Need help? <a href="mailto:${esc(SUPPORT())}" style="color:#fff">${esc(SUPPORT())}</a></p>
   </section>
   <main class="login-main">
     <form class="login-box" id="authForm" novalidate>
@@ -373,7 +452,7 @@ function renderLogin(mode = 'in', msg = '') {
   };
 }
 function renderPending() {
-  $app.innerHTML = `<div class="login"><section class="login-side"><span class="wm" aria-label="brightfront">br<span class="wi">ı</span>ghtfront</span></section><main class="login-main"><div class="login-box"><h2>You’re signed in.</h2><p class="muted">We’re linking your account to your business. You’ll see your portal as soon as that’s done, usually within one business day.</p><p class="muted">Questions? <a href="mailto:${esc(CFG.SUPPORT_EMAIL)}">${esc(CFG.SUPPORT_EMAIL)}</a></p><button class="btn btn-ghost" id="so">Log out</button></div></main></div>`;
+  $app.innerHTML = `<div class="login"><section class="login-side">${WM()}</section><main class="login-main"><div class="login-box"><h2>You’re signed in.</h2><p class="muted">We’re linking your account to your business. You’ll see your portal as soon as that’s done, usually within one business day.</p><p class="muted">Questions? <a href="mailto:${esc(SUPPORT())}">${esc(SUPPORT())}</a></p><button class="btn btn-ghost" id="so">Log out</button></div></main></div>`;
   document.getElementById('so').onclick = async () => { await api.signOut(); renderLogin(); };
 }
 function renderError(e) { $app.innerHTML = `<div class="login-main" style="min-height:100vh"><div class="login-box"><h2>We couldn’t load your portal.</h2><p class="muted">${esc(e.message || e)}</p><button class="btn btn-pink" onclick="location.reload()">Try again</button></div></div>`; }
@@ -406,17 +485,18 @@ function render() {
     ${navBtn('invoices', 'Invoices', 'doc')}
     ${navBtn('onboarding', 'Onboarding & files', 'flag', c.steps)}` : '';
   $app.innerHTML = `
-  <div class="mobilebar"><span class="wm" aria-label="brightfront">br<span class="wi">ı</span>ghtfront</span><button type="button" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="side">${ic('menu', 22)}</button></div>
+  <div class="mobilebar">${WM()}<button type="button" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="side">${ic('menu', 22)}</button></div>
   <div class="shell">
     <aside class="side" id="side">
-      <div class="brand"><span class="wm" aria-label="brightfront">br<span class="wi">ı</span>ghtfront</span></div>
-      <div class="brand-sub">${isAgency() ? 'Agency workspace' : 'Client portal'}</div>
+      <div class="brand">${WM()}</div>
+      <div class="brand-sub">${isOwner() ? 'Agency workspace' : isAgency() ? 'Partner workspace' : 'Client portal'}</div>
       ${isAgency() ? `<div class="switch"><label class="sr" for="clientSel">Viewing client</label><select id="clientSel"><option value="">All clients</option>${state.clients.map((x) => `<option value="${esc(x.id)}" ${x.id === state.clientId ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select></div>` : ''}
       <nav class="nav" aria-label="Portal">
         ${isAgency() ? navBtn('overview', 'All clients', 'users') : ''}
+        ${isAgency() ? navBtn('partners', isOwner() ? 'Partner agencies' : 'Your agency', 'flag') : ''}
         ${clientNav}
       </nav>
-      <div class="side-foot"><div class="avatar">${esc(initials(me.full_name || me.email))}</div><div class="who"><b>${esc(me.full_name || me.email)}</b><span>${isAgency() ? 'brightfront' : esc(client()?.name || '')}</span></div><button type="button" id="signOut" aria-label="Log out">${ic('out')}</button></div>
+      <div class="side-foot"><div class="avatar">${esc(initials(me.full_name || me.email))}</div><div class="who"><b>${esc(me.full_name || me.email)}</b><span>${isAgency() ? esc(state.brand?.name || 'brightfront') : esc(client()?.name || '')}</span></div><button type="button" id="signOut" aria-label="Log out">${ic('out')}</button></div>
     </aside>
     <main class="main" id="main">${VIEWS[state.view]()}</main>
   </div>`;
@@ -644,8 +724,9 @@ const VIEWS = {
   },
   invoices() {
     const d = state.data; const due = d.invoices.filter((i) => i.status !== 'paid');
-    return head('Billing', 'Invoices', 'Fixed monthly fee, agreed in writing. No lock-in, 30 days’ notice.', isAgency() ? `<button class="btn btn-pink" data-act="addInvoice">${ic('plus', 16)} New invoice</button>` : '') + `
+    return head('Billing', 'Invoices', 'What you’re charged for and why. Every booked appointment is listed, and each one is only ever charged once.', isAgency() ? `<button class="btn btn-pink" data-act="addInvoice">${ic('plus', 16)} New invoice</button>` : '') + `
     ${due.length ? `<div class="card" style="background:var(--amberl);border-color:#F2DDB0;margin-bottom:16px"><b>${due.length} invoice${due.length > 1 ? 's' : ''} to pay</b> <span class="muted">· next due ${fmtDate(due[due.length - 1].due_date, { day: 'numeric', month: 'long' })}</span></div>` : ''}
+    ${billingSection(d)}
     <section class="card"><div class="tbl-wrap"><table><thead><tr><th scope="col">Invoice</th><th scope="col">For</th><th scope="col">Amount</th><th scope="col">Issued</th><th scope="col">Due</th><th scope="col">Status</th><th scope="col"><span class="sr">Actions</span></th></tr></thead><tbody>
     ${d.invoices.map((i) => `<tr><td><b>${esc(i.number)}</b></td><td>${esc(i.description || '')}</td><td>${i.amount == null ? '<span class="muted">[PRICE]</span>' : money(i.amount)}</td><td class="muted">${fmtDate(i.issued_on)}</td><td class="muted">${fmtDate(i.due_date)}</td><td>${pill(i.status)}</td><td style="text-align:right;white-space:nowrap">${i.status !== 'paid' && i.pay_url ? `<a class="btn btn-pink btn-sm" href="${esc(i.pay_url)}" target="_blank" rel="noopener">Pay now</a>` : ''}${i.pdf_path ? ` <button class="btn btn-ghost btn-sm" data-file="${esc(i.pdf_path)}">PDF</button>` : ''}${isAgency() && i.status !== 'paid' ? ` <button class="btn btn-ghost btn-sm" data-inv="${esc(i.id)}">Mark paid</button>` : ''}</td></tr>`).join('') || '<tr><td colspan="7" class="empty">No invoices yet.</td></tr>'}
     </tbody></table></div></section>`;
@@ -695,6 +776,7 @@ const VIEWS = {
       </div></section>`;
     else if (tab === 'settings') body = `<form class="card rp-form" id="rpSettings" novalidate>
       <h2>What your assistant knows and says</h2><p class="muted small" style="margin:0">It only uses what you write here. Anything else, it hands to you.</p>
+      <label class="lab">Start from a template<span class="small muted">Fills in the questions and tone for your industry. Then add your own details.</span><select class="field" id="rpTpl"><option value="">Choose your industry…</option>${Object.keys(TEMPLATES).map((k) => `<option>${esc(k)}</option>`).join('')}</select></label>
       <div class="two"><label class="lab">Business name<input class="field" name="business_name" required maxlength="80" value="${esc(r.business_name || client()?.name || '')}"></label><label class="lab">Tone<input class="field" name="tone" maxlength="120" value="${esc(r.tone || 'Warm, friendly and to the point')}"></label></div>
       <label class="lab">About the business<span class="small muted">Services, area, prices you’re happy to share, anything leads often ask.</span><textarea class="field" name="about" maxlength="3000" required placeholder="We sell homes in Brisbane’s inner north. Free appraisals. Open homes every Saturday.">${esc(r.about || '')}</textarea></label>
       <label class="lab">Questions to ask every lead<span class="small muted">One per line. It asks them one at a time.</span><textarea class="field" name="questions" maxlength="1500" placeholder="Are you buying or selling?&#10;Which suburb?&#10;When are you hoping to move?">${esc(r.questions || '')}</textarea></label>
@@ -823,6 +905,101 @@ function integrationsSection(d) {
 }
 const NAMES_INT = { xero: 'Xero', servicem8: 'ServiceM8', cliniko: 'Cliniko', gcal: 'Google Calendar', webhook: 'Webhook' };
 
+/* ---------------- industry templates for the assistant ---------------- */
+const TEMPLATES = {
+  'Trades & home services': { tone: 'Friendly, practical and quick', about: 'We are [business], a licensed [trade] servicing [suburbs/area]. We do [main jobs]. Free quotes. Call-out fee: [amount or "we\'ll confirm"]. Fully insured.', questions: 'What do you need done?\nWhat suburb is the job in?\nIs it urgent, or when would suit?\nCan you send a photo of the job?' },
+  'Clinics & allied health': { tone: 'Warm, calm and professional', about: 'We are [clinic], a [type of clinic] in [suburb]. Services: [list]. New patients welcome. [Health fund / Medicare / NDIS details if you want to share them]. We never give medical advice by message.', questions: 'What would you like help with?\nHave you been to us before?\nWhich days and times usually suit you?' },
+  'Beauty & aesthetics': { tone: 'Warm, friendly and polished', about: 'We are [clinic], in [suburb]. Treatments: [list]. Consultations: [free / $ amount]. [Any key policies, e.g. deposits].', questions: 'Which treatment are you interested in?\nHave you had it before?\nWhen would you like to come in?' },
+  'Gyms & fitness': { tone: 'Upbeat, encouraging and to the point', about: 'We are [gym], in [suburb]. We offer [classes / PT / memberships]. Free trial: [details]. Open [hours].', questions: 'What are your goals?\nHave you trained before?\nWhen would you like to do your free trial?' },
+  'Childcare & early learning': { tone: 'Warm, reassuring and clear', about: 'We are [centre], a long day care / kindergarten in [suburb] for children aged [ages]. Open [hours]. We run centre tours [days/times]. Childcare Subsidy (CCS) applies; fees are confirmed by the centre. We never discuss a child\'s details by message.', questions: 'How old is your child?\nWhich days are you looking for, and from when?\nWould you like to book a centre tour?' },
+  'Schools & colleges': { tone: 'Warm, professional and informative', about: 'We are [school], a [type of school] in [suburb] for [year levels]. We hold tours and open days [details]. Enrolment information: [link or "the enrolments team will send it"].', questions: 'Which year level are you enquiring about, and for what year?\nWould you like to book a school tour?\nIs there anything specific you\'d like to know about?' },
+  'Tutoring & classes': { tone: 'Friendly, encouraging and clear', about: 'We are [business], offering [tutoring / swim / dance / music / martial arts / driving lessons] in [area] for [ages/levels]. Free assessment or trial: [details].', questions: 'Who are the lessons for, and how old are they?\nWhat would you like help with, or what level are they at?\nWhich days and times suit?' },
+  'Real estate': { tone: 'Professional, warm and to the point', about: 'We are [agency], selling and leasing in [suburbs]. Free appraisals. Open homes [details].', questions: 'Are you looking to buy, sell or rent?\nWhich suburb?\nWhen are you hoping to move?' },
+  'Car sales': { tone: 'Friendly, confident and helpful', about: 'We are [dealership] in [suburb]. We sell [new/used] [makes]. Test drives available [hours]. Finance and trade-ins: a team member will confirm details.', questions: 'Which car are you interested in?\nDo you have a trade-in?\nWhen would you like to come in for a test drive?' },
+  'Hospitality & events': { tone: 'Friendly, warm and welcoming', about: 'We are [venue] in [suburb]. We cater for [functions / bookings / events] up to [number] guests. Packages: [details or "we\'ll send our packages"].', questions: 'What\'s the occasion?\nWhat date, and how many guests?\nDo you have a budget in mind?' }
+};
+
+/* ---------------- results billing ---------------- */
+const EXTRA_ACTS = {};
+function billingSection(d) {
+  const p = d.plan, ev = d.bev || [], m = state.billMonth || new Date().toISOString().slice(0, 7);
+  const live = ev.filter((e) => e.status !== 'void');
+  const sum = (k) => live.filter((e) => e.kind === k).reduce((t, e) => t + Number(e.amount || 0), 0);
+  const n = (k) => live.filter((e) => e.kind === k).length;
+  const total = (p ? Number(p.monthly_fee || 0) : 0) + sum('booking') + sum('won');
+  const monthLabel = new Date(m + '-01T00:00:00').toLocaleDateString('en-AU', { month: 'long', year: 'numeric' });
+  if (!p && !isAgency()) return '';
+  const planTxt = p ? [p.monthly_fee > 0 && `${money0(p.monthly_fee)} a month`, p.per_booking > 0 && `${money0(p.per_booking)} per booked appointment`, p.per_won > 0 && `${money0(p.per_won)} per sale`, p.won_percent > 0 && `${p.won_percent}% of each sale`].filter(Boolean).join(' + ') : '';
+  return `<section class="card bill" style="margin-bottom:16px">
+    <div class="card-head" style="align-items:flex-start;gap:12px;flex-wrap:wrap"><div><h2>Results billing</h2><p class="small muted" style="margin:4px 0 0">${p ? esc(planTxt || 'No charges set') + (p.active ? '' : ' · paused') : 'No billing plan yet. Set one so booked appointments are counted automatically.'}</p></div>
+      <div class="row" style="gap:8px;flex-wrap:wrap"><label class="sr" for="billM">Month</label><input class="field" id="billM" type="month" value="${esc(m)}" style="width:auto;min-height:38px">${isAgency() ? `<button class="btn btn-ghost btn-sm" data-act="editPlan">${p ? 'Edit plan' : 'Set up plan'}</button>` : ''}</div></div>
+    ${p ? `<div class="grid g4 bill-k"><div><span class="lab">Monthly fee</span><b>${money0(p.monthly_fee)}</b></div><div><span class="lab">Booked appointments</span><b>${n('booking')}</b><span class="small muted">${money0(sum('booking'))}</span></div><div><span class="lab">Sales won</span><b>${n('won')}</b><span class="small muted">${money0(sum('won'))}</span></div><div><span class="lab">${monthLabel} total</span><b>${money0(total)}</b><span class="small muted">plus GST if applicable</span></div></div>
+    ${ev.length ? `<details style="margin-top:12px"><summary class="small" style="font-weight:700;cursor:pointer">${ev.length} billable item${ev.length > 1 ? 's' : ''} this month</summary><div class="tbl-wrap"><table><thead><tr><th scope="col">Date</th><th scope="col">Lead</th><th scope="col">For</th><th scope="col">Amount</th><th scope="col">Status</th>${isAgency() ? '<th scope="col"><span class="sr">Actions</span></th>' : ''}</tr></thead><tbody>${ev.map((e) => `<tr><td class="muted">${fmtDate(e.occurred_at)}</td><td>${esc(e.leads?.name || '—')}</td><td>${e.kind === 'won' ? 'Sale won' : 'Booked appointment'}</td><td>${money(e.amount)}</td><td>${pill(e.status === 'billable' ? 'due' : e.status === 'invoiced' ? 'paid' : 'lost')}</td>${isAgency() ? `<td style="text-align:right">${e.status === 'billable' ? `<button class="btn btn-ghost btn-sm" data-void="${esc(e.id)}">Don’t charge</button>` : e.status === 'void' ? `<button class="btn btn-ghost btn-sm" data-unvoid="${esc(e.id)}">Charge</button>` : ''}</td>` : ''}</tr>`).join('')}</tbody></table></div></details>` : `<p class="small muted" style="margin:12px 0 0">No booked appointments yet this month. They’re added automatically when a lead is marked Booked.</p>`}
+    ${isAgency() ? `<div class="row" style="gap:8px;margin-top:14px"><button class="btn btn-pink" data-act="billNow">Create ${esc(monthLabel)} invoice</button><span class="small muted">Adds the invoice below${client()?.agency_id ? '' : ' and emails a pay-online link when Stripe is connected'}.</span></div>` : ''}` : ''}
+  </section>`;
+}
+function wireBilling() {
+  const bm = document.getElementById('billM');
+  bm && (bm.onchange = () => { if (bm.value) { state.billMonth = bm.value; reload(); } });
+  $app.querySelectorAll('[data-void]').forEach((b) => b.onclick = async () => { await api.setBillable(b.dataset.void, 'void'); toast('Won’t be charged'); reload(); });
+  $app.querySelectorAll('[data-unvoid]').forEach((b) => b.onclick = async () => { await api.setBillable(b.dataset.unvoid, 'billable'); toast('Will be charged'); reload(); });
+}
+EXTRA_ACTS.editPlan = () => { const p = state.data.plan || {}; dialog('Billing plan', `<p class="small muted" style="margin:0">Booked appointments and won sales are counted automatically from the lead pipeline, once per lead.</p><div class="two">${F('Monthly fee ($)', 'monthly_fee', 'number', `min="0" step="1" value="${esc(p.monthly_fee ?? 0)}"`)}${F('Per booked appointment ($)', 'per_booking', 'number', `min="0" step="1" value="${esc(p.per_booking ?? 0)}"`)}</div><div class="two">${F('Per sale won ($)', 'per_won', 'number', `min="0" step="1" value="${esc(p.per_won ?? 0)}"`)}${F('% of sale value', 'won_percent', 'number', `min="0" max="100" step="0.5" value="${esc(p.won_percent ?? 0)}"`)}</div>${F('Billing email', 'billing_email', 'email', `value="${esc(p.billing_email || '')}" placeholder="accounts@business.com.au"`)}<label class="row" style="gap:8px"><input type="checkbox" name="active" ${p.active !== false ? 'checked' : ''}> Billing is on</label>`,
+  (o) => api.saveBillingPlan(state.clientId, { monthly_fee: +o.monthly_fee || 0, per_booking: +o.per_booking || 0, per_won: +o.per_won || 0, won_percent: Math.min(100, +o.won_percent || 0), billing_email: o.billing_email.trim() || null, active: !!o.active })); };
+EXTRA_ACTS.billNow = async () => { const m = state.billMonth; if (!confirm(`Create the invoice for ${m}? Each booking and sale is only ever charged once.`)) return; try { const r = await api.billMonth(state.clientId, m); toast(r.note || 'Invoice created'); reload(); } catch (e) { toast(e.message); } };
+
+/* ---------------- partner agencies (white-label resale) ---------------- */
+VIEWS.partners = function () {
+  const A = state.data.agencies || [];
+  const count = (id) => state.clients.filter((c) => c.agency_id === id).length;
+  const link = (a) => `https://brightfrontstudio.com/portal/?a=${a.slug || ''}`;
+  if (!isOwner()) {
+    const a = A[0];
+    if (!a) return head('Partner', 'Your agency', '') + '<div class="card empty">Your agency isn’t set up yet. Contact brightfront.</div>';
+    return head('Partner', esc(a.name), 'Your clients see your name, logo and colours everywhere in this portal.') + `
+    <section class="grid g2" style="align-items:start">
+      <form class="card ch-form" id="agForm" novalidate><input type="hidden" name="id" value="${esc(a.id)}"><h2>Your branding</h2>${F('Agency name', 'name', 'text', `required maxlength="120" value="${esc(a.name)}"`)}${F('Logo link (https, PNG or SVG)', 'logo_url', 'url', `value="${esc(a.logo_url || '')}"`)}<div class="two"><label class="lab">Brand colour<input class="field" name="brand_color" type="color" value="${esc(a.brand_color || '#0B0B2E')}"></label>${F('Support email', 'support_email', 'email', `value="${esc(a.support_email || '')}"`)}</div>${F('Website', 'website', 'url', `value="${esc(a.website || '')}"`)}<button class="btn btn-navy" type="submit" style="align-self:flex-start">Save</button></form>
+      <div class="card ch-form"><h2>Your client login link</h2><p class="small muted" style="margin:0">Send clients here. The login page shows your brand.</p><label class="lab">Link<span class="row" style="gap:8px"><input class="field" readonly value="${esc(link(a))}" onclick="this.select()"><button type="button" class="btn btn-ghost btn-sm" data-copy="${esc(link(a))}">Copy</button></span></label>
+        <h2 style="margin-top:8px">Add a team member</h2><p class="small muted" style="margin:0">They sign up at your link first, then you add them here.</p><form id="ptForm" class="row" novalidate><input class="field" name="email" type="email" required placeholder="name@youragency.com.au" style="flex:1 1 200px"><input type="hidden" name="agency" value="${esc(a.id)}"><button class="btn btn-navy" type="submit">Add</button></form>
+        <p class="small muted" style="margin:0">${count(a.id)} client${count(a.id) === 1 ? '' : 's'} on your account.</p></div>
+    </section>`;
+  }
+  const active = (id) => state.clients.filter((c) => c.agency_id === id && c.status !== 'paused').length;
+  const owed = A.reduce((t, a) => t + active(a.id) * Number(a.wholesale_fee || 0), 0);
+  return head('Resale', 'Partner agencies', 'Other agencies resell brightfront under their own brand. Their clients only ever see the partner’s name.', `<button class="btn btn-pink" data-act="addAgency">${ic('plus', 16)} Add partner</button>`) + `
+  <section class="grid g4"><div class="card kpi"><span class="lab">Partners</span><span class="val">${A.length}</span></div><div class="card kpi"><span class="lab">Partner clients</span><span class="val">${state.clients.filter((c) => c.agency_id).length}</span></div><div class="card kpi"><span class="lab">Partner revenue / month</span><span class="val">${money0(owed)}</span><span class="delta muted">Active clients × wholesale fee</span></div><div class="card kpi"><span class="lab">Direct clients</span><span class="val">${state.clients.filter((c) => !c.agency_id).length}</span></div></section>
+  <section class="card" style="margin-top:16px"><div class="tbl-wrap"><table><thead><tr><th scope="col">Partner</th><th scope="col">Clients</th><th scope="col">Wholesale / client</th><th scope="col">Monthly</th><th scope="col">Login link</th><th scope="col"><span class="sr">Actions</span></th></tr></thead><tbody>
+  ${A.map((a) => `<tr><td><b>${esc(a.name)}</b><div class="small muted">${esc(a.support_email || '')}</div></td><td>${count(a.id)}</td><td>${money0(a.wholesale_fee)}</td><td>${money0(active(a.id) * Number(a.wholesale_fee || 0))}</td><td><button type="button" class="btn btn-ghost btn-sm" data-copy="${esc(link(a))}">Copy link</button></td><td style="text-align:right"><span class="pill ${a.status === 'active' ? 'p-green' : 'p-grey'}">${a.status === 'active' ? 'Active' : 'Paused'}</span> <button class="btn btn-ghost btn-sm" data-editag="${esc(a.id)}">Edit</button></td></tr>`).join('') || '<tr><td colspan="6" class="empty">No partners yet. Add an agency to start reselling.</td></tr>'}
+  </tbody></table></div></section>
+  <section class="grid g2" style="margin-top:16px;align-items:start">
+    <div class="card ch-form"><h2>Give a partner login</h2><p class="small muted" style="margin:0">They sign up on the portal first, then you link them to their agency here.</p><form id="ptForm" class="ch-form" novalidate>${F('Their email', 'email', 'email', 'required')}<label class="lab">Agency<select class="field" name="agency">${A.map((a) => `<option value="${esc(a.id)}">${esc(a.name)}</option>`).join('')}</select></label><button class="btn btn-navy" type="submit" style="align-self:flex-start">Link as partner</button></form></div>
+    <div class="card ch-form"><h2>Move a client to a partner</h2><form id="mvForm" class="ch-form" novalidate><label class="lab">Client<select class="field" name="client">${state.clients.map((c) => `<option value="${esc(c.id)}">${esc(c.name)}${c.agency_id ? ' · ' + esc(A.find((a) => a.id === c.agency_id)?.name || '') : ''}</option>`).join('')}</select></label><label class="lab">Partner<select class="field" name="agency"><option value="">brightfront (direct)</option>${A.map((a) => `<option value="${esc(a.id)}">${esc(a.name)}</option>`).join('')}</select></label><button class="btn btn-navy" type="submit" style="align-self:flex-start">Move</button></form></div>
+  </section>`;
+};
+const agencyFields = (a = {}) => `${F('Agency name', 'name', 'text', `required maxlength="120" value="${esc(a.name || '')}"`)}<div class="two">${F('Short name for their link', 'slug', 'text', `required pattern="[a-z0-9-]{2,40}" placeholder="northside" value="${esc(a.slug || '')}"`)}${F('Wholesale fee per client / month ($)', 'wholesale_fee', 'number', `min="0" step="1" value="${esc(a.wholesale_fee ?? 149)}"`)}</div>${F('Logo link (https)', 'logo_url', 'url', `value="${esc(a.logo_url || '')}"`)}<div class="two"><label class="lab">Brand colour<input class="field" name="brand_color" type="color" value="${esc(a.brand_color || '#0B0B2E')}"></label>${F('Support email', 'support_email', 'email', `value="${esc(a.support_email || '')}"`)}</div>${F('Website', 'website', 'url', `value="${esc(a.website || '')}"`)}${a.id ? `<label class="lab">Status<select class="field" name="status"><option value="active" ${a.status === 'active' ? 'selected' : ''}>Active</option><option value="paused" ${a.status === 'paused' ? 'selected' : ''}>Paused</option></select></label>` : ''}`;
+const agencyObj = (o, id) => ({ ...(id ? { id } : {}), name: o.name.trim(), slug: o.slug.trim().toLowerCase(), wholesale_fee: +o.wholesale_fee || 0, logo_url: o.logo_url.trim() || null, brand_color: o.brand_color, support_email: o.support_email.trim() || null, website: o.website.trim() || null, ...(o.status ? { status: o.status } : {}) });
+EXTRA_ACTS.addAgency = () => dialog('Add partner agency', agencyFields(), (o) => api.saveAgency(agencyObj(o)));
+function wirePartners() {
+  $app.querySelectorAll('[data-editag]').forEach((b) => b.onclick = () => { const a = state.data.agencies.find((x) => x.id === b.dataset.editag); dialog('Edit partner', agencyFields(a), (o) => api.saveAgency(agencyObj(o, a.id))); });
+  const pt = document.getElementById('ptForm');
+  pt && (pt.onsubmit = async (e) => { e.preventDefault(); if (!pt.email.checkValidity()) return pt.email.reportValidity(); try { await api.assignPartner(pt.email.value, pt.agency.value); toast('Linked. They’ll see the partner workspace next time they sign in.'); pt.reset(); } catch (err) { toast(err.message); } });
+  const mv = document.getElementById('mvForm');
+  mv && (mv.onsubmit = async (e) => { e.preventDefault(); try { await api.updateClient(mv.client.value, { agency_id: mv.agency.value || null }); state.clients = await api.clients(); toast('Client moved'); reload(); } catch (err) { toast(err.message); } });
+  const ag = document.getElementById('agForm');
+  ag && (ag.onsubmit = async (e) => { e.preventDefault(); const o = Object.fromEntries(new FormData(ag)); try { await api.saveAgency({ id: o.id, name: o.name.trim(), logo_url: o.logo_url.trim() || null, brand_color: o.brand_color, support_email: o.support_email.trim() || null, website: o.website.trim() || null }); state.brand = await api.brand().catch(() => state.brand); applyBrand(); toast('Saved'); reload(); } catch (err) { toast(err.message); } });
+}
+
+/* ---------------- system health ---------------- */
+async function healthPanel(box) {
+  const ev = await api.sysEvents().catch(() => []);
+  const day = ev.filter((e) => Date.now() - new Date(e.created_at) < 86400e3);
+  const err = day.filter((e) => e.level === 'error').length, warn = day.filter((e) => e.level === 'warn').length;
+  const el = document.createElement('section'); el.className = 'card'; el.style.marginTop = '16px';
+  el.innerHTML = `<div class="card-head"><h2>System health</h2><span class="pill ${err ? 'p-pink' : warn ? 'p-amber' : 'p-green'}">${err ? err + ' error' + (err > 1 ? 's' : '') + ' today' : warn ? warn + ' warning' + (warn > 1 ? 's' : '') + ' today' : 'All good'}</span></div>
+  ${ev.length ? `<ul class="list">${ev.slice(0, 8).map((e) => `<li class="row" style="justify-content:space-between;gap:12px;align-items:flex-start"><span><b style="color:${e.level === 'error' ? 'var(--pinkd)' : 'inherit'}">${esc(e.source)}</b>${e.clients?.name ? ' · ' + esc(e.clients.name) : ''} · <span class="muted">${esc(e.message)}</span></span><span class="small muted" style="white-space:nowrap">${fmtDT(e.created_at)}</span></li>`).join('')}</ul>` : '<p class="small muted" style="margin:0">No problems in the last 7 days. Failed replies, sending errors and app sync problems show up here, and errors are emailed to you.</p>'}`;
+  box.appendChild(el);
+}
+
 function analytics(d) {
   const L = d.leads || [], C = d.calls || [], cr = d.creatives || [], M = d.metrics || [];
   const replied = L.filter((l) => l.first_reply_seconds != null);
@@ -906,6 +1083,7 @@ async function fillOverview() {
   <section class="card" style="margin-top:16px"><h2 style="margin-bottom:8px">Give a client access</h2><p class="muted small" style="margin:0 0 12px">Ask them to create an account on this portal with their email, then link it to their business here.</p>
   <form id="assignForm" class="row" novalidate><label class="sr" for="asEmail">Client email</label><input class="field" id="asEmail" name="email" type="email" placeholder="client@business.com.au" required style="flex:1 1 220px"><label class="sr" for="asClient">Business</label><select class="field" id="asClient" name="client" style="flex:1 1 180px">${state.clients.map((c) => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('')}</select><button class="btn btn-navy" type="submit">Link account</button></form></section>`;
   box.querySelectorAll('[data-open]').forEach((b) => b.onclick = () => go('dashboard', b.dataset.open));
+  healthPanel(box);
   document.getElementById('assignForm').onsubmit = async (e) => { e.preventDefault(); const f = e.target; if (!f.email.checkValidity()) return f.email.reportValidity(); try { await api.assign(f.email.value, f.client.value); toast('Account linked. They’ll see their portal next time they sign in.'); f.reset(); } catch (err) { toast(err.message); } };
 }
 
@@ -924,7 +1102,7 @@ function dialog(title, fields, onSave) {
 const F = (label, name, type = 'text', extra = '') => `<label class="lab">${label}<input class="field" name="${name}" type="${type}" ${extra}></label>`;
 const today = () => new Date().toISOString().slice(0, 10);
 const ACTS = {
-  newClient: () => dialog('Add client', `${F('Business name', 'name', 'text', 'required')}<div class="two">${F('Industry', 'industry')}<label class="lab">Plan<select class="field" name="plan"><option>Keep it live</option><option selected>Keep it moving</option><option>Keep it growing</option></select></label></div><div class="two">${F('Baseline cost per lead ($)', 'baseline_cpl', 'number', 'step="0.01" min="0"')}${F('Guarantee start', 'guarantee_start', 'date')}</div>${F('Monthly ad budget ($)', 'monthly_budget', 'number', 'step="1" min="0"')}`,
+  newClient: () => dialog('Add client', `${F('Business name', 'name', 'text', 'required')}<div class="two">${F('Industry', 'industry', 'text', 'list="indList"')}<datalist id="indList">${Object.keys(TEMPLATES).map((k) => `<option value="${esc(k)}">`).join('')}</datalist><label class="lab">Plan<select class="field" name="plan"><option>Keep it live</option><option selected>Keep it moving</option><option>Keep it growing</option></select></label></div><div class="two">${F('Baseline cost per lead ($)', 'baseline_cpl', 'number', 'step="0.01" min="0"')}${F('Guarantee start', 'guarantee_start', 'date')}</div>${F('Monthly ad budget ($)', 'monthly_budget', 'number', 'step="1" min="0"')}`,
     async (o) => { const n = await api.addClient({ name: o.name, industry: o.industry || null, plan: o.plan, baseline_cpl: o.baseline_cpl || null, guarantee_start: o.guarantee_start || null, monthly_budget: o.monthly_budget || null }); state.clients = await api.clients(); for (const [i, t] of ['Sign your agreement', 'Kick-off call', 'Give us Google Ads access', 'Give us Meta Business access', 'Google Analytics & Search Console', 'Upload your brand assets'].entries()) await api.addStep(n.id, { title: t, sort: i }); }),
   addMetric: () => dialog('Add a week of results', `${F('Week starting', 'week_start', 'date', `required value="${today()}"`)}<div class="two">${F('Leads', 'leads', 'number', 'min="0" required')}${F('Booked calls', 'booked_calls', 'number', 'min="0" required')}</div>${F('Ad spend ($)', 'ad_spend', 'number', 'step="0.01" min="0" required')}`, (o) => api.addMetric(state.clientId, { week_start: o.week_start, leads: +o.leads, booked_calls: +o.booked_calls, ad_spend: +o.ad_spend })),
   addLead: () => dialog('Add lead', `${F('Name', 'name', 'text', 'required')}<div class="two">${F('Source', 'source', 'text', 'placeholder="Google Ads"')}${F('Enquiry', 'enquiry')}</div>`, (o) => api.addLead(state.clientId, { name: o.name, source: o.source, enquiry: o.enquiry, status: 'new' })),
@@ -942,6 +1120,7 @@ const ACTS = {
   async draftReport() { const m = new Date(); const month = new Date(m.getFullYear(), m.getMonth(), 1).toISOString().slice(0, 10); toast('Drafting with AI…'); try { const r = await api.draftReport(state.clientId, month); await api.saveReport(state.clientId, { ...r, month, status: 'draft' }); toast('Draft ready. Check it, then publish.'); state.openReport = null; reload(); } catch (e) { toast(e.message); } },
   addStep: () => dialog('Add onboarding step', `${F('Step', 'title', 'text', 'required')}${F('Help text', 'detail')}`, (o) => api.addStep(state.clientId, { title: o.title, detail: o.detail, sort: state.data.steps.length }))
 };
+Object.assign(ACTS, EXTRA_ACTS);
 async function reload() { await load(); render(); }
 
 /* ---------------- events ---------------- */
@@ -982,6 +1161,8 @@ function wire() {
     const upd = () => { const f = Object.fromEntries(new FormData(rs)); const col = f.brand_color || '#0B0B2E'; const h = document.getElementById('rpPrevH'); h.style.background = f.logo_url ? '#fff' : col; h.style.borderBottom = '4px solid ' + col; h.innerHTML = ''; if (/^https:\/\//.test(f.logo_url || '')) { const im = new Image(); im.src = f.logo_url; im.alt = ''; im.style.cssText = 'max-height:34px;max-width:180px'; h.appendChild(im); } else { h.textContent = f.business_name || 'Your business'; } document.getElementById('rpColTxt').textContent = col; const who = f.assistant_name ? `${f.assistant_name}, ${f.business_name}’s automated assistant` : `${f.business_name || 'your business'}’s automated assistant`; document.getElementById('rpPrevT').textContent = `Hi Sarah, thanks for getting in touch. I’m ${who}. ${(f.questions || 'What are you looking for?').split('\n')[0]}\n\n${f.sign_off || f.assistant_name || f.business_name || ''}`; document.getElementById('rpPrevBtn').style.background = col; document.getElementById('rpPrevBtn').style.display = f.booking_url ? '' : 'none'; document.getElementById('rpPrevF').textContent = `${f.business_name || ''}${f.website ? ' · ' + f.website.replace(/^https?:\/\//, '').replace(/\/$/, '') : ''}`; };
     rs.addEventListener('input', upd); upd();
   }
+  const tpl = document.getElementById('rpTpl');
+  tpl && (tpl.onchange = () => { const t = TEMPLATES[tpl.value]; if (!t || !rs) return; const has = rs.about.value.trim() || rs.questions.value.trim(); if (has && !confirm('Replace what’s in “About” and “Questions” with the template?')) { tpl.value = ''; return; } rs.about.value = t.about; rs.questions.value = t.questions; rs.tone.value = t.tone; rs.dispatchEvent(new Event('input')); toast('Template added. Change the [brackets] to your details.'); });
   const rt = document.getElementById('rpTest');
   rt && (rt.onsubmit = async (e) => { e.preventDefault(); const fd = Object.fromEntries(new FormData(rt)); if (!fd.phone && !fd.email) return toast('Add a mobile or an email.'); const btn = rt.querySelector('[type=submit]'); btn.disabled = true; btn.textContent = 'Sending…'; try { await api.testLead(state.clientId, fd); toast('Test sent. Check your phone or inbox.'); state.replyTab = 'inbox'; state.convId = null; reload(); } catch (err) { toast(err.message); btn.disabled = false; btn.textContent = 'Send test'; } });
   const rsend = document.getElementById('rpSend');
@@ -1009,6 +1190,7 @@ function wire() {
   mf && (mf.onsubmit = async (e) => { e.preventDefault(); const f = Object.fromEntries(new FormData(mf)); const id = f.meta_page_id.trim(); if (id && !/^\d{5,25}$/.test(id)) return toast('The Page ID is a number, e.g. 1029384756.'); const o = { meta_page_id: id || null, lead_ads: !!f.lead_ads, dms: !!f.dms }; if (f.meta_page_token.trim()) o.meta_page_token = f.meta_page_token.trim(); try { await api.saveConn(state.clientId, o); toast('Saved. Now click Connect & check.'); reload(); } catch (err) { toast(/duplicate|unique/i.test(err.message) ? 'That Page is already connected to another client.' : err.message); } });
   const ef = document.getElementById('emailForm');
   ef && (ef.onsubmit = async (e) => { e.preventDefault(); const v = ef.inbound_email.value.trim(); if (v && !ef.inbound_email.checkValidity()) return ef.inbound_email.reportValidity(); try { await api.saveConn(state.clientId, { inbound_email: v || null }); toast('Saved'); reload(); } catch (err) { toast(err.message); } });
+  wireBilling(); wirePartners();
   if (state.view === 'overview') fillOverview();
 }
 function scrollMsgs() { const m = document.getElementById('rpMsgs'); if (m) m.scrollTop = m.scrollHeight; }
