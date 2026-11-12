@@ -1,5 +1,5 @@
 if (window.top !== window.self && /(^|\.)brightfrontstudio\.com$/.test(location.hostname)) { try { window.top.location = window.location.href; } catch { document.documentElement.style.display = 'none'; } }
-// brightfront client portal
+// Frontos client portal
 // Runs on Supabase when config.js has keys, otherwise in demo mode with sample data.
 const CFG = window.BF_CONFIG || {};
 const LIVE = !!(CFG.SUPABASE_URL && CFG.SUPABASE_ANON_KEY);
@@ -316,7 +316,7 @@ const state = { me: null, clients: [], clientId: null, view: 'dashboard', data: 
 const isAgency = () => ['agency', 'partner'].includes(state.me?.role);
 const isOwner = () => state.me?.role === 'agency';
 const SUPPORT = () => state.brand?.support_email || CFG.SUPPORT_EMAIL;
-const WM = () => state.brand ? (state.brand.logo_url ? `<img class="wm-img" src="${esc(state.brand.logo_url)}" alt="${esc(state.brand.name)}">` : `<span class="wm wm-p">${esc(state.brand.name)}</span>`) : '<span class="wm" aria-label="brightfront">br<span class="wi">ı</span>ghtfront</span>';
+const WM = () => state.brand ? (state.brand.logo_url ? `<img class="wm-img" src="${esc(state.brand.logo_url)}" alt="${esc(state.brand.name)}">` : `<span class="wm wm-p">${esc(state.brand.name)}</span>`) : '<span class="wm" aria-label="Frontos">front<span class="wi">o</span>s</span>';
 function applyBrand() { const c = state.brand?.brand_color; if (c && /^#[0-9a-f]{6}$/i.test(c)) document.documentElement.style.setProperty('--pink', c); }
 const client = () => state.clients.find((c) => c.id === state.clientId);
 
@@ -495,7 +495,7 @@ function render() {
         ${isAgency() ? navBtn('partners', isOwner() ? 'Partner agencies' : 'Your agency', 'flag') : ''}
         ${clientNav}
       </nav>
-      <div class="side-foot"><div class="avatar">${esc(initials(me.full_name || me.email))}</div><div class="who"><b>${esc(me.full_name || me.email)}</b><span>${isAgency() ? esc(state.brand?.name || 'brightfront') : esc(client()?.name || '')}</span></div><button type="button" id="signOut" aria-label="Log out">${ic('out')}</button></div>
+      <div class="side-foot"><div class="avatar">${esc(initials(me.full_name || me.email))}</div><div class="who"><b>${esc(me.full_name || me.email)}</b><span>${isAgency() ? esc(state.brand?.name || 'Frontos') : esc(client()?.name || '')}</span></div><button type="button" id="signOut" aria-label="Log out">${ic('out')}</button></div>
     </aside>
     <main class="main" id="main">${VIEWS[state.view]()}</main>
   </div>`;
@@ -638,7 +638,7 @@ const VIEWS = {
     const booked = C.filter((c) => ['booked', 'sold'].includes(c.outcome)).length;
     const talk = conn.length ? conn.reduce((a, c) => a + (+c.duration_seconds || 0), 0) / conn.length : 0;
     const outs = ['booked', 'sold', 'callback', 'no_answer', 'not_interested', 'wrong_number'].map((k) => ({ label: PILL[k][0], value: C.filter((c) => c.outcome === k).length })).filter((x) => x.value);
-    return head('brightfront Convert', 'Calls', 'Every call our sales team makes to your leads, with the outcome and notes.', isAgency() ? `<button class="btn btn-pink" data-act="addCall">${ic('plus', 16)} Log call</button>` : '') + `
+    return head('Frontos Calls', 'Calls', 'Every call our sales team makes to your leads, with the outcome and notes.', isAgency() ? `<button class="btn btn-pink" data-act="addCall">${ic('plus', 16)} Log call</button>` : '') + `
     <section class="grid g4">
       <div class="card kpi"><span class="lab">Calls made</span><span class="val">${C.length}</span></div>
       <div class="card kpi"><span class="lab">Spoke to</span><span class="val">${C.length ? Math.round((100 * conn.length) / C.length) : 0}%</span><span class="delta muted">${conn.length} conversations</span></div>
@@ -988,7 +988,7 @@ VIEWS.partners = function () {
   const link = (a) => `https://brightfrontstudio.com/portal/?a=${a.slug || ''}`;
   if (!isOwner()) {
     const a = A[0];
-    if (!a) return head('Partner', 'Your agency', '') + '<div class="card empty">Your agency isn’t set up yet. Contact brightfront.</div>';
+    if (!a) return head('Partner', 'Your agency', '') + '<div class="card empty">Your agency isn’t set up yet. Contact Frontos.</div>';
     return head('Partner', esc(a.name), 'Your clients see your name, logo and colours everywhere in this portal.') + `
     <section class="grid g2" style="align-items:start">
       <form class="card ch-form" id="agForm" novalidate><input type="hidden" name="id" value="${esc(a.id)}"><h2>Your branding</h2>${F('Agency name', 'name', 'text', `required maxlength="120" value="${esc(a.name)}"`)}${F('Logo link (https, PNG or SVG)', 'logo_url', 'url', `value="${esc(a.logo_url || '')}"`)}<div class="two"><label class="lab">Brand colour<input class="field" name="brand_color" type="color" value="${esc(a.brand_color || '#0B0B2E')}"></label>${F('Support email', 'support_email', 'email', `value="${esc(a.support_email || '')}"`)}</div>${F('Website', 'website', 'url', `value="${esc(a.website || '')}"`)}<button class="btn btn-navy" type="submit" style="align-self:flex-start">Save</button></form>
@@ -999,14 +999,14 @@ VIEWS.partners = function () {
   }
   const active = (id) => state.clients.filter((c) => c.agency_id === id && c.status !== 'paused').length;
   const owed = A.reduce((t, a) => t + active(a.id) * Number(a.wholesale_fee || 0), 0);
-  return head('Resale', 'Partner agencies', 'Other agencies resell brightfront under their own brand. Their clients only ever see the partner’s name.', `<button class="btn btn-pink" data-act="addAgency">${ic('plus', 16)} Add partner</button>`) + `
+  return head('Resale', 'Partner agencies', 'Other agencies resell Frontos under their own brand. Their clients only ever see the partner’s name.', `<button class="btn btn-pink" data-act="addAgency">${ic('plus', 16)} Add partner</button>`) + `
   <section class="grid g4"><div class="card kpi"><span class="lab">Partners</span><span class="val">${A.length}</span></div><div class="card kpi"><span class="lab">Partner clients</span><span class="val">${state.clients.filter((c) => c.agency_id).length}</span></div><div class="card kpi"><span class="lab">Partner revenue / month</span><span class="val">${money0(owed)}</span><span class="delta muted">Active clients × wholesale fee</span></div><div class="card kpi"><span class="lab">Direct clients</span><span class="val">${state.clients.filter((c) => !c.agency_id).length}</span></div></section>
   <section class="card" style="margin-top:16px"><div class="tbl-wrap"><table><thead><tr><th scope="col">Partner</th><th scope="col">Clients</th><th scope="col">Wholesale / client</th><th scope="col">Monthly</th><th scope="col">Login link</th><th scope="col"><span class="sr">Actions</span></th></tr></thead><tbody>
   ${A.map((a) => `<tr><td><b>${esc(a.name)}</b><div class="small muted">${esc(a.support_email || '')}</div></td><td>${count(a.id)}</td><td>${money0(a.wholesale_fee)}</td><td>${money0(active(a.id) * Number(a.wholesale_fee || 0))}</td><td><button type="button" class="btn btn-ghost btn-sm" data-copy="${esc(link(a))}">Copy link</button></td><td style="text-align:right"><span class="pill ${a.status === 'active' ? 'p-green' : 'p-grey'}">${a.status === 'active' ? 'Active' : 'Paused'}</span> <button class="btn btn-ghost btn-sm" data-editag="${esc(a.id)}">Edit</button></td></tr>`).join('') || '<tr><td colspan="6" class="empty">No partners yet. Add an agency to start reselling.</td></tr>'}
   </tbody></table></div></section>
   <section class="grid g2" style="margin-top:16px;align-items:start">
     <div class="card ch-form"><h2>Give a partner login</h2><p class="small muted" style="margin:0">They sign up on the portal first, then you link them to their agency here.</p><form id="ptForm" class="ch-form" novalidate>${F('Their email', 'email', 'email', 'required')}<label class="lab">Agency<select class="field" name="agency">${A.map((a) => `<option value="${esc(a.id)}">${esc(a.name)}</option>`).join('')}</select></label><button class="btn btn-navy" type="submit" style="align-self:flex-start">Link as partner</button></form></div>
-    <div class="card ch-form"><h2>Move a client to a partner</h2><form id="mvForm" class="ch-form" novalidate><label class="lab">Client<select class="field" name="client">${state.clients.map((c) => `<option value="${esc(c.id)}">${esc(c.name)}${c.agency_id ? ' · ' + esc(A.find((a) => a.id === c.agency_id)?.name || '') : ''}</option>`).join('')}</select></label><label class="lab">Partner<select class="field" name="agency"><option value="">brightfront (direct)</option>${A.map((a) => `<option value="${esc(a.id)}">${esc(a.name)}</option>`).join('')}</select></label><button class="btn btn-navy" type="submit" style="align-self:flex-start">Move</button></form></div>
+    <div class="card ch-form"><h2>Move a client to a partner</h2><form id="mvForm" class="ch-form" novalidate><label class="lab">Client<select class="field" name="client">${state.clients.map((c) => `<option value="${esc(c.id)}">${esc(c.name)}${c.agency_id ? ' · ' + esc(A.find((a) => a.id === c.agency_id)?.name || '') : ''}</option>`).join('')}</select></label><label class="lab">Partner<select class="field" name="agency"><option value="">Frontos (direct)</option>${A.map((a) => `<option value="${esc(a.id)}">${esc(a.name)}</option>`).join('')}</select></label><button class="btn btn-navy" type="submit" style="align-self:flex-start">Move</button></form></div>
   </section>`;
 };
 const agencyFields = (a = {}) => `${F('Agency name', 'name', 'text', `required maxlength="120" value="${esc(a.name || '')}"`)}<div class="two">${F('Short name for their link', 'slug', 'text', `required pattern="[a-z0-9-]{2,40}" placeholder="northside" value="${esc(a.slug || '')}"`)}${F('Wholesale fee per client / month ($)', 'wholesale_fee', 'number', `min="0" step="1" value="${esc(a.wholesale_fee ?? 149)}"`)}</div>${F('Logo link (https)', 'logo_url', 'url', `value="${esc(a.logo_url || '')}"`)}<div class="two"><label class="lab">Brand colour<input class="field" name="brand_color" type="color" value="${esc(a.brand_color || '#0B0B2E')}"></label>${F('Support email', 'support_email', 'email', `value="${esc(a.support_email || '')}"`)}</div>${F('Website', 'website', 'url', `value="${esc(a.website || '')}"`)}${a.id ? `<label class="lab">Status<select class="field" name="status"><option value="active" ${a.status === 'active' ? 'selected' : ''}>Active</option><option value="paused" ${a.status === 'paused' ? 'selected' : ''}>Paused</option></select></label>` : ''}`;
@@ -1153,7 +1153,7 @@ const ACTS = {
   addInvoice: () => dialog('New invoice', `<div class="two">${F('Invoice number', 'number', 'text', 'required placeholder="BF-0014"')}${F('Amount ($)', 'amount', 'number', 'step="0.01" min="0" required')}</div>${F('Description', 'description', 'text', 'placeholder="Tilly Growth · monthly fee"')}<div class="two">${F('Issued', 'issued_on', 'date', `value="${today()}"`)}${F('Due', 'due_date', 'date', 'required')}</div>${F('Payment link (optional)', 'pay_url', 'url', 'placeholder="https://buy.stripe.com/…"')}`, (o) => api.addInvoice(state.clientId, { number: o.number, amount: +o.amount, description: o.description, issued_on: o.issued_on, due_date: o.due_date, pay_url: o.pay_url || null, status: 'due' })),
   refreshReplies: () => reload(),
   async csvLeads() { try { const rows = await api.allLeads(state.clientId); if (!rows.length) return toast('No leads to download yet.'); downloadCsv(rows, `${slug(client()?.name)}-leads-${today()}.csv`); toast(`Downloaded ${rows.length} lead${rows.length === 1 ? '' : 's'}.`); } catch (e) { toast(e.message); } },
-  async csvAll() { try { const rows = await api.everyLead(); if (!rows.length) return toast('No leads yet.'); downloadCsv(rows, `brightfront-all-leads-${today()}.csv`, true); toast(`Downloaded ${rows.length} leads.`); } catch (e) { toast(e.message); } },
+  async csvAll() { try { const rows = await api.everyLead(); if (!rows.length) return toast('No leads yet.'); downloadCsv(rows, `frontos-all-leads-${today()}.csv`, true); toast(`Downloaded ${rows.length} leads.`); } catch (e) { toast(e.message); } },
   async metaCheck() { toast('Checking with Facebook…'); try { const r = await api.metaConnect(state.clientId); toast(`Connected: ${r.page}${r.instagram ? ' + @' + r.instagram : ''}`); reload(); } catch (e) { toast(e.message); } },
   addCall: () => dialog('Log a call', `<label class="lab">Lead<select class="field" name="lead">${state.data.leads.map((l) => `<option value="${esc(l.id)}">${esc(l.name)}</option>`).join('')}<option value="">Someone else</option></select></label>${F('Name (if someone else)', 'lead_name')}<div class="two"><label class="lab">Outcome<select class="field" name="outcome">${['booked', 'sold', 'callback', 'no_answer', 'not_interested', 'wrong_number'].map((k) => `<option value="${k}">${PILL[k][0]}</option>`).join('')}</select></label>${F('Length (minutes)', 'mins', 'number', 'min="0" step="0.5"')}</div>${F('Caller', 'caller', 'text', `value="${esc((state.me.full_name || '').split(' ')[0])}"`)}<label class="lab">Notes<textarea class="field" name="notes"></textarea></label>`,
     async (o) => { const l = state.data.leads.find((x) => x.id === o.lead); await api.addCall(state.clientId, { lead_id: l ? l.id : null, lead_name: l ? l.name : o.lead_name, outcome: o.outcome, duration_seconds: Math.round((+o.mins || 0) * 60), caller: o.caller, notes: o.notes }); if (l && ['booked', 'sold'].includes(o.outcome)) await api.setLead(l.id, o.outcome === 'sold' ? 'won' : 'booked'); }),
