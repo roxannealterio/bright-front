@@ -80,6 +80,11 @@ h3{font-size:22px;line-height:1.25;font-weight:700;letter-spacing:-.01em}
 .mnav.open{display:block}
 .mnav a{display:block;color:#fff;text-decoration:none;font-size:26px;font-weight:500;letter-spacing:-.02em;padding:10px 0}
 @media(max-width:1060px){.nav,.bar .btn{display:none}.burger{display:flex}}
+/* mobile header v2 */
+@media(max-width:1060px){.bar .btn{display:inline-flex;min-height:40px;padding:0 16px;font-size:13px;white-space:nowrap}}
+@media(max-width:440px){.bar .circ[href^="mailto"]{display:none}.bar .wm{font-size:24px}}
+@media(max-width:900px){.mnav{position:fixed;left:0;right:0;top:calc(60px + env(safe-area-inset-top,0px));bottom:0;max-width:none;margin:0;border-radius:0;padding:12px 24px calc(32px + env(safe-area-inset-bottom,0px));overflow-y:auto;overscroll-behavior:contain;border-top:1px solid rgba(255,255,255,.08)}.mnav a:last-child{margin-top:20px;background:#DB2468;border-radius:999px;text-align:center;font-size:18px;font-weight:600;padding:16px}body.menu-open .hdr .bar{border-radius:0}}
+body.menu-open{overflow:hidden}
 
 /* hero */
 .hero{background:var(--navy);color:#fff;padding:170px 0 0;position:relative;overflow:hidden}
@@ -740,8 +745,11 @@ var SERVICES = [
   document.querySelectorAll('.mo').forEach(function (e) { e.textContent = new Date().toLocaleDateString('en-AU', { month: 'long' }); });
 
   var burger = document.getElementById('burger'), mnav = document.getElementById('mnav');
-  burger.addEventListener('click', function () { var o = mnav.classList.toggle('open'); burger.setAttribute('aria-expanded', o); burger.setAttribute('aria-label', o ? 'Close menu' : 'Open menu'); });
-  mnav.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { mnav.classList.remove('open'); burger.setAttribute('aria-expanded', 'false'); }); });
+  function setMenu(o) { mnav.classList.toggle('open', o); document.body.classList.toggle('menu-open', o); burger.setAttribute('aria-expanded', o); burger.setAttribute('aria-label', o ? 'Close menu' : 'Open menu'); burger.querySelector('svg').innerHTML = o ? '<path d="M6 6l12 12M18 6L6 18"/>' : '<path d="M4 8h16M4 16h16"/>'; }
+  burger.addEventListener('click', function () { setMenu(!mnav.classList.contains('open')); });
+  mnav.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { setMenu(false); }); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
+  matchMedia('(min-width:1061px)').addEventListener('change', function (m) { if (m.matches) setMenu(false); });
 
   // rotating hero word
   var words = document.querySelectorAll('#rot span'), wi = 0;
