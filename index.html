@@ -581,31 +581,54 @@ footer a:hover{color:var(--pink)}
 .tl-hero .statement{font-size:clamp(38px,4.6vw,72px)}
 .tl-br{display:none}
 .tl-demo{display:flex;flex-direction:column;align-items:center;gap:14px}
-.tl-phone{position:relative;width:min(100%,360px);background:#fff;border-radius:34px;padding:14px;box-shadow:0 30px 80px rgba(0,0,0,.35),0 0 0 8px rgba(255,255,255,.06);color:var(--navy)}
-.tl-ph-top{display:flex;align-items:center;gap:10px;padding:6px 6px 12px;border-bottom:1px solid var(--line)}
-.tl-ph-top img{width:40px;height:40px;border-radius:50%;object-fit:cover}
-.tl-ph-top b{display:block;font-size:15px}.tl-ph-top span{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
-.tl-ph-top .rx-dot{width:7px;height:7px}
-.tl-thread{height:390px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-start;gap:8px;padding:12px 4px 4px}
-.tl-b{max-width:84%;padding:10px 13px;border-radius:18px;font-size:14px;line-height:1.4;animation:tlin .35s ease both}
-.tl-b.in{align-self:flex-start;background:#EFEDF4;border-bottom-left-radius:6px}
-.tl-b.out{align-self:flex-end;background:linear-gradient(135deg,#FF3D7F,#C2185B);color:#fff;border-bottom-right-radius:6px}
-.tl-b.sys{align-self:center;max-width:94%;background:none;color:var(--muted);font-size:12px;font-weight:700;padding:4px 8px;text-align:center}
-.tl-b.sys.ok{color:#15803D}
-.tl-typing{align-self:flex-end;display:flex;gap:4px;padding:12px 14px;border-radius:18px;border-bottom-right-radius:6px;background:linear-gradient(135deg,#FF3D7F,#C2185B)}
-.tl-typing i{width:7px;height:7px;border-radius:50%;background:#fff;opacity:.5;animation:omdot 1s infinite}.tl-typing i:nth-child(2){animation-delay:.15s}.tl-typing i:nth-child(3){animation-delay:.3s}
-@keyframes tlin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.tl-note{margin:6px 0 0;text-align:center;font-size:11px;color:var(--muted)}
+.tl-phone{position:relative;width:min(100%,350px);background:#0b0b0f;border-radius:52px;padding:11px;box-shadow:0 30px 80px rgba(0,0,0,.45),inset 0 0 0 2px #2a2a33;color:#000;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif}
+.tl-screen{position:relative;background:#fff;border-radius:42px;overflow:hidden}
+.tl-island{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:96px;height:28px;border-radius:20px;background:#0b0b0f;z-index:2}
+.tl-status{display:flex;justify-content:space-between;align-items:center;padding:14px 26px 4px;font-size:14px;font-weight:600;height:44px}
+.tl-status span{display:flex;gap:5px;align-items:center}
+.tl-ph-top{position:relative;display:flex;flex-direction:column;align-items:center;gap:3px;padding:2px 12px 8px;background:#F7F7F8;border-bottom:1px solid #E3E3E6}
+.tl-back{position:absolute;left:12px;top:14px;color:#0A84FF}
+.tl-av{width:46px;height:46px;border-radius:50%;background:linear-gradient(180deg,#A5ABB8,#858B98);color:#fff;font-weight:600;font-size:18px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.tl-av img{width:100%;height:100%;object-fit:cover}
+.tl-ph-top b{font-size:12px;font-weight:500;color:#000;display:flex;align-items:center;gap:2px}
+.tl-ph-top b:after{content:"›";color:#8E8E93;font-size:14px;margin-left:2px}
+.tl-thread{height:372px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-start;gap:3px;padding:10px 12px 6px}
+.tl-b{max-width:76%;padding:7px 12px;border-radius:18px;font-size:15px;line-height:1.3;margin:0;animation:tlin .3s ease both;letter-spacing:-.1px}
+.tl-b.in{align-self:flex-end;background:#34C759;color:#fff;margin-top:4px}
+.tl-b.out{align-self:flex-start;background:#E9E9EB;color:#000;margin-top:4px}
+.tl-b.sys{align-self:center;max-width:94%;background:none;color:#8E8E93;font-size:11px;font-weight:500;padding:6px 8px 2px;text-align:center;margin:0}
+.tl-b.sys:first-child{padding-top:0}
+.tl-b.sys.ok{background:#FFE8F0;color:#C2185B;font-weight:700;border-radius:999px;padding:5px 11px;margin-top:8px}
+.tl-typing{align-self:flex-start;display:flex;gap:4px;padding:11px 13px;border-radius:18px;background:#E9E9EB;margin-top:4px}
+.tl-typing i{width:7px;height:7px;border-radius:50%;background:#8E8E93;opacity:.5;animation:omdot 1s infinite}.tl-typing i:nth-child(2){animation-delay:.15s}.tl-typing i:nth-child(3){animation-delay:.3s}
+.tl-input{display:flex;align-items:center;gap:8px;padding:6px 12px 22px}
+.tl-input i{width:30px;height:30px;border-radius:50%;background:#E9E9EB;color:#8E8E93;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:20px;flex:0 0 auto}
+.tl-input span{flex:1;border:1px solid #D1D1D6;border-radius:18px;padding:6px 12px;font-size:14px;color:#B0B0B5}
+@keyframes tlin{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
+.tl-note{margin:0;text-align:center;font-size:12px;color:rgba(233,230,255,.7)}
 .tl-tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:400px}
 .tl-tabs button{font:inherit;font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.06);color:#E9E6FF;cursor:pointer;transition:background .2s,color .2s}
 .tl-tabs button:hover{background:rgba(255,255,255,.14)}
 .tl-tabs button[aria-selected="true"]{background:#fff;color:var(--navy);border-color:#fff}
-.tl-logos{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
-.tl-logos li{display:flex;align-items:center;gap:12px;padding:16px 18px;border-radius:20px;background:var(--grey);border:1px solid var(--line);font-weight:700;color:var(--navy);font-size:15px;transition:transform .2s,box-shadow .2s}
-.tl-logos li:hover{transform:translateY(-2px);box-shadow:0 12px 24px rgba(11,11,46,.08)}
-.tl-logos svg{color:var(--pink);flex:0 0 auto}.tl-logos img{flex:0 0 auto}
+.tl-row{margin-top:26px}
+.tl-row h3{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:center;margin:0 0 14px}
+.tl-marq{overflow:hidden;padding:12px 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.tl-logos{list-style:none;margin:0;padding:0;display:flex;gap:16px;width:max-content;animation:tlscroll 46s linear infinite}
+.tl-marq.rev .tl-logos{animation-direction:reverse;animation-duration:54s}
+.tl-marq:hover .tl-logos{animation-play-state:paused}
+.tl-logos li{display:flex;align-items:center;gap:12px;padding:14px 20px 14px 14px;border-radius:20px;background:#fff;border:1px solid var(--line);box-shadow:0 10px 26px rgba(11,11,46,.07);font-weight:700;color:var(--navy);font-size:15px;white-space:nowrap;animation:tlbob 4.5s ease-in-out infinite}
+.tl-logos li:nth-child(3n+1){animation-delay:-1.5s}.tl-logos li:nth-child(3n+2){animation-delay:-3s}
+.tl-logos .lg{width:42px;height:42px;border-radius:12px;background:var(--grey);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.tl-logos .lg img{width:26px;height:26px}.tl-logos .lg svg{color:var(--pink)}
+@keyframes tlscroll{to{transform:translateX(calc(-50% - 8px))}}
+@keyframes tlbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@media(prefers-reduced-motion:reduce){.tl-marq{-webkit-mask-image:none;mask-image:none}.tl-logos,.tl-logos li{animation:none}.tl-logos{width:auto;flex-wrap:wrap;justify-content:center}.tl-logos [aria-hidden=true]{display:none}}
+.plan-setup{margin:6px 0 0;font-size:13px;font-weight:700;color:var(--muted)}
+.tl-setup{margin:28px auto 0;max-width:880px;display:flex;gap:24px;align-items:center;justify-content:space-between;padding:24px 28px;border-radius:24px;background:var(--grey);border:1px solid var(--line)}
+.tl-setup b{font-size:28px;color:var(--navy);white-space:nowrap}.tl-setup h3{margin:0 0 4px;font-size:18px}.tl-setup p{margin:0;color:var(--muted);font-size:14.5px}
+@media(max-width:700px){.tl-setup{flex-direction:column;align-items:flex-start}}
 @media(max-width:960px){.tl-hero{grid-template-columns:1fr;gap:36px}.tl-br{display:inline}}
-@media(max-width:480px){.tl-thread{height:360px}.tl-b{font-size:13.5px}}
+@media(max-width:480px){.tl-thread{height:340px}.tl-b{font-size:14px}}
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"brightfront","url":"https://brightfrontstudio.com/","email":"info@brightfrontstudio.com","description":"brightfront makes Tilly, an AI office admin for trades and home service businesses. She answers enquiries, texts back missed calls, chases quotes and overdue invoices.","areaServed":"Australia","address":{"@type":"PostalAddress","addressLocality":"Brisbane","addressRegion":"QLD","addressCountry":"AU"}}</script>
 </head>
@@ -651,11 +674,16 @@ footer a:hover{color:var(--pink)}
       <div class="hero-cta"><a class="btn btn-pink" href="book.html#start">Book a demo <svg width="18" height="18"><use href="#arr"/></svg></a><a class="btn hero-ghost" href="#what">What Tilly does</a></div>
     </div>
     <div class="tl-demo" id="tlDemo">
-      <div class="tl-phone" aria-live="polite">
-        <div class="tl-ph-top"><img src="assets/roxy.webp" alt="" width="40" height="40"><div><b id="tlWho">Tilly · Smith Plumbing</b><span><i class="rx-dot"></i>AI admin · replies in seconds</span></div></div>
-        <div class="tl-thread" id="tlThread"></div>
-        <p class="tl-note">Example conversation</p>
+      <div class="tl-phone">
+        <div class="tl-screen">
+          <div class="tl-island"></div>
+          <div class="tl-status" aria-hidden="true"><span id="tlClock">9:41</span><span><svg width="18" height="11" viewBox="0 0 18 11"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="6" rx="1"/><rect x="10" y="2.5" width="3" height="8.5" rx="1"/><rect x="15" y="0" width="3" height="11" rx="1"/></svg><svg width="16" height="11" viewBox="0 0 16 11" fill="none" stroke="#000" stroke-width="1.7" stroke-linecap="round"><path d="M1.5 4a9.5 9.5 0 0 1 13 0M4 6.7a6 6 0 0 1 8 0"/><circle cx="8" cy="9.3" r="1" fill="#000"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="#000" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="2"/><rect x="24" y="4" width="1.6" height="4" rx=".8" opacity=".4"/></svg></span></div>
+          <div class="tl-ph-top"><svg class="tl-back" width="12" height="20" viewBox="0 0 12 20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2 2 10l8 8"/></svg><div class="tl-av" id="tlAv">SP</div><b id="tlWho">Smith Plumbing</b></div>
+          <div class="tl-thread" id="tlThread" aria-live="polite"></div>
+          <div class="tl-input" aria-hidden="true"><i>+</i><span>Text Message</span></div>
+        </div>
       </div>
+      <p class="tl-note" id="tlNote">Example conversation, as your customer sees it.</p>
       <div class="tl-tabs" role="tablist" aria-label="See Tilly in action">
         <button role="tab" type="button" data-s="0" aria-selected="true">Missed call</button><button role="tab" type="button" data-s="1" aria-selected="false">Quote</button><button role="tab" type="button" data-s="2" aria-selected="false">Invoice</button><button role="tab" type="button" data-s="3" aria-selected="false">Rebooking</button><button role="tab" type="button" data-s="4" aria-selected="false">Wrap-up</button>
       </div>
@@ -678,7 +706,9 @@ footer a:hover{color:var(--pink)}
 <section id="works" style="background:#fff">
   <div class="wrap">
     <div class="shead reveal"><h2>Works with the tools you already use.</h2><p class="lede">Tilly plugs into your calendar, job software and accounts, and answers wherever customers reach you. Anything else connects through Zapier or Make.</p></div>
-    <ul class="tl-logos reveal" aria-label="Integrations"><li><img src="assets/logos/xero.svg" alt="" width="28" height="28" loading="lazy"><span>Xero</span></li><li><img src="assets/logos/google-calendar.svg" alt="" width="28" height="28" loading="lazy"><span>Google Calendar</span></li><li><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v10H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8 11h8M8 14h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>ServiceM8</span></li><li><img src="assets/logos/facebook.svg" alt="" width="28" height="28" loading="lazy"><span>Facebook</span></li><li><img src="assets/logos/instagram.svg" alt="" width="28" height="28" loading="lazy"><span>Instagram</span></li><li><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span>SMS</span></li><li><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="m3 8 9 6 9-6" fill="none" stroke="currentColor" stroke-width="2"/></svg><span>Email</span></li><li><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 9h10M7 13h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Website forms</span></li><li><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.6 5.6 6.1.6-4.6 4.1 1.3 6L12 16.3 6.6 19.3l1.3-6L3.3 9.2l6.1-.6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span>Google reviews</span></li><li><img src="assets/logos/zapier.svg" alt="" width="28" height="28" loading="lazy"><span>Zapier</span></li><li><img src="assets/logos/make.svg" alt="" width="28" height="28" loading="lazy"><span>Make</span></li></ul>
+    <div class="tl-row reveal"><h3>Built in</h3><div class="tl-marq"><ul class="tl-logos" aria-label="Built-in integrations"><li><span class="lg"><img src="assets/logos/xero.svg" alt="" width="26" height="26" loading="lazy"></span><span>Xero</span></li><li><span class="lg"><img src="assets/logos/google-calendar.svg" alt="" width="26" height="26" loading="lazy"></span><span>Google Calendar</span></li><li><span class="lg"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v10H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8 11h8M8 14h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span>ServiceM8</span></li><li><span class="lg"><img src="assets/logos/gmail.svg" alt="" width="26" height="26" loading="lazy"></span><span>Gmail</span></li><li><span class="lg"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span>Text messages</span></li><li><span class="lg"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span>Phone calls</span></li><li><span class="lg"><img src="assets/logos/facebook.svg" alt="" width="26" height="26" loading="lazy"></span><span>Facebook</span></li><li><span class="lg"><img src="assets/logos/messenger.svg" alt="" width="26" height="26" loading="lazy"></span><span>Messenger</span></li><li><span class="lg"><img src="assets/logos/instagram.svg" alt="" width="26" height="26" loading="lazy"></span><span>Instagram</span></li><li><span class="lg"><img src="assets/logos/google.svg" alt="" width="26" height="26" loading="lazy"></span><span>Google reviews</span></li><li><span class="lg"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 9h10M7 13h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span>Website forms</span></li></ul></div></div>
+    <div class="tl-row reveal"><h3>Through Zapier or Make</h3><div class="tl-marq rev"><ul class="tl-logos" aria-label="Integrations through Zapier or Make"><li><span class="lg"><img src="assets/logos/zapier.svg" alt="" width="26" height="26" loading="lazy"></span><span>Zapier</span></li><li><span class="lg"><img src="assets/logos/make.svg" alt="" width="26" height="26" loading="lazy"></span><span>Make</span></li><li><span class="lg"><img src="assets/logos/hubspot.svg" alt="" width="26" height="26" loading="lazy"></span><span>HubSpot</span></li><li><span class="lg"><img src="assets/logos/mailchimp.svg" alt="" width="26" height="26" loading="lazy"></span><span>Mailchimp</span></li><li><span class="lg"><img src="assets/logos/calendly.svg" alt="" width="26" height="26" loading="lazy"></span><span>Calendly</span></li><li><span class="lg"><img src="assets/logos/googlesheets.svg" alt="" width="26" height="26" loading="lazy"></span><span>Google Sheets</span></li><li><span class="lg"><img src="assets/logos/stripe.svg" alt="" width="26" height="26" loading="lazy"></span><span>Stripe</span></li><li><span class="lg"><img src="assets/logos/shopify.svg" alt="" width="26" height="26" loading="lazy"></span><span>Shopify</span></li><li><span class="lg"><img src="assets/logos/wordpress.svg" alt="" width="26" height="26" loading="lazy"></span><span>WordPress</span></li><li><span class="lg"><img src="assets/logos/wix.svg" alt="" width="26" height="26" loading="lazy"></span><span>Wix</span></li><li><span class="lg"><img src="assets/logos/squarespace.svg" alt="" width="26" height="26" loading="lazy"></span><span>Squarespace</span></li></ul></div></div>
+    <script>document.querySelectorAll('.tl-marq .tl-logos').forEach(function(u){Array.prototype.slice.call(u.children).forEach(function(li){var c=li.cloneNode(true);c.setAttribute('aria-hidden','true');u.appendChild(c);});});</script>
   </div>
 </section>
 
@@ -722,19 +752,20 @@ footer a:hover{color:var(--pink)}
 
 <section id="pricing" style="background:#fff">
   <div class="wrap">
-    <div class="shead reveal"><h2>Simple monthly pricing.</h2><p class="lede">Month to month with 30 days’ notice. Prices are in Australian dollars and exclude GST. Texts are included up to fair use.</p></div>
+    <div class="shead reveal"><h2>Simple monthly pricing.</h2><p class="lede">A one-off setup fee, then month to month with 30 days’ notice. Prices are in Australian dollars and exclude GST. Texts are included up to fair use.</p></div>
     <div class="plan-grid">
-      <article class="plan reveal"><div class="phead"><span class="tier">Online enquiries</span><h3>Starter</h3><div class="price"><b>$297</b><span>/month</span></div><p>For businesses that mostly get enquiries through their website, email and socials.</p></div>
+      <article class="plan reveal"><div class="phead"><span class="tier">Online enquiries</span><h3>Starter</h3><div class="price"><b>$297</b><span>/month</span></div><p class="plan-setup">+ $490 one-off setup</p><p>For businesses that mostly get enquiries through their website, email and socials.</p></div>
         <ul><li><svg width="14" height="14"><use href="#ck"/></svg>Replies to forms, email and Facebook leads</li><li><svg width="14" height="14"><use href="#ck"/></svg>Quote follow-ups by email</li><li><svg width="14" height="14"><use href="#ck"/></svg>Nightly wrap-up by email</li><li><svg width="14" height="14"><use href="#ck"/></svg>Up to 100 leads a month</li><li><svg width="14" height="14"><use href="#ck"/></svg>Every conversation in your portal</li></ul>
         <a class="btn btn-navy" href="book.html#start">Book a demo</a></article>
-      <article class="plan pop reveal"><div class="phead"><span class="tier">Most popular</span><h3>Growth</h3><div class="price"><b>$497</b><span>/month</span></div><p>The full admin. Your own Australian number, so Tilly can text, catch missed calls and chase money.</p></div>
+      <article class="plan pop reveal"><div class="phead"><span class="tier">Most popular</span><h3>Growth</h3><div class="price"><b>$497</b><span>/month</span></div><p class="plan-setup">+ $490 one-off setup</p><p>The full admin. Your own Australian number, so Tilly can text, catch missed calls and chase money.</p></div>
         <ul><li><svg width="14" height="14"><use href="#ck"/></svg>Everything in Starter</li><li><svg width="14" height="14"><use href="#ck"/></svg>Missed-call text-back</li><li><svg width="14" height="14"><use href="#ck"/></svg>Two-way texts with customers</li><li><svg width="14" height="14"><use href="#ck"/></svg>Overdue invoice reminders from Xero</li><li><svg width="14" height="14"><use href="#ck"/></svg>Rebooking reminders for repeat work</li><li><svg width="14" height="14"><use href="#ck"/></svg>Nightly wrap-up by text</li><li><svg width="14" height="14"><use href="#ck"/></svg>Up to 300 leads a month</li></ul>
         <a class="btn btn-pink" href="book.html#start">Book a demo</a></article>
-      <article class="plan reveal"><div class="phead"><span class="tier">For teams</span><h3>Team</h3><div class="price"><b>$797</b><span>/month</span></div><p>For businesses with an office, several crews or more than one location.</p></div>
+      <article class="plan reveal"><div class="phead"><span class="tier">For teams</span><h3>Team</h3><div class="price"><b>$797</b><span>/month</span></div><p class="plan-setup">+ $990 one-off setup</p><p>For businesses with an office, several crews or more than one location.</p></div>
         <ul><li><svg width="14" height="14"><use href="#ck"/></svg>Everything in Growth</li><li><svg width="14" height="14"><use href="#ck"/></svg>Unlimited leads, within fair use</li><li><svg width="14" height="14"><use href="#ck"/></svg>Up to 5 team members get handovers</li><li><svg width="14" height="14"><use href="#ck"/></svg>Separate numbers per location</li><li><svg width="14" height="14"><use href="#ck"/></svg>Emails sent from your own domain</li><li><svg width="14" height="14"><use href="#ck"/></svg>Priority support</li></ul>
         <a class="btn btn-navy" href="book.html#start">Book a demo</a></article>
     </div>
-    <p class="setup">One-off set-up $490: we write Tilly’s questions and replies, connect your forms, Xero and calendar, and set up your number.</p>
+    <div class="tl-setup reveal"><div><h3>Setup, done for you</h3><p>We learn your business, write Tilly’s questions and replies, connect your forms, calendar and Xero, set up your Australian number and test everything before she goes live.</p></div><b>$490<small style="font-size:14px;color:var(--muted);font-weight:700"> once</small></b></div>
+    <p class="setup">Team plan setup is $990, as it covers several numbers, locations and team members.</p>
   </div>
 </section>
 
@@ -987,11 +1018,11 @@ window.addEventListener('load', function () { if (!location.hash) { window.scrol
 <script>
 (function () {
   var S = [
-    { who: 'Tilly · Smith Plumbing', m: [['sys', 'Missed call from 0412 ••• 381 · 7:42am'], ['out', 'Hi, it’s Tilly from Smith Plumbing. Sorry we missed your call! What can we help you with?'], ['in', 'Hot water’s gone cold. House in Carindale'], ['out', 'Sorry to hear that. Is it gas or electric, and roughly how old is the system?'], ['in', 'Electric, about 12 years old'], ['out', 'Thanks Jess. Dave can come today at 1pm or tomorrow at 8am. Which suits?'], ['in', '1pm today please!'], ['sys ok', '✓ Booked: Jess, Carindale, today 1pm. Dave notified']] },
-    { who: 'Tilly · Smith Plumbing', m: [['sys', 'Quote sent: bathroom renovation · $14,800 · 2 days ago'], ['out', 'Hi Mark, just checking you got our quote for the bathroom renovation. Happy to answer any questions or adjust anything. Just reply here.'], ['in', 'Got it thanks. Could you do it without the heated floor?'], ['out', 'Good question. I’ll get Dave to send you an updated price today.'], ['sys ok', '✓ Passed to Dave with a summary']] },
-    { who: 'Tilly · Smith Plumbing', m: [['sys', 'Invoice INV-0042 · $1,250.00 · 7 days overdue'], ['out', 'Hi Sam, just following up on invoice INV-0042 for $1,250.00 from Smith Plumbing, now a week overdue. Pay online here: in.xero.com/…'], ['in', 'So sorry, totally forgot. Paying now'], ['sys ok', '✓ Paid in Xero · $1,250.00']] },
-    { who: 'Tilly · Bug Off Pest Control', m: [['sys', '6 months since Kate’s last pest treatment'], ['out', 'Hi Kate, it’s Tilly from Bug Off Pest Control. You’re due for your next pest treatment. Would you like us to book you in?'], ['in', 'Yes please, any day next week'], ['out', 'Great! Tuesday at 9am or Thursday at 1pm?'], ['in', 'Tuesday works'], ['sys ok', '✓ Booked: Kate, Tuesday 9am']] },
-    { who: 'Tilly → Dave (owner)', m: [['sys', '6:00pm · your daily wrap-up'], ['out', 'Tilly’s wrap-up for Smith Plumbing: 9 new enquiries, 4 booked, 3 missed calls texted back, 2 quotes followed up.'], ['out', 'Money: $2,340 paid, $1,250 overdue. Needs you: Mark (bathroom quote).'], ['in', 'Legend, thanks Tilly 👍']] }
+    { who: 'Smith Plumbing', av: 'SP', m: [['sys', 'Text Message · Today 7:42 am'], ['sys', 'Missed call · 20 seconds ago'], ['out', 'Hi, it’s Tilly from Smith Plumbing. Sorry we missed your call! What can we help you with?'], ['in', 'Hot water’s gone cold. House in Carindale'], ['out', 'Sorry to hear that. Is it gas or electric, and roughly how old is the system?'], ['in', 'Electric, about 12 years old'], ['out', 'Thanks Jess. Dave can come today at 1pm or tomorrow at 8am. Which suits?'], ['in', '1pm today please!'], ['sys ok', '✓ Booked: Jess, Carindale, today 1pm. Dave notified']] },
+    { who: 'Smith Plumbing', av: 'SP', m: [['sys', 'Text Message · Today 10:15 am'], ['sys', 'Quote sent: bathroom renovation · $14,800 · 2 days ago'], ['out', 'Hi Mark, just checking you got our quote for the bathroom renovation. Happy to answer any questions or adjust anything. Just reply here.'], ['in', 'Got it thanks. Could you do it without the heated floor?'], ['out', 'Good question. I’ll get Dave to send you an updated price today.'], ['sys ok', '✓ Passed to Dave with a summary']] },
+    { who: 'Smith Plumbing', av: 'SP', m: [['sys', 'Text Message · Yesterday 2:30 pm'], ['sys', 'Invoice INV-0042 · $1,250.00 · 7 days overdue'], ['out', 'Hi Sam, just following up on invoice INV-0042 for $1,250.00 from Smith Plumbing, now a week overdue. Pay online here: in.xero.com/…'], ['in', 'So sorry, totally forgot. Paying now'], ['sys ok', '✓ Paid in Xero · $1,250.00']] },
+    { who: 'Bug Off Pest Control', av: 'BO', m: [['sys', 'Text Message · Today 9:05 am'], ['sys', '6 months since Kate’s last pest treatment'], ['out', 'Hi Kate, it’s Tilly from Bug Off Pest Control. You’re due for your next pest treatment. Would you like us to book you in?'], ['in', 'Yes please, any day next week'], ['out', 'Great! Tuesday at 9am or Thursday at 1pm?'], ['in', 'Tuesday works'], ['sys ok', '✓ Booked: Kate, Tuesday 9am']] },
+    { who: 'Tilly', av: 'img', note: 'Example: Tilly texting you, the owner, at 6pm.', m: [['sys', 'Text Message · Today 6:00 pm'], ['out', 'Tilly’s wrap-up for Smith Plumbing: 9 new enquiries, 4 booked, 3 missed calls texted back, 2 quotes followed up.'], ['out', 'Money: $2,340 paid, $1,250 overdue. Needs you: Mark (bathroom quote).'], ['in', 'Legend, thanks Tilly 👍']] }
   ];
   var box = document.getElementById('tlThread'), who = document.getElementById('tlWho'), tabs = document.querySelectorAll('.tl-tabs button');
   if (!box) return;
@@ -1001,7 +1032,7 @@ window.addEventListener('load', function () { if (!location.hash) { window.scrol
   function bubble(k, t) { var p = document.createElement('p'); p.className = 'tl-b ' + k; p.textContent = t; box.appendChild(p); trim(); }
   function trim() { while (box.scrollHeight > box.clientHeight + 2 && box.children.length > 1) box.removeChild(box.firstChild); }
   function play(n) {
-    clear(); cur = n; who.textContent = S[n].who;
+    clear(); cur = n; who.textContent = S[n].who; document.getElementById('tlNote').textContent = S[n].note || 'Example conversation, as your customer sees it.'; var av = document.getElementById('tlAv'); if (S[n].av === 'img') av.innerHTML = '<img src="assets/roxy.webp" alt="">'; else av.textContent = S[n].av;
     tabs.forEach(function (b, i) { b.setAttribute('aria-selected', i === n ? 'true' : 'false'); });
     if (reduce) { S[n].m.forEach(function (x) { bubble(x[0], x[1]); }); return; }
     var t = 300;
