@@ -64,7 +64,7 @@ h3{font-size:22px;line-height:1.25;font-weight:700;letter-spacing:-.01em}
 
 /* header: floating navy bar with white pill nav */
 .hdr{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:0;right:0;z-index:60;padding:0 16px}
-@media(max-width:900px){.hdr{top:0;padding:0}.hdr .bar{border-radius:0 0 22px 22px;height:auto;min-height:60px;padding:calc(env(safe-area-inset-top,0px) + 8px) 12px 8px 20px}.mnav{margin:8px 12px 0}}
+@media(max-width:900px){.hdr{top:calc(env(safe-area-inset-top,0px) + 10px);padding:0 10px}.hdr .bar{border-radius:22px;height:auto;min-height:58px;padding:7px 8px 7px 18px}.mnav{margin:8px 0 0}}
 .bar{max-width:1400px;margin:0 auto;background:var(--navy);border-radius:22px;display:flex;align-items:center;justify-content:space-between;gap:16px;height:68px;padding:0 12px 0 24px;box-shadow:0 12px 30px rgba(11,11,46,.22)}
 .bar .wm{font-size:27px}
 .nav{display:flex;gap:2px;background:#fff;border-radius:999px;padding:5px}
@@ -82,7 +82,7 @@ h3{font-size:22px;line-height:1.25;font-weight:700;letter-spacing:-.01em}
 /* mobile header v2 */
 @media(max-width:1060px){.bar .btn{display:inline-flex;min-height:40px;padding:0 16px;font-size:13px;white-space:nowrap}}
 @media(max-width:440px){.bar .circ[href^="mailto"]{display:none}.bar .wm{font-size:24px}}
-@media(max-width:900px){.mnav{position:fixed;left:0;right:0;top:calc(60px + env(safe-area-inset-top,0px));bottom:0;max-width:none;margin:0;border-radius:0;padding:12px 24px calc(32px + env(safe-area-inset-bottom,0px));overflow-y:auto;overscroll-behavior:contain;border-top:1px solid rgba(255,255,255,.08)}.mnav a:last-child{margin-top:20px;background:#DB2468;border-radius:999px;text-align:center;font-size:18px;font-weight:600;padding:16px}body.menu-open .hdr .bar{border-radius:0}}
+@media(max-width:900px){.mnav{position:fixed;left:10px;right:10px;top:calc(env(safe-area-inset-top,0px) + 76px);bottom:calc(env(safe-area-inset-bottom,0px) + 10px);max-width:none;margin:0;border-radius:22px;padding:12px 24px calc(32px + env(safe-area-inset-bottom,0px));overflow-y:auto;overscroll-behavior:contain;}.mnav a:last-child{margin-top:20px;background:#DB2468;border-radius:999px;text-align:center;font-size:18px;font-weight:600;padding:16px}}
 body.menu-open{overflow:hidden}
 
 /* hero */
