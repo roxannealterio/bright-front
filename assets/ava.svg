@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="Ava, the brightfront assistant">
+  <defs>
+    <linearGradient id="avaBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FF3D7F"/>
+      <stop offset="1" stop-color="#7A2B8F"/>
+    </linearGradient>
+    <clipPath id="avaClip"><circle cx="120" cy="120" r="120"/></clipPath>
+  </defs>
+  <g clip-path="url(#avaClip)">
+    <rect width="240" height="240" fill="url(#avaBg)"/>
+    <circle cx="190" cy="44" r="60" fill="#fff" opacity=".08"/>
+    <!-- shoulders / top -->
+    <path d="M38 240c4-46 38-72 82-72s78 26 82 72z" fill="#0B0B2E"/>
+    <path d="M100 168h40l-6 22h-28z" fill="#F2B79A"/>
+    <path d="M92 176c8 10 18 15 28 15s20-5 28-15" fill="none" stroke="#FF3D7F" stroke-width="5" stroke-linecap="round"/>
+    <!-- neck + face -->
+    <rect x="106" y="138" width="28" height="36" rx="12" fill="#E9A786"/>
+    <ellipse cx="120" cy="112" rx="40" ry="46" fill="#F2B79A"/>
+    <!-- hair: a short wavy bob -->
+    <path d="M78 116c-6-44 18-70 46-70 30 0 50 22 46 62-2 18-6 30-12 38 4-20 2-40-8-52-14 6-36 8-58 2-8 12-10 30-6 50-6-8-8-18-8-30z" fill="#2A1438"/>
+    <path d="M96 58c16-10 44-10 58 6" fill="none" stroke="#4A2560" stroke-width="5" stroke-linecap="round"/>
+    <!-- face details -->
+    <ellipse cx="104" cy="114" rx="4.5" ry="5.5" fill="#1A1A3A"/>
+    <ellipse cx="136" cy="114" rx="4.5" ry="5.5" fill="#1A1A3A"/>
+    <path d="M96 102c4-3 10-3 14 0M130 102c4-3 10-3 14 0" fill="none" stroke="#2A1438" stroke-width="3" stroke-linecap="round"/>
+    <path d="M108 134c7 6 17 6 24 0" fill="none" stroke="#B54A5A" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="96" cy="126" r="6" fill="#FF7FA6" opacity=".45"/>
+    <circle cx="144" cy="126" r="6" fill="#FF7FA6" opacity=".45"/>
+    <!-- headset -->
+    <path d="M76 112c0-30 20-52 44-52s44 22 44 52" fill="none" stroke="#0B0B2E" stroke-width="7" stroke-linecap="round"/>
+    <rect x="66" y="102" width="16" height="28" rx="8" fill="#0B0B2E"/>
+    <rect x="158" y="102" width="16" height="28" rx="8" fill="#0B0B2E"/>
+    <path d="M74 128c0 16 10 22 26 22" fill="none" stroke="#0B0B2E" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="103" cy="150" r="6" fill="#FF3D7F"/>
+  </g>
+  <!-- the brightfront sparkle -->
+  <path d="M200 30l5 14 14 5-14 5-5 14-5-14-14-5 14-5z" fill="#fff"/>
+</svg>
