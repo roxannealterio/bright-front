@@ -81,6 +81,14 @@ h3{font-size:22px;line-height:1.25;font-weight:700;letter-spacing:-.01em}
 .burger{display:none}
 .mnav{display:none;max-width:1400px;margin:8px auto 0;background:var(--navy);border-radius:22px;padding:10px 24px 22px}
 .mnav.open{display:block}
+.mnav.open{display:flex;flex-direction:column}
+.mn-tilly{margin-top:auto;display:flex;gap:12px;align-items:flex-start;padding:16px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#D6D6EE;font-size:14px;line-height:1.45}
+.mn-tilly img{width:52px;height:52px;border-radius:50%;object-fit:cover;flex:0 0 auto;box-shadow:0 0 0 2px #FF3D7F}
+.mn-tilly b{display:block;color:#fff;font-size:16px;margin-bottom:2px}
+.mn-foot{display:grid;gap:10px;margin-top:14px}
+.mnav .mn-foot a{margin:0;font-size:17px;font-weight:600;text-align:center;border-radius:999px;padding:15px}
+.mnav .mn-login{border:1.5px solid rgba(255,255,255,.3)}
+
 .mnav a{display:block;color:#fff;text-decoration:none;font-size:26px;font-weight:500;letter-spacing:-.02em;padding:10px 0}
 @media(max-width:1060px){.nav,.bar .btn{display:none}.burger{display:flex}}
 /* mobile header v2 */
@@ -419,11 +427,11 @@ footer a:hover{color:var(--pink)}
     <nav class="nav" aria-label="Main"><a href="index.html#what">What Tilly does</a><a href="index.html#who">Who it’s for</a><a href="index.html#pricing">Pricing</a><a href="index.html#faq">FAQ</a></nav>
     <div class="right">
       <a class="circ" href="mailto:info@brightfrontstudio.com" aria-label="Email us"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m3 8 9 6 9-6"/></svg></a>
-      <a class="btn btn-pink" href="/book.html#start">Get started</a>
+      <a class="btn btn-pink" href="/book.html#start">Book a demo</a>
       <button class="circ burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mnav"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg></button>
     </div>
   </div>
-  <nav class="mnav" id="mnav" aria-label="Mobile"><a href="index.html#what">What Tilly does</a><a href="index.html#who">Who it’s for</a><a href="index.html#pricing">Pricing</a><a href="index.html#faq">FAQ</a><a href="book.html#start">Book a demo</a></nav>
+  <nav class="mnav" id="mnav" aria-label="Mobile"><a href="/index.html#what">What Tilly does</a><a href="/index.html#works">Integrations</a><a href="/index.html#who">Who it’s for</a><a href="/index.html#pricing">Pricing</a><a href="/index.html#faq">FAQ</a><div class="mn-tilly"><img src="/assets/roxy.webp" alt="" width="52" height="52"><div><b>Hi, I’m Tilly.</b><span>I answer your calls, texts and enquiries day and night, chase your quotes and invoices, and text you a wrap-up every evening.</span></div></div><div class="mn-foot"><a class="mn-login" href="/portal/">Client login</a><a class="mn-cta" href="/book.html#start">Book a free demo</a></div></nav>
 </header>
 
 <main id="top"><span id="main"></span>
