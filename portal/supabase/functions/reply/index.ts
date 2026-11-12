@@ -752,12 +752,18 @@ async function dailySummaries() {
 
 /* ---------- Twilio signature ---------- */
 async function twilioValid(req: Request, params: Record<string, string>, path = "/sms", query = "") {
-  const sig = req.headers.get("x-twilio-signature"); const tok = env("TWILIO_AUTH_TOKEN");
-  if (!sig || !tok) return false;
-  const data = FN_URL + path + query + Object.keys(params).sort().map((k) => k + params[k]).join("");
+  const sig = req.headers.get("x-twilio-signature"); const tok = env("TWILIO_AUTH_TOKEN").trim();
+  if (!sig || !tok) { console.error("twilio-sig: missing", { sig: !!sig, tok: !!tok }); return false; }
   const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(tok), { name: "HMAC", hash: "SHA-1" }, false, ["sign"]);
-  const mac = new Uint8Array(await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(data)));
-  return btoa(String.fromCharCode(...mac)) === sig;
+  const tail = Object.keys(params).sort().map((k) => k + params[k]).join("");
+  const u = new URL(req.url);
+  const bases = [...new Set([FN_URL + path + query, `https://${req.headers.get("host") || u.host}${u.pathname}${u.search}`, `https://${req.headers.get("x-forwarded-host") || u.host}/functions/v1/reply${path}${query}`])];
+  for (const base of bases) {
+    const mac = new Uint8Array(await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(base + tail)));
+    if (btoa(String.fromCharCode(...mac)) === sig) return true;
+  }
+  console.error("twilio-sig: no match", JSON.stringify({ bases, keys: Object.keys(params).sort(), reqUrl: req.url, tokLen: tok.length }));
+  return false;
 }
 
 /* ---------- Meta: lead ads + DMs ---------- */
