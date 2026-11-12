@@ -8,6 +8,9 @@
 //   /reply/meta    public   Meta webhook: Facebook/Instagram lead ads + Messenger/Instagram DMs. Checked with the app secret.
 //   /reply/oauth   GET      OAuth callback for Xero, ServiceM8 and Google Calendar
 //   /reply/email   public   inbound email (Postmark, Mailgun, SendGrid, Cloudflare). ?key=INTAKE_KEY
+//   /reply/voice   public   Twilio "a call comes in" webhook: rings the owner, then texts back missed calls. Twilio signature checked.
+//   /reply/voice_done public Twilio <Dial> result callback for /voice. Twilio signature checked.
+//   /reply/cron    private  hourly jobs (quote chasing, daily owner summary). Needs the x-cron-key header = CRON_SECRET.
 //
 // Secrets (Supabase -> Edge Functions -> Secrets):
 //   ANTHROPIC_API_KEY             required
@@ -19,6 +22,7 @@
 //   SERVICEM8_CLIENT_ID, SERVICEM8_CLIENT_SECRET   for ServiceM8
 //   GCAL_CLIENT_ID, GCAL_CLIENT_SECRET    for Google Calendar (can be the same Google OAuth client as sign-in)
 //   STRIPE_SECRET_KEY (optional)        to email clients a pay-online invoice each month
+//   CRON_SECRET                   for Ava's hourly jobs (any long random string; the same value goes in v6.sql)
 //   optional: RESEND_API_KEY (send from each client's own domain), AI_MODEL, SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_FROM, TWILIO_FROM
 // SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are provided by Supabase automatically.
 
@@ -207,7 +211,8 @@ RULES
 - When handing over, tell them a team member will be in touch ${s.hours ? "(" + s.hours + ")" : "soon"}.
 
 Reply with JSON only, no other text:
-{"reply": "<message to send>", "handoff": true|false, "status": "new"|"follow_up"|"booked", "summary": "<one line for the business: who, what they want, when, any answers>"}`;
+{"reply": "<message to send>", "handoff": true|false, "status": "new"|"follow_up"|"booked", "summary": "<one line for the business: who, what they want, when, any answers>", "simple": true|false}
+"simple" is true only when the reply just greets, thanks, asks one of the questions above, offers the booking link or the free times, or confirms details the lead gave. It is false if the reply answers anything about prices, scope, products, policies or anything else.`;
 }
 
 async function aiReply(s: Settings, channel: string, history: Turn[], lead: Record<string, any>) {
@@ -231,7 +236,7 @@ async function aiReply(s: Settings, channel: string, history: Turn[], lead: Reco
   let reply = clip(safeLinks(String(raw || ""), s), channel === "sms" ? 480 : isDm(channel) ? 900 : 2000);
   if (!reply) throw new Error(`AI returned an empty reply. Raw: ${clip(text, 300) || "(nothing)"}`);
   if (channel === "sms" && first && !/STOP/i.test(reply)) reply += " Reply STOP to opt out.";
-  return { reply, handoff: !!out.handoff, status: ["new", "follow_up", "booked"].includes(out.status) ? out.status : "follow_up", summary: clip(out.summary, 400) };
+  return { reply, handoff: !!out.handoff, status: ["new", "follow_up", "booked"].includes(out.status) ? out.status : "follow_up", summary: clip(out.summary, 400), simple: out.simple === true };
 }
 
 
@@ -299,7 +304,7 @@ async function addMsg(conv: any, direction: "in" | "out", sender: string, body: 
   await db.from("conversations").update({ last_message_at: new Date().toISOString() }).eq("id", conv.id);
 }
 
-async function deliver(conv: any, s: Settings, body: string, sender: "ai" | "human") {
+async function deliver(conv: any, s: Settings, body: string, sender: "ai" | "human", subject?: string) {
   try {
     if (conv.channel === "sms") await sendSms(s.sms_number || env("TWILIO_FROM"), conv.contact, body);
     else if (isDm(conv.channel)) {
@@ -309,7 +314,7 @@ async function deliver(conv: any, s: Settings, body: string, sender: "ai" | "hum
     } else {
       const c = await getConn(conv.client_id).catch(() => null);
       const replyTo = validEmail(c?.inbound_email) ? c!.inbound_email : s.handoff_email; // replies come back to the assistant when inbound email is set up
-      await sendEmail(conv.contact, `Thanks for getting in touch${s.business_name ? " with " + s.business_name : ""}`, body, s.assistant_name && s.business_name ? `${s.assistant_name} at ${s.business_name}` : s.business_name || "Enquiries", replyTo, s);
+      await sendEmail(conv.contact, subject || `Thanks for getting in touch${s.business_name ? " with " + s.business_name : ""}`, body, s.assistant_name && s.business_name ? `${s.assistant_name} at ${s.business_name}` : s.business_name || "Enquiries", replyTo, s);
     }
     await addMsg(conv, "out", sender, body);
   } catch (e) {
@@ -321,7 +326,7 @@ async function deliver(conv: any, s: Settings, body: string, sender: "ai" | "hum
 
 async function notifyHandoff(conv: any, s: Settings, lead: any, summary: string) {
   if (!validEmail(s.handoff_email)) return;
-  const { data: msgs } = await db.from("messages").select("sender, body").eq("conversation_id", conv.id).order("created_at");
+  const { data: msgs } = await db.from("messages").select("sender, body").eq("conversation_id", conv.id).eq("status", "sent").order("created_at");
   const transcript = (msgs || []).map((m: any) => `${m.sender === "lead" ? lead?.name || "Lead" : m.sender === "ai" ? "Assistant" : "You"}: ${m.body}`).join("\n\n");
   const contact = isDm(conv.channel) ? `${CH_LABEL[conv.channel]}${lead?.phone ? " · Mobile: " + lead.phone : ""}${lead?.email ? " · Email: " + lead.email : ""}` : `${CH_LABEL[conv.channel] || "Contact"}: ${conv.contact}`;
   await sendEmail(s.handoff_email, `New lead ready for you: ${lead?.name || conv.contact}`,
@@ -330,21 +335,25 @@ async function notifyHandoff(conv: any, s: Settings, lead: any, summary: string)
 }
 
 async function respond(conv: any, s: Settings, lead: any) {
-  const { data: hist } = await db.from("messages").select("sender, body").eq("conversation_id", conv.id).order("created_at");
+  const { data: hist } = await db.from("messages").select("sender, body").eq("conversation_id", conv.id).eq("status", "sent").order("created_at");
   try { const slots = await freeTimes(conv.client_id); if (slots) s = { ...s, available_times: slots }; } catch (e) { console.error("calendar", e); }
   const aiTurns = (hist || []).filter((m: any) => m.sender === "ai").length;
-  let out: { reply: string; handoff: boolean; status: string; summary: string };
+  let out: { reply: string; handoff: boolean; status: string; summary: string; simple?: boolean; fixed?: boolean };
   if (aiTurns >= MAX_AI_TURNS) {
-    out = { reply: `Thanks${lead?.name ? " " + String(lead.name).split(" ")[0] : ""}. A team member will pick this up with you ${s.hours ? "(" + s.hours + ")" : "shortly"}.`, handoff: true, status: "follow_up", summary: conv.summary || "Long conversation handed to a person." };
+    out = { reply: `Thanks${lead?.name ? " " + String(lead.name).split(" ")[0] : ""}. A team member will pick this up with you ${s.hours ? "(" + s.hours + ")" : "shortly"}.`, handoff: true, status: "follow_up", summary: conv.summary || "Long conversation handed to a person.", fixed: true };
   } else {
     try { out = await aiReply(s, conv.channel, (hist || []) as Turn[], lead || {}); }
     catch (e) {
       await logSys("error", "ai", `AI reply failed, sent a holding message instead: ${(e as Error).message}`, conv.client_id);
       const first = String(lead?.name || "").split(" ")[0];
-      out = { reply: `Hi${first && first !== "New" ? " " + first : ""}, thanks for getting in touch${s.business_name ? " with " + s.business_name : ""}. A team member will be in touch ${s.hours ? "(" + s.hours + ")" : "soon"}.${conv.channel === "sms" && !aiTurns ? " Reply STOP to opt out." : ""}`, handoff: true, status: "follow_up", summary: "The assistant couldn't reply, so a holding message was sent. Please follow up." };
+      out = { reply: `Hi${first && first !== "New" ? " " + first : ""}, thanks for getting in touch${s.business_name ? " with " + s.business_name : ""}. A team member will be in touch ${s.hours ? "(" + s.hours + ")" : "soon"}.${conv.channel === "sms" && !aiTurns ? " Reply STOP to opt out." : ""}`, handoff: true, status: "follow_up", summary: "The assistant couldn't reply, so a holding message was sent. Please follow up.", fixed: true };
     }
   }
-  await deliver(conv, s, out.reply, "ai");
+  // Draft-approve mode: "draft" holds every reply for the owner; "simple" sends routine replies and holds the rest
+  const mode = s.approval_mode || "auto";
+  const asDraft = !out.fixed && (mode === "draft" || (mode === "simple" && !out.simple));
+  if (asDraft) await saveDraft(conv, s, lead, out.reply);
+  else { await deliver(conv, s, out.reply, "ai"); await clearDrafts(conv); }
   const upd: Record<string, unknown> = { summary: out.summary || conv.summary };
   if (out.handoff) upd.status = "human";
   await db.from("conversations").update(upd).eq("id", conv.id);
@@ -353,7 +362,7 @@ async function respond(conv: any, s: Settings, lead: any) {
     await fireEvent({ ...lead, status: out.status }, "lead.updated").catch((e) => console.error("events", e));
   }
   if (out.handoff) await notifyHandoff(conv, s, lead, out.summary);
-  return out;
+  return { ...out, draft: asDraft };
 }
 
 async function newLead(s: Settings, input: Record<string, string>) {
@@ -386,15 +395,153 @@ async function newLead(s: Settings, input: Record<string, string>) {
 
   const { data: conv } = await db.from("conversations").insert({ client_id: s.client_id, lead_id: lead.id, channel, contact: channel === "sms" ? phone : email }).select().single();
   if (message) await addMsg(conv, "in", "lead", message);
-  try { await respond(conv, s, lead); await db.from("leads").update({ first_reply_seconds: Math.max(1, Math.round((Date.now() - new Date(lead.created_at).getTime()) / 1000)) }).eq("id", lead.id); } catch (e) { console.error(e); return { ok: true, lead_id: lead.id, replied: false, error: String((e as Error).message) }; }
+  try { const res = await respond(conv, s, lead); if (!res.draft) await db.from("leads").update({ first_reply_seconds: Math.max(1, Math.round((Date.now() - new Date(lead.created_at).getTime()) / 1000)) }).eq("id", lead.id); } catch (e) { console.error(e); return { ok: true, lead_id: lead.id, replied: false, error: String((e as Error).message) }; }
   return { ok: true, lead_id: lead.id, replied: true, channel };
 }
 
+/* ---------- Ava, the admin: drafts, owner alerts, missed calls, quote chasing, daily summary ---------- */
+const bneNow = (o: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat(o.year ? "en-CA" : "en-AU", { timeZone: "Australia/Brisbane", ...o }).format(new Date());
+const bneHour = () => Number(bneNow({ hour: "numeric", hourCycle: "h23" }));
+const bneDate = () => bneNow({ year: "numeric", month: "2-digit", day: "2-digit" });
+const firstName = (n?: string | null) => { const f = String(n || "").trim().split(/\s+/)[0] || ""; return /^(new|missed|text|test|instagram|facebook)$/i.test(f) || /\d/.test(f) ? "" : f; };
+const AU_MOBILE = /^\+614\d{8}$/;
+
+// A short alert to the business owner: a text to their mobile if texting is set up, otherwise an email
+async function alertOwner(s: Settings, text: string, subject: string) {
+  const ph = auPhone(s.handoff_phone), from = s.sms_number || env("TWILIO_FROM");
+  if (ph && from && env("TWILIO_ACCOUNT_SID")) { await sendSms(from, ph, clip(text, 600)); return "sms"; }
+  if (validEmail(s.handoff_email)) { await sendEmail(s.handoff_email, subject, text, `${s.business_name || "Your"} alerts`); return "email"; }
+  return null;
+}
+
+async function clearDrafts(conv: any) {
+  if (!conv.pending_draft) { const { data: d } = await db.from("messages").select("id").eq("conversation_id", conv.id).eq("status", "draft").limit(1); if (!d?.length) return; }
+  await db.from("messages").update({ status: "discarded" }).eq("conversation_id", conv.id).eq("status", "draft");
+  await db.from("conversations").update({ pending_draft: false }).eq("id", conv.id);
+  conv.pending_draft = false;
+}
+async function saveDraft(conv: any, s: Settings, lead: any, body: string) {
+  await db.from("messages").update({ status: "discarded" }).eq("conversation_id", conv.id).eq("status", "draft");
+  await db.from("messages").insert({ conversation_id: conv.id, client_id: conv.client_id, direction: "out", sender: "ai", body, status: "draft" });
+  await db.from("conversations").update({ pending_draft: true, last_message_at: new Date().toISOString() }).eq("id", conv.id);
+  conv.pending_draft = true;
+  if (await allow(`draft-alert:${conv.id}`, 1, 900)) {
+    const who = lead?.name && !/^(text from|missed call)/i.test(lead.name) ? lead.name : conv.contact;
+    await alertOwner(s, `${s.assistant_name || "Your assistant"} has a reply ready for ${who}. Check it and tap send in your portal: ${PORTAL_URL}`, `Reply waiting for your OK: ${who}`).catch((e) => console.error("draft alert", e));
+  }
+}
+
+// Text back anyone whose call wasn't answered, then let the assistant carry on the conversation by text
+async function missedCall(s: Settings, caller: string) {
+  if (!s.enabled || s.missed_call_enabled === false) return "off";
+  if (!AU_MOBILE.test(caller)) return "not a mobile";
+  if (!(await allow(`missed:${s.client_id}:${caller}`, 1, 1800))) return "already texted";
+  const since = new Date(Date.now() - 30 * 86400000).toISOString();
+  let { data: conv } = await db.from("conversations").select("*").eq("client_id", s.client_id).eq("channel", "sms").eq("contact", caller).gte("last_message_at", since).order("last_message_at", { ascending: false }).limit(1).maybeSingle();
+  if (conv?.status === "opted_out") return "opted out";
+  let lead: any = null, isNew = false;
+  if (!conv) {
+    ({ data: lead } = await db.from("leads").insert({ client_id: s.client_id, name: "Missed call " + caller, phone: caller, message: "Called the business and didn't get through.", source: "Missed call", status: "new" }).select().single());
+    ({ data: conv } = await db.from("conversations").insert({ client_id: s.client_id, lead_id: lead.id, channel: "sms", contact: caller, origin: "missed_call" }).select().single());
+    isNew = true;
+    await fireEvent(lead, "lead.created").catch((e) => console.error("events", e));
+  } else if (conv.lead_id) ({ data: lead } = await db.from("leads").select("*").eq("id", conv.lead_id).maybeSingle());
+  const who = s.assistant_name ? `${s.assistant_name} from ${s.business_name || "the team"}` : s.business_name || "the team";
+  const name = firstName(lead?.name);
+  let text = (s.missed_call_text || "").trim().replace(/\{business\}/gi, s.business_name || "us").replace(/\{name\}/gi, name)
+    || `Hi${name ? " " + name : ""}, it's ${who}. Sorry we missed your call! What can we help you with? Reply here and we'll get you sorted.`;
+  if (isNew && !/STOP/i.test(text)) text += " Reply STOP to opt out.";
+  await deliver(conv, s, clip(text, 480), "ai");
+  if (conv.status === "closed") await db.from("conversations").update({ status: "ai" }).eq("id", conv.id);
+  if (lead && lead.first_reply_seconds == null) await db.from("leads").update({ first_reply_seconds: Math.max(1, Math.round((Date.now() - new Date(lead.created_at).getTime()) / 1000)) }).eq("id", lead.id);
+  return "texted";
+}
+const voiceXml = (inner: string) => new Response(`<?xml version="1.0" encoding="UTF-8"?><Response>${inner}</Response>`, { headers: { "Content-Type": "text/xml" } });
+const sayAu = (t: string) => `<Say voice="alice" language="en-AU">${escHtml(t)}</Say>`;
+
+// Follow up quotes that went quiet: 2, 5 and 10 days after the quote, 9am to 6pm Brisbane time
+const CHASE_DAYS = [2, 5, 10];
+async function chaseQuotes() {
+  const h = bneHour(); if (h < 9 || h >= 18) return 0;
+  const { data: leads } = await db.from("leads").select("*").not("quoted_at", "is", null).lt("chase_step", 3).not("status", "in", "(won,lost,booked)").order("quoted_at").limit(300);
+  const cache: Record<string, Settings> = {}; let sent = 0;
+  for (const l of leads || []) {
+    if (Date.now() < new Date(l.quoted_at).getTime() + CHASE_DAYS[l.chase_step] * 86400000) continue;
+    const s = cache[l.client_id] ||= await settingsFor(l.client_id);
+    if (!s.enabled || s.quote_chase_enabled === false) continue;
+    const stop = () => db.from("leads").update({ chase_step: 9 }).eq("id", l.id);
+    let { data: conv } = await db.from("conversations").select("*").eq("lead_id", l.id).order("last_message_at", { ascending: false }).limit(1).maybeSingle();
+    if (conv?.status === "opted_out") { await stop(); continue; }
+    // They've been in touch since the quote or the last follow-up: a person or the assistant is already on it
+    if (conv) { const { data: back } = await db.from("messages").select("id").eq("conversation_id", conv.id).eq("direction", "in").gte("created_at", l.last_chased_at || l.quoted_at).limit(1); if (back?.length) { await stop(); continue; } }
+    // Facebook and Instagram chats can't be messaged days later, so follow up by text or email instead
+    if (!conv || isDm(conv.channel)) {
+      const phone = auPhone(l.phone), email = validEmail(l.email) ? l.email : null;
+      const ch = phone && s.sms_enabled !== false && (s.sms_number || env("TWILIO_FROM")) ? "sms" : email && s.email_enabled !== false ? "email" : null;
+      if (!ch) { await stop(); continue; }
+      const contact = ch === "sms" ? phone : email;
+      ({ data: conv } = await db.from("conversations").insert({ client_id: l.client_id, lead_id: l.id, channel: ch, contact, status: "human" }).select().single());
+    }
+    const nm = firstName(l.name), hi = `Hi${nm ? " " + nm : ""}`, biz = s.business_name || "us";
+    const T = [
+      `${hi}, just checking you got our quote${l.enquiry ? " for " + clip(l.enquiry, 60) : ""}. Happy to answer any questions or adjust anything. Just reply here.`,
+      `${hi}, following up on your quote from ${biz}. Would you like to lock in a time? Reply here and we'll get you booked in.`,
+      `${hi}, a last check-in on your quote from ${biz}. If now isn't the right time, no worries at all. Just reply if you'd like to go ahead.`,
+    ];
+    let text = T[l.chase_step];
+    if (conv.channel === "sms") text += " Reply STOP to opt out.";
+    else text += `\n\n${s.sign_off || s.business_name || ""}`;
+    try {
+      await deliver(conv, s, text, "ai", `Your quote from ${biz}`);
+      await db.from("leads").update({ chase_step: l.chase_step + 1, last_chased_at: new Date().toISOString() }).eq("id", l.id);
+      // Questions about a quote need a person, so replies go to the owner rather than the assistant
+      if (conv.status !== "human") await db.from("conversations").update({ status: "human" }).eq("id", conv.id);
+      sent++;
+    } catch { await stop(); }
+  }
+  return sent;
+}
+
+// One text (or email) to the owner each evening: what came in, what's booked, what needs them
+async function dailySummaries() {
+  const h = bneHour(), today = bneDate();
+  const { data: list } = await db.from("reply_settings").select("*").eq("enabled", true).eq("daily_summary_enabled", true).eq("daily_summary_hour", h);
+  let sent = 0;
+  for (const s of list || []) {
+    if (s.last_summary_on === today) continue;
+    const since = new Date(Date.now() - 24 * 3600000).toISOString(), cid = s.client_id;
+    const cnt = (q: any) => q.then((r: any) => r.count || 0);
+    const [leads, booked, missed, chased, drafts, human] = await Promise.all([
+      cnt(db.from("leads").select("id", { count: "exact", head: true }).eq("client_id", cid).gte("created_at", since)),
+      cnt(db.from("lead_events").select("id", { count: "exact", head: true }).eq("client_id", cid).eq("to_status", "booked").gte("created_at", since)),
+      cnt(db.from("conversations").select("id", { count: "exact", head: true }).eq("client_id", cid).eq("origin", "missed_call").gte("created_at", since)),
+      cnt(db.from("leads").select("id", { count: "exact", head: true }).eq("client_id", cid).gte("last_chased_at", since)),
+      cnt(db.from("conversations").select("id", { count: "exact", head: true }).eq("client_id", cid).eq("pending_draft", true)),
+      db.from("conversations").select("leads(name), contact").eq("client_id", cid).eq("status", "human").gte("last_message_at", since).order("last_message_at", { ascending: false }).limit(5).then((r: any) => r.data || []),
+    ]);
+    await db.from("reply_settings").update({ last_summary_on: today }).eq("client_id", cid);
+    if (!leads && !booked && !missed && !chased && !drafts && !human.length) continue; // quiet day: no text
+    const parts = [
+      `${leads} new ${leads === 1 ? "enquiry" : "enquiries"}`,
+      booked && `${booked} booked`,
+      missed && `${missed} missed ${missed === 1 ? "call" : "calls"} texted back`,
+      chased && `${chased} ${chased === 1 ? "quote" : "quotes"} followed up`,
+    ].filter(Boolean).join(", ");
+    const names = human.map((c: any) => (c.leads?.name && !/^(text from|missed call)/i.test(c.leads.name) ? c.leads.name : c.contact)).slice(0, 3);
+    const text = `${s.assistant_name || "Your assistant"}'s wrap-up for ${s.business_name || "today"}: ${parts}.`
+      + (names.length ? ` Needs you: ${names.join(", ")}${human.length > 3 ? " and more" : ""}.` : "")
+      + (drafts ? ` ${drafts} ${drafts === 1 ? "reply is" : "replies are"} waiting for your OK.` : "")
+      + ` ${PORTAL_URL}`;
+    try { if (await alertOwner(s, text, `Today's leads: ${parts}`)) sent++; } catch (e) { await logSys("warn", "summary", `Daily summary failed: ${(e as Error).message}`, cid); }
+  }
+  return sent;
+}
+
 /* ---------- Twilio signature ---------- */
-async function twilioValid(req: Request, params: Record<string, string>) {
+async function twilioValid(req: Request, params: Record<string, string>, path = "/sms", query = "") {
   const sig = req.headers.get("x-twilio-signature"); const tok = env("TWILIO_AUTH_TOKEN");
   if (!sig || !tok) return false;
-  const data = FN_URL + "/sms" + Object.keys(params).sort().map((k) => k + params[k]).join("");
+  const data = FN_URL + path + query + Object.keys(params).sort().map((k) => k + params[k]).join("");
   const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(tok), { name: "HMAC", hash: "SHA-1" }, false, ["sign"]);
   const mac = new Uint8Array(await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(data)));
   return btoa(String.fromCharCode(...mac)) === sig;
@@ -438,8 +585,8 @@ async function metaDm(object: string, entryId: string, m: any) {
   }
   await addMsg(conv, "in", "lead", text);
   if (conv.status === "ai" && s.enabled && s.dm_enabled !== false && c.dms !== false) {
-    await respond(conv, s, lead);
-    if (lead && lead.first_reply_seconds == null) await db.from("leads").update({ first_reply_seconds: Math.max(1, Math.round((Date.now() - new Date(lead.created_at).getTime()) / 1000)) }).eq("id", lead.id);
+    const res = await respond(conv, s, lead);
+    if (!res.draft && lead && lead.first_reply_seconds == null) await db.from("leads").update({ first_reply_seconds: Math.max(1, Math.round((Date.now() - new Date(lead.created_at).getTime()) / 1000)) }).eq("id", lead.id);
   } else if (conv.status === "human") await notifyHandoff(conv, s, lead, `${lead?.name || "A lead"} sent a new ${CH_LABEL[channel]} message: "${text}"`);
 }
 
@@ -736,6 +883,31 @@ Deno.serve(async (req) => {
       return twiml();
     }
 
+    if (route === "voice" || route === "voice_done") {
+      const p = await readBody(req);
+      if (!(await twilioValid(req, p, "/" + route))) return new Response("Forbidden", { status: 403 });
+      const from = auPhone(p.From) || String(p.From || ""), to = auPhone(p.To) || String(p.To || "");
+      const { data: s } = await db.from("reply_settings").select("*").eq("sms_number", to).maybeSingle();
+      if (!s) return voiceXml("<Hangup/>");
+      const biz = s.business_name || "us";
+      if (route === "voice") {
+        const fwd = auPhone(s.forward_phone || s.handoff_phone);
+        if (fwd && fwd !== from) return voiceXml(`<Dial timeout="20" answerOnBridge="true" action="${FN_URL}/voice_done" method="POST">${escHtml(fwd)}</Dial>`);
+        const r = await missedCall(s, from).catch(async (e) => { await logSys("error", "missed-call", String((e as Error).message || e), s.client_id); return "failed"; });
+        return voiceXml(sayAu(`Thanks for calling ${biz}. Sorry we can't take your call right now.${r === "texted" ? " We've just sent you a text, so reply there and we'll get you sorted." : " Please call back soon."}`) + "<Hangup/>");
+      }
+      if (["completed", "answered"].includes(String(p.DialCallStatus))) return voiceXml("<Hangup/>");
+      const r = await missedCall(s, from).catch(async (e) => { await logSys("error", "missed-call", String((e as Error).message || e), s.client_id); return "failed"; });
+      return voiceXml(sayAu(`Sorry we missed you at ${biz}.${r === "texted" ? " We've just sent you a text, so reply there and we'll get you sorted." : " Please try again soon."}`) + "<Hangup/>");
+    }
+
+    if (route === "cron") {
+      if (!env("CRON_SECRET") || req.headers.get("x-cron-key") !== env("CRON_SECRET")) return json({ ok: false, error: "Not allowed" }, 403);
+      const chased = await chaseQuotes().catch(async (e) => { await logSys("error", "quote-chase", String((e as Error).message || e)); return -1; });
+      const summaries = await dailySummaries().catch(async (e) => { await logSys("error", "summary", String((e as Error).message || e)); return -1; });
+      return json({ ok: true, chased, summaries });
+    }
+
     if (route === "send") {
       const token = (req.headers.get("authorization") || "").replace(/^Bearer\s+/i, "");
       const { data: u } = await db.auth.getUser(token);
@@ -762,6 +934,35 @@ Deno.serve(async (req) => {
         return json(r, r.ok ? 200 : 400);
       }
 
+
+      if (input.action === "draft") {
+        const { data: conv } = await db.from("conversations").select("*").eq("id", input.conversation_id).single();
+        if (!conv || !(await can(conv.client_id))) return json({ ok: false, error: "Not allowed" }, 403);
+        const { data: dr } = await db.from("messages").select("*").eq("conversation_id", conv.id).eq("status", "draft").order("created_at", { ascending: false }).limit(1).maybeSingle();
+        if (!dr) { await db.from("conversations").update({ pending_draft: false }).eq("id", conv.id); return json({ ok: false, error: "This reply was already sent or replaced." }, 400); }
+        if (input.decision === "discard") {
+          await db.from("messages").update({ status: "discarded" }).eq("id", dr.id);
+          await db.from("conversations").update({ pending_draft: false }).eq("id", conv.id);
+          return json({ ok: true });
+        }
+        if (conv.status === "opted_out") return json({ ok: false, error: "This person opted out. You can't message them here." }, 400);
+        const { data: s } = await db.from("reply_settings").select("*").eq("client_id", conv.client_id).single();
+        const body = clip(input.body || dr.body, conv.channel === "sms" ? 480 : 4000);
+        if (!body) return json({ ok: false, error: "The reply is empty." }, 400);
+        await db.from("messages").delete().eq("id", dr.id);
+        await deliver(conv, s, body, "ai");
+        await db.from("conversations").update({ pending_draft: false }).eq("id", conv.id);
+        if (conv.lead_id) { const { data: l } = await db.from("leads").select("id, created_at, first_reply_seconds").eq("id", conv.lead_id).maybeSingle(); if (l && l.first_reply_seconds == null) await db.from("leads").update({ first_reply_seconds: Math.max(1, Math.round((Date.now() - new Date(l.created_at).getTime()) / 1000)) }).eq("id", l.id); }
+        return json({ ok: true });
+      }
+
+      if (input.action === "quote") {
+        const { data: lead } = await db.from("leads").select("id, client_id").eq("id", input.lead_id).single();
+        if (!lead || !(await can(lead.client_id))) return json({ ok: false, error: "Not allowed" }, 403);
+        const upd = input.decision === "stop" ? { chase_step: 9 } : { quoted_at: new Date().toISOString(), chase_step: 0, last_chased_at: null };
+        await db.from("leads").update(upd).eq("id", lead.id);
+        return json({ ok: true });
+      }
 
       if (input.action === "oauth_start") {
         if (!(await manages(input.client_id))) return json({ ok: false, error: "Not allowed" }, 403);
@@ -897,6 +1098,7 @@ Deno.serve(async (req) => {
       const body = clip(input.body, conv.channel === "sms" ? 480 : 4000);
       if (!body) return json({ ok: false, error: "Write a message first." }, 400);
       await deliver(conv, s, body, "human");
+      await clearDrafts(conv);
       await db.from("conversations").update({ status: "human" }).eq("id", conv.id);
       return json({ ok: true });
     }
