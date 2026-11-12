@@ -40,7 +40,7 @@ Each client only ever sees their own business. This is enforced by the database 
    https://cupsusqjcgefmfhdznmo.supabase.co/functions/v1/reply/sms (HTTP POST), and put the number (+61...) in the client's Lead replies settings.
 5. Lead forms POST to https://cupsusqjcgefmfhdznmo.supabase.co/functions/v1/reply/intake?key=CLIENT_KEY with name, email, phone, message, source.
 
-## Ava, the admin (v6)
+## Roxy, the admin (v6)
 
 Missed-call text-back, quote chasing, a daily owner wrap-up and draft-approve mode.
 
@@ -51,8 +51,9 @@ Missed-call text-back, quote chasing, a daily owner wrap-up and draft-approve mo
 5. Twilio, for each client's number: set **A call comes in** to `https://cupsusqjcgefmfhdznmo.supabase.co/functions/v1/reply/voice` (HTTP POST). Keep **A message comes in** on `/reply/sms`.
 6. In the portal, Inbox -> What it says -> **Admin jobs**: choose how replies go out, add the owner's mobile under "Ring this mobile first" and "Mobile for alerts".
 7. Xero invoice chasing (v7): run `supabase/v7.sql`. Once a client's Xero is connected, overdue invoices get reminders 1, 7 and 14 days after the due date (weekdays 9am to 5pm Brisbane), by text if the Xero contact has a mobile, otherwise email, with Xero's online payment link. Reminders stop when the invoice is paid or the customer replies. Turn it off per client under Integrations -> Xero.
+8. Rebooking reminders and booked-out mode (v8): run `supabase/v8.sql`, then redeploy `reply`. In the portal, What it says -> Repeat work: set the usual gap between jobs. When a job is marked Won, the reminder is scheduled automatically, or set it per customer on their profile. Reminders go out weekdays 9am to 5pm Brisbane and the assistant handles the reply. Set "Booked out until" and the assistant tells new enquiries honestly when work can start.
 
 Notes
 - Missed calls are only texted back to Australian mobiles (04...), never landlines.
-- If a client keeps their own number and forwards unanswered calls to the Ava number, leave "Ring this mobile first" empty, or the call will loop back to them.
+- If a client keeps their own number and forwards unanswered calls to the Roxy number, leave "Ring this mobile first" empty, or the call will loop back to them.
 - Quote follow-ups send 2, 5 and 10 days after "Quote sent", 9am to 6pm Brisbane time, and stop when the customer replies.
