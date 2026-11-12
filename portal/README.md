@@ -39,3 +39,19 @@ Each client only ever sees their own business. This is enforced by the database 
 4. Twilio: buy an Australian mobile number per client, set "A message comes in" webhook to
    https://cupsusqjcgefmfhdznmo.supabase.co/functions/v1/reply/sms (HTTP POST), and put the number (+61...) in the client's Lead replies settings.
 5. Lead forms POST to https://cupsusqjcgefmfhdznmo.supabase.co/functions/v1/reply/intake?key=CLIENT_KEY with name, email, phone, message, source.
+
+## Ava, the admin (v6)
+
+Missed-call text-back, quote chasing, a daily owner wrap-up and draft-approve mode.
+
+1. Supabase -> Database -> Extensions: turn on **pg_cron** and **pg_net**.
+2. Supabase -> Edge Functions -> Secrets: add `CRON_SECRET` (any long random string).
+3. SQL Editor: paste `supabase/v6.sql`, replace `REPLACE_WITH_CRON_SECRET` with the same value, then Run. Don't commit the real secret.
+4. Redeploy the `reply` Edge Function from `supabase/functions/reply/index.ts`.
+5. Twilio, for each client's number: set **A call comes in** to `https://cupsusqjcgefmfhdznmo.supabase.co/functions/v1/reply/voice` (HTTP POST). Keep **A message comes in** on `/reply/sms`.
+6. In the portal, Inbox -> What it says -> **Admin jobs**: choose how replies go out, add the owner's mobile under "Ring this mobile first" and "Mobile for alerts".
+
+Notes
+- Missed calls are only texted back to Australian mobiles (04...), never landlines.
+- If a client keeps their own number and forwards unanswered calls to the Ava number, leave "Ring this mobile first" empty, or the call will loop back to them.
+- Quote follow-ups send 2, 5 and 10 days after "Quote sent", 9am to 6pm Brisbane time, and stop when the customer replies.
