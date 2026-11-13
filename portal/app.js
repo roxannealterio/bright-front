@@ -1,4 +1,4 @@
-if (window.top !== window.self && !/[?&]demo/.test(location.search) && /(^|\.)brightfrontstudio\.com$/.test(location.hostname)) { try { window.top.location = window.location.href; } catch { document.documentElement.style.display = 'none'; } }
+if (window.top !== window.self && !/[?&]demo/.test(location.search) && /(^|\.)(brightfrontstudio\.com|autofice\.com\.au)$/.test(location.hostname)) { try { window.top.location = window.location.href; } catch { document.documentElement.style.display = 'none'; } }
 // Autofice client portal
 // Runs on Supabase when config.js has keys, otherwise in demo mode with sample data.
 const CFG = window.BF_CONFIG || {};
@@ -87,8 +87,8 @@ function demoData() {
       [c3]: []
     },
     invoices: {
-      [c1]: [{ id: uid(), number: 'AF-0012', description: 'Autofice Team · monthly fee', amount: null, issued_on: d(-4).slice(0, 10), due_date: d(3).slice(0, 10), status: 'due', pay_url: '' }, { id: uid(), number: 'AF-0011', description: 'Tilly Team · monthly fee', amount: null, issued_on: d(-34).slice(0, 10), due_date: d(-27).slice(0, 10), status: 'paid' }, { id: uid(), number: 'AF-0010', description: 'Set-up and onboarding', amount: null, issued_on: d(-55).slice(0, 10), due_date: d(-48).slice(0, 10), status: 'paid' }],
-      [c2]: [{ id: uid(), number: 'AF-0013', description: 'Autofice Growth · monthly fee', amount: null, issued_on: d(-2).slice(0, 10), due_date: d(5).slice(0, 10), status: 'due' }], [c3]: []
+      [c1]: [{ id: uid(), number: 'AF-0012', description: 'Autofice Team · monthly fee', amount: 876.70, issued_on: d(-4).slice(0, 10), due_date: d(3).slice(0, 10), status: 'due', pay_url: '' }, { id: uid(), number: 'AF-0011', description: 'Autofice Team · monthly fee', amount: 876.70, issued_on: d(-34).slice(0, 10), due_date: d(-27).slice(0, 10), status: 'paid' }, { id: uid(), number: 'AF-0010', description: 'Set-up and onboarding', amount: 1089.00, issued_on: d(-55).slice(0, 10), due_date: d(-48).slice(0, 10), status: 'paid' }],
+      [c2]: [{ id: uid(), number: 'AF-0013', description: 'Autofice Growth · monthly fee', amount: 546.70, issued_on: d(-2).slice(0, 10), due_date: d(5).slice(0, 10), status: 'due' }], [c3]: []
     },
     steps: {
       [c1]: [['Sign your agreement', '', true], ['Setup call', '', true], ['Tell Tilly about your business', '', true], ['Set up your Tilly number', 'Forward unanswered calls to your Tilly number. Takes 2 minutes.', false], ['Connect your calendar', 'So Tilly can offer your real free times.', false], ['Connect Xero (optional)', 'So Tilly can chase overdue invoices.', false]].map(([title, detail, done], i) => ({ id: uid(), title, detail, done, sort: i })),
@@ -302,9 +302,9 @@ if (LIVE) {
     agencies: () => ok(D.agencies ||= [{ id: 'a1', name: 'Northside Digital', slug: 'northside', brand_color: '#1F6FEB', support_email: 'hello@northside.example', wholesale_fee: 149, status: 'active' }]),
     saveAgency(o) { const a = (D.agencies ||= []); if (o.id) Object.assign(a.find((x) => x.id === o.id), o); else a.push({ id: uid(), status: 'active', ...o }); return ok(); },
     sysEvents: () => ok([{ id: 1, level: 'warn', source: 'xero', message: 'Xero 401: token expired. Reconnect Xero for this client.', created_at: new Date(Date.now() - 5400e3).toISOString(), clients: { name: 'Sample Realty' } }]),
-    billingPlan: (c) => ok((D.plans ||= { c1: { client_id: 'c1', active: true, monthly_fee: 990, per_booking: 45, per_won: 0, won_percent: 0, billing_email: 'accounts@example.com' } })[c] || null),
+    billingPlan: (c) => ok((D.plans ||= { c1: { client_id: 'c1', active: true, monthly_fee: 797, per_booking: 0, per_won: 0, won_percent: 0, billing_email: 'accounts@example.com' } })[c] || null),
     saveBillingPlan(c, o) { (D.plans ||= {})[c] = { ...(D.plans[c] || {}), ...o, client_id: c }; return ok(); },
-    billable: (c) => ok(c === 'c1' ? (D.bev ||= D.extra.leads.filter((l) => ['booked', 'won'].includes(l.status)).map((l, i) => ({ id: 'b' + i, kind: 'booking', amount: 45, status: 'billable', occurred_at: l.created_at, leads: { name: l.name } }))) : []),
+    billable: (c) => ok(false ? (D.bev ||= D.extra.leads.filter((l) => ['booked', 'won'].includes(l.status)).map((l, i) => ({ id: 'b' + i, kind: 'booking', amount: 45, status: 'billable', occurred_at: l.created_at, leads: { name: l.name } }))) : []),
     setBillable(id, status) { (D.bev || []).forEach((e) => { if (e.id === id) e.status = status; }); return ok(); },
     billMonth: () => ok({ ok: true, note: 'Invoice created. In the live portal it’s emailed with a pay-online link.' }),
     replySettings: (c) => ok(D.reply[c] || null),
@@ -326,10 +326,10 @@ if (LIVE) {
     conversations: (c) => ok(D.convs[c] || []),
     allLeads: (c) => api.leads(c),
     everyLead: () => ok(D.clients.flatMap((cl) => (cl.id === 'c1' ? D.extra.leads : (D.leads[cl.id] || [])).map((l) => ({ ...l, client: cl.name })))),
-    connStatus: (c) => ok(c === 'c1' ? { meta_page_name: 'Sample Electrical', meta_ig_username: 'sampleelectrical', facebook: true, instagram: true, inbound_email: null } : null),
-    conn: (c) => ok(D.conn?.[c] || (c === 'c1' ? { meta_page_id: '1029384756', meta_page_name: 'Sample Electrical', meta_ig_username: 'sampleelectrical', meta_page_token: 'set', lead_ads: true, dms: true } : null)),
+    connStatus: (c) => ok(c === 'c1' ? { meta_page_name: 'Smith Plumbing', meta_ig_username: 'smithplumbing', facebook: true, instagram: true, inbound_email: null } : null),
+    conn: (c) => ok(D.conn?.[c] || (c === 'c1' ? { meta_page_id: '1029384756', meta_page_name: 'Smith Plumbing', meta_ig_username: 'smithplumbing', meta_page_token: 'set', lead_ads: true, dms: true } : null)),
     saveConn(c, o) { (D.conn ||= {})[c] = { ...(D.conn[c] || {}), ...o }; return ok(); },
-    metaConnect: () => ok({ ok: true, page: 'Sample Electrical', instagram: 'sampleelectrical' }),
+    metaConnect: () => ok({ ok: true, page: 'Smith Plumbing', instagram: 'smithplumbing' }),
     intStatus: (c) => ok(c === 'c4' ? (D.ints4 ||= [{ provider: 'shopify', status: 'connected', account_name: 'lunaandsage.myshopify.com', config: { shop: 'lunaandsage.myshopify.com' } }]) : c === 'c1' ? (D.ints ||= [{ provider: 'xero', status: 'connected', account_name: 'Sample Electrical Pty Ltd', config: {} }, { provider: 'gcal', status: 'connected', account_name: 'bookings@sampleelectrical.com.au', config: { start_hour: 7, end_hour: 16 } }]) : []),
     ints: (c) => api.intStatus(c),
     trackNums: (c) => ok(c === 'c1' ? (D.tn ||= [{ number: '+61480000099', source: 'Google Ads', forward_to: '', last_call_at: new Date(Date.now() - 7200e3).toISOString() }, { number: '+61480000098', source: 'Van signage', forward_to: '', last_call_at: null }]) : (D.tn2 ||= [])),
@@ -386,7 +386,7 @@ async function load() {
   if (VERT() === 'store') state.data.returns = await api.returns(c).catch(() => []);
   state.data.social = await api.socialComments(c).catch(() => []);
   if (['money', 'orders', 'tilly'].includes(state.view)) state.data.ints = await (isAgency() ? api.ints(c) : api.intStatus(c)).catch(() => []);
-  if (state.view === 'money') state.data.chases = await api.invoiceChases(c).catch(() => []);
+  if (['money', 'dashboard'].includes(state.view)) state.data.chases = await api.invoiceChases(c).catch(() => []);
   if (state.view === 'voice') {
     const calls = (state.data.convs || []).filter((v) => v.channel === 'voice'); state.data.vcalls = calls;
     if (!calls.find((v) => v.id === state.callId)) state.callId = calls[0]?.id || null;
@@ -410,7 +410,7 @@ async function load() {
 }
 async function boot() {
   try {
-    if (DEMOQ !== null && !state.me && !boot.demoed) { boot.demoed = true; api.demoAs('client', /store|shop/i.test(DEMOQ) ? 'maya@lunaandsage.com.au' : 'dave@smithplumbing.com.au'); const qp = new URLSearchParams(location.search); state.view = qp.get('view') || 'dashboard'; if (qp.has('embed')) document.body.classList.add('embed'); else demoBar(); }
+    if (DEMOQ !== null && !state.me && !boot.demoed) { boot.demoed = true; api.demoAs('client', /store|shop/i.test(DEMOQ) ? 'maya@shop.lunaandsage.com.au' : 'dave@smithplumbing.com.au'); const qp = new URLSearchParams(location.search); state.view = qp.get('view') || 'dashboard'; if (qp.has('embed')) document.body.classList.add('embed'); else demoBar(); }
     const s = await api.session();
     if (!s) return renderLogin();
     state.me = await api.me();
@@ -668,7 +668,7 @@ const VIEWS = {
         <ul class="list">
           <li><span><b>${chasing.length}</b> ${chasing.length === 1 ? 'quote' : 'quotes'} being chased${chaseVal ? ` · ${money0(chaseVal)}` : ''}</span><button class="btn btn-ghost btn-sm" data-go="leads">See leads</button></li>
           <li><span><b>${rebooks.length}</b> ${rebooks.length === 1 ? 'customer' : 'customers'} due a rebooking reminder</span><button class="btn btn-ghost btn-sm" data-go="leads">See leads</button></li>
-          <li><span>Overdue invoices from Xero</span><button class="btn btn-ghost btn-sm" data-go="money">Money</button></li>
+          <li><span>${(d.chases || []).filter((x) => x.status !== 'paid').length ? `<b>${(d.chases || []).filter((x) => x.status !== 'paid').length}</b> overdue invoices being chased · ${money0((d.chases || []).filter((x) => x.status !== 'paid').reduce((t, x) => t + Number(x.amount_due || 0), 0))}` : 'Overdue invoices from Xero'}</span><button class="btn btn-ghost btn-sm" data-go="money">Money</button></li>
         </ul>
       </div>`}
       <div class="card"><div class="card-head"><h2>Enquiries per week</h2><span class="small muted">Last 8 weeks</span></div>
@@ -809,11 +809,11 @@ const VIEWS = {
   },
   invoices() {
     const d = state.data; const due = d.invoices.filter((i) => i.status !== 'paid');
-    return head('Billing', 'Invoices', 'What you’re charged for and why. Every booked appointment is listed, and each one is only ever charged once.', isAgency() ? `<button class="btn btn-pink" data-act="addInvoice">${ic('plus', 16)} New invoice</button>` : '') + `
+    return head('Billing', 'Invoices', 'Your plan, your invoices and what’s due. Pay online any time.', isAgency() ? `<button class="btn btn-pink" data-act="addInvoice">${ic('plus', 16)} New invoice</button>` : '') + `
     ${due.length ? `<div class="card" style="background:var(--amberl);border-color:#F2DDB0;margin-bottom:16px"><b>${due.length} invoice${due.length > 1 ? 's' : ''} to pay</b> <span class="muted">· next due ${fmtDate(due[due.length - 1].due_date, { day: 'numeric', month: 'long' })}</span></div>` : ''}
     ${billingSection(d)}
     <section class="card"><div class="tbl-wrap"><table><thead><tr><th scope="col">Invoice</th><th scope="col">For</th><th scope="col">Amount</th><th scope="col">Issued</th><th scope="col">Due</th><th scope="col">Status</th><th scope="col"><span class="sr">Actions</span></th></tr></thead><tbody>
-    ${d.invoices.map((i) => `<tr><td><b>${esc(i.number)}</b></td><td>${esc(i.description || '')}</td><td>${i.amount == null ? '<span class="muted">[PRICE]</span>' : money(i.amount)}</td><td class="muted">${fmtDate(i.issued_on)}</td><td class="muted">${fmtDate(i.due_date)}</td><td>${pill(i.status)}</td><td style="text-align:right;white-space:nowrap">${i.status !== 'paid' && i.pay_url ? `<a class="btn btn-pink btn-sm" href="${esc(i.pay_url)}" target="_blank" rel="noopener">Pay now</a>` : ''}${i.pdf_path ? ` <button class="btn btn-ghost btn-sm" data-file="${esc(i.pdf_path)}">PDF</button>` : ''}${isAgency() && i.status !== 'paid' ? ` <button class="btn btn-ghost btn-sm" data-inv="${esc(i.id)}">Mark paid</button>` : ''}</td></tr>`).join('') || '<tr><td colspan="7" class="empty">No invoices yet.</td></tr>'}
+    ${d.invoices.map((i) => `<tr><td><b>${esc(i.number)}</b></td><td>${esc(i.description || '')}</td><td>${i.amount == null ? '<span class="muted">To be confirmed</span>' : money(i.amount)}</td><td class="muted">${fmtDate(i.issued_on)}</td><td class="muted">${fmtDate(i.due_date)}</td><td>${pill(i.status)}</td><td style="text-align:right;white-space:nowrap">${i.status !== 'paid' && i.pay_url ? `<a class="btn btn-pink btn-sm" href="${esc(i.pay_url)}" target="_blank" rel="noopener">Pay now</a>` : ''}${i.pdf_path ? ` <button class="btn btn-ghost btn-sm" data-file="${esc(i.pdf_path)}">PDF</button>` : ''}${isAgency() && i.status !== 'paid' ? ` <button class="btn btn-ghost btn-sm" data-inv="${esc(i.id)}">Mark paid</button>` : ''}</td></tr>`).join('') || '<tr><td colspan="7" class="empty">No invoices yet.</td></tr>'}
     </tbody></table></div></section>`;
   },
   onboarding() {
@@ -835,7 +835,7 @@ const VIEWS = {
     const on = !!r.enabled; const cv = convs.find((v) => v.id === state.convId);
     const month = convs.filter((v) => Date.now() - new Date(v.last_message_at) < 30 * 86400000);
     const n = (st) => month.filter((v) => v.status === st).length;
-    const intake = LIVE ? `${CFG.SUPABASE_URL}/functions/v1/reply/intake` : 'https://YOUR-PROJECT.supabase.co/functions/v1/reply/intake';
+    const intake = LIVE ? `${CFG.SUPABASE_URL}/functions/v1/reply/intake` : `${CFG.SUPABASE_URL || 'https://cupsusqjcgefmfhdznmo.supabase.co'}/functions/v1/reply/intake`;
     const tabs = [['inbox', 'Conversations'], ['settings', 'What it says'], ['connect', 'Connect & test']];
     const top = head('Tilly', 'Inbox', 'Every new lead gets a reply in your business’s name in under a minute, day or night. When they’re ready, it hands them to you.',
       `<span class="pill ${on ? 'p-green' : 'p-grey'}" style="align-self:center">${on ? 'On' : 'Off'}</span><button class="btn ${on ? 'btn-ghost' : 'btn-pink'}" data-replyon="${on ? 0 : 1}">${on ? 'Pause replies' : 'Turn on replies'}</button>`);
@@ -877,7 +877,7 @@ const VIEWS = {
       <div class="two"><label class="lab">Ring this mobile first<span class="small muted">Calls to your business number ring here. If you don’t answer in 20 seconds, the caller gets a text.</span><input class="field" name="forward_phone" type="tel" maxlength="20" placeholder="04…" value="${esc(r.forward_phone || '')}"></label><label class="lab">Daily wrap-up time<span class="small muted">Sent to your alerts mobile, or by email.</span><select class="field" name="daily_summary_hour">${Array.from({ length: 18 }, (_, i) => i + 5).map((h) => `<option value="${h}" ${(r.daily_summary_hour ?? 18) === h ? 'selected' : ''}>${((h + 11) % 12) + 1}${h < 12 ? 'am' : 'pm'}</option>`).join('')}</select></label></div>
       <label class="lab">Missed-call text (optional)<span class="small muted">Leave empty for: “Hi, it’s Tilly from your business. Sorry we missed your call! What can we help you with?” Use {business} and {name}.</span><textarea class="field" name="missed_call_text" maxlength="400" style="min-height:70px">${esc(r.missed_call_text || '')}</textarea></label>
       <h2 style="margin-top:10px">Tilly answers the phone</h2><p class="muted small" style="margin:0">Your assistant talks to callers, answers questions and books the job, then puts the whole call in your inbox.</p>
-      <div class="two"><label class="lab">When should she answer?<select class="field" name="voice">${[['off', 'Off: just text back missed calls'], ['missed', 'When I don’t pick up in 20 seconds'], ['always', 'Every call, straight away']].map(([v, l]) => `<option value="${v}" ${(r.voice_enabled ? (r.voice_mode || 'missed') : 'off') === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label><label class="lab">Greeting (optional)<span class="small muted">Leave empty for: “Hi, thanks for calling your business. I’m Tilly, their automated assistant. How can I help?” Use {business}.</span><textarea class="field" name="voice_greeting" maxlength="300" style="min-height:70px">${esc(r.voice_greeting || '')}</textarea></label></div>
+      <div class="two"><label class="lab">When should she answer?<select class="field" name="voice">${[['off', 'Off: just text back missed calls'], ['missed', 'If I don’t answer in 20 seconds'], ['always', 'Every call, straight away']].map(([v, l]) => `<option value="${v}" ${(r.voice_enabled ? (r.voice_mode || 'missed') : 'off') === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label><label class="lab">Greeting (optional)<span class="small muted">Leave empty for: “Hi, thanks for calling your business. I’m Tilly, their automated assistant. How can I help?” Use {business}.</span><textarea class="field" name="voice_greeting" maxlength="300" style="min-height:70px">${esc(r.voice_greeting || '')}</textarea></label></div>
       <h2 style="margin-top:10px">Repeat work</h2><p class="muted small" style="margin:0">For jobs that come round again, like pest treatments, cleans, house washes and services.</p>
       <fieldset class="rp-ch"><legend class="lab">Rebooking</legend><label><input type="checkbox" name="rebook_enabled" ${r.rebook_enabled !== false ? 'checked' : ''}> Remind customers when they’re due again</label></fieldset>
       <div class="two"><label class="lab">Usual gap between jobs<span class="small muted">When you mark a job Won, the reminder is set for this long after. You can change it per customer.</span><select class="field" name="rebook_default_days">${[[0, 'Off'],[30, '1 month'],[61, '2 months'],[91, '3 months'],[122, '4 months'],[183, '6 months'],[365, '12 months']].map(([v, l]) => `<option value="${v}" ${(r.rebook_default_days || 0) === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label><label class="lab">Rebooking text (optional)<span class="small muted">Use {name}, {business} and {job}. Leave empty for a friendly default.</span><textarea class="field" name="rebook_text" maxlength="400" style="min-height:70px">${esc(r.rebook_text || '')}</textarea></label></div>
@@ -936,7 +936,7 @@ const slug = (t) => String(t || 'leads').toLowerCase().replace(/[^a-z0-9]+/g, '-
 
 VIEWS.channels = function () {
   const d = state.data, r = d.reply || {}, cs = d.cs || {}, cn = d.conn || {};
-  const fn = LIVE ? `${CFG.SUPABASE_URL}/functions/v1/reply` : 'https://YOUR-PROJECT.supabase.co/functions/v1/reply';
+  const fn = LIVE ? `${CFG.SUPABASE_URL}/functions/v1/reply` : `${CFG.SUPABASE_URL || 'https://cupsusqjcgefmfhdznmo.supabase.co'}/functions/v1/reply`;
   const key = r.intake_key;
   const L = d.leads || [];
   const bySrc = Object.entries(L.reduce((a, l) => { const k = l.source || 'Other'; a[k] = (a[k] || 0) + 1; return a; }, {})).sort((a, b) => b[1] - a[1]);
@@ -1045,10 +1045,10 @@ function billingSection(d) {
   if (!p && !isAgency()) return '';
   const planTxt = p ? [p.monthly_fee > 0 && `${money0(p.monthly_fee)} a month`, p.per_booking > 0 && `${money0(p.per_booking)} per booked appointment`, p.per_won > 0 && `${money0(p.per_won)} per sale`, p.won_percent > 0 && `${p.won_percent}% of each sale`].filter(Boolean).join(' + ') : '';
   return `<section class="card bill" style="margin-bottom:16px">
-    <div class="card-head" style="align-items:flex-start;gap:12px;flex-wrap:wrap"><div><h2>Results billing</h2><p class="small muted" style="margin:4px 0 0">${p ? esc(planTxt || 'No charges set') + (p.active ? '' : ' · paused') : 'No billing plan yet. Set one so booked appointments are counted automatically.'}</p></div>
+    <div class="card-head" style="align-items:flex-start;gap:12px;flex-wrap:wrap"><div><h2>${p && !(p.per_booking > 0 || p.per_won > 0 || p.won_percent > 0) ? 'Your plan' : 'Results billing'}</h2><p class="small muted" style="margin:4px 0 0">${p ? esc(planTxt || 'No charges set') + (p.active ? '' : ' · paused') : 'No billing plan yet. Set one so booked appointments are counted automatically.'}</p></div>
       <div class="row" style="gap:8px;flex-wrap:wrap"><label class="sr" for="billM">Month</label><input class="field" id="billM" type="month" value="${esc(m)}" style="width:auto;min-height:38px">${isAgency() ? `<button class="btn btn-ghost btn-sm" data-act="editPlan">${p ? 'Edit plan' : 'Set up plan'}</button>` : ''}</div></div>
-    ${p ? `<div class="grid g4 bill-k"><div><span class="lab">Monthly fee</span><b>${money0(p.monthly_fee)}</b></div><div><span class="lab">Booked appointments</span><b>${n('booking')}</b><span class="small muted">${money0(sum('booking'))}</span></div><div><span class="lab">Sales won</span><b>${n('won')}</b><span class="small muted">${money0(sum('won'))}</span></div><div><span class="lab">${monthLabel} total</span><b>${money0(total)}</b><span class="small muted">plus GST if applicable</span></div></div>
-    ${ev.length ? `<details style="margin-top:12px"><summary class="small" style="font-weight:700;cursor:pointer">${ev.length} billable item${ev.length > 1 ? 's' : ''} this month</summary><div class="tbl-wrap"><table><thead><tr><th scope="col">Date</th><th scope="col">Lead</th><th scope="col">For</th><th scope="col">Amount</th><th scope="col">Status</th>${isAgency() ? '<th scope="col"><span class="sr">Actions</span></th>' : ''}</tr></thead><tbody>${ev.map((e) => `<tr><td class="muted">${fmtDate(e.occurred_at)}</td><td>${esc(e.leads?.name || '—')}</td><td>${e.kind === 'won' ? 'Sale won' : 'Booked appointment'}</td><td>${money(e.amount)}</td><td>${pill(e.status === 'billable' ? 'due' : e.status === 'invoiced' ? 'paid' : 'lost')}</td>${isAgency() ? `<td style="text-align:right">${e.status === 'billable' ? `<button class="btn btn-ghost btn-sm" data-void="${esc(e.id)}">Don’t charge</button>` : e.status === 'void' ? `<button class="btn btn-ghost btn-sm" data-unvoid="${esc(e.id)}">Charge</button>` : ''}</td>` : ''}</tr>`).join('')}</tbody></table></div></details>` : `<p class="small muted" style="margin:12px 0 0">No booked appointments yet this month. They’re added automatically when a lead is marked Booked.</p>`}
+    ${p ? `<div class="grid g4 bill-k"><div><span class="lab">Monthly fee</span><b>${money0(p.monthly_fee)}</b></div>${p.per_booking > 0 ? `<div><span class="lab">Booked appointments</span><b>${n('booking')}</b><span class="small muted">${money0(sum('booking'))}</span></div>` : ''}${(p.per_won > 0 || p.won_percent > 0) ? `<div><span class="lab">Sales won</span><b>${n('won')}</b><span class="small muted">${money0(sum('won'))}</span></div>` : ''}<div><span class="lab">${monthLabel} total</span><b>${money0(total)}</b><span class="small muted">plus GST if applicable</span></div></div>
+    ${ev.length ? `<details style="margin-top:12px"><summary class="small" style="font-weight:700;cursor:pointer">${ev.length} billable item${ev.length > 1 ? 's' : ''} this month</summary><div class="tbl-wrap"><table><thead><tr><th scope="col">Date</th><th scope="col">Lead</th><th scope="col">For</th><th scope="col">Amount</th><th scope="col">Status</th>${isAgency() ? '<th scope="col"><span class="sr">Actions</span></th>' : ''}</tr></thead><tbody>${ev.map((e) => `<tr><td class="muted">${fmtDate(e.occurred_at)}</td><td>${esc(e.leads?.name || '—')}</td><td>${e.kind === 'won' ? 'Sale won' : 'Booked appointment'}</td><td>${money(e.amount)}</td><td>${pill(e.status === 'billable' ? 'due' : e.status === 'invoiced' ? 'paid' : 'lost')}</td>${isAgency() ? `<td style="text-align:right">${e.status === 'billable' ? `<button class="btn btn-ghost btn-sm" data-void="${esc(e.id)}">Don’t charge</button>` : e.status === 'void' ? `<button class="btn btn-ghost btn-sm" data-unvoid="${esc(e.id)}">Charge</button>` : ''}</td>` : ''}</tr>`).join('')}</tbody></table></div></details>` : ((p && (p.per_booking > 0 || p.per_won > 0 || p.won_percent > 0)) ? `<p class="small muted" style="margin:12px 0 0">No booked appointments yet this month. They’re added automatically when a lead is marked Booked.</p>` : '')}
     ${isAgency() ? `<div class="row" style="gap:8px;margin-top:14px"><button class="btn btn-pink" data-act="billNow">Create ${esc(monthLabel)} invoice</button><span class="small muted">Adds the invoice below${client()?.agency_id ? '' : ' and emails a pay-online link when Stripe is connected'}.</span></div>` : ''}` : ''}
   </section>`;
 }
@@ -1114,13 +1114,12 @@ VIEWS.tilly = function () {
     </article>
     <article class="card"><div class="card-head"><h2>Business type</h2></div>
       <p class="small muted" style="margin:0 0 10px">Sets Tilly’s questions, words and screens for your kind of business.</p>
-      <div class="seg" role="radiogroup" aria-label="Business type">${Object.entries(VERTS).map(([k, x]) => `<button type="button" role="radio" aria-checked="${v === k}" data-vert="${k}" ${isAgency() ? '' : 'disabled'}>${esc(x.label)}</button>`).join('')}</div>
-      ${isAgency() ? '' : '<p class="small muted" style="margin:10px 0 0">Need to change this? Send us a request.</p>'}
+      ${isAgency() ? `<div class="vchoice" role="radiogroup" aria-label="Business type">${Object.entries(VERTS).map(([k, x]) => `<button type="button" role="radio" aria-checked="${v === k}" data-vert="${k}"><span class="vdot"></span>${esc(x.label)}</button>`).join('')}</div>` : `<div class="vread"><b>${esc(VERTS[v]?.label || '')}</b><button type="button" class="btn btn-ghost btn-sm" data-go="requests">Request a change</button></div>`}
     </article>
   </section>
   <section class="grid g2" style="margin-top:16px;align-items:start">
     <form class="card ch-form" id="voiceForm" novalidate><h2>Phone answering</h2><p class="small muted" style="margin:0">Tilly answers in a natural Australian voice, books the job and puts the transcript in Calls.</p>
-      <label class="lab">When should Tilly answer?<select class="field" name="voice">${[['off', 'Off: just text back missed calls'], ['missed', 'When I don’t pick up in 20 seconds'], ['every', 'Every call, straight away']].map(([k, l]) => `<option value="${k}" ${voice === k ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
+      <label class="lab">When should Tilly answer?<select class="field" name="voice">${[['off', 'Off: just text back missed calls'], ['missed', 'If I don’t answer in 20 seconds'], ['every', 'Every call, straight away']].map(([k, l]) => `<option value="${k}" ${voice === k ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
       ${F('Ring this mobile first', 'forward_phone', 'tel', `maxlength="20" placeholder="04…" value="${esc(r.forward_phone || '')}"`)}
       <button class="btn btn-navy btn-sm" type="submit" style="align-self:flex-start">Save</button></form>
     <div style="display:flex;flex-direction:column;gap:16px">${voiceCard()}
@@ -1404,7 +1403,11 @@ Object.assign(ACTS, EXTRA_ACTS);
 async function reload() { await load(); render(); }
 
 /* ---------------- events ---------------- */
+function labelTables() {
+  $app.querySelectorAll('.tbl-wrap table').forEach((t) => { const hs = [...t.querySelectorAll('thead th')].map((h) => h.textContent.trim()); t.classList.add('rt'); t.querySelectorAll('tbody tr').forEach((tr) => [...tr.children].forEach((td, k) => { if (hs[k] && !td.hasAttribute('data-l')) td.setAttribute('data-l', hs[k]); })); });
+}
 function wire() {
+  labelTables();
   const side = document.getElementById('side'), mb = document.getElementById('menuBtn');
   mb && (mb.onclick = () => { const o = side.classList.toggle('open'); mb.setAttribute('aria-expanded', o); });
   document.getElementById('signOut').onclick = async () => { if (DEMOQ !== null) { location.href = '/'; return; } await api.signOut(); state.me = null; state.clientId = null; renderLogin(); };

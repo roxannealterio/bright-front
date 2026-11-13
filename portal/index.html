@@ -316,12 +316,27 @@ dialog.profile form{display:flex;flex-direction:column;gap:14px}
 .note-card{background:var(--amberl);border-color:#F2DDB0}
 .bills{background:linear-gradient(135deg,#fff,var(--violetl))}.bills-ic{width:44px;height:44px;border-radius:12px;background:var(--navy);color:#fff;display:grid;place-items:center;flex-shrink:0}
 @media(max-width:760px){.lvl{grid-template-columns:1fr}}
+
+.vchoice{display:grid;gap:8px}.vchoice button{display:flex;align-items:center;gap:10px;text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:12px 14px;font:inherit;font-weight:700;font-size:14px;color:var(--navy);cursor:pointer}.vchoice button[aria-checked="true"]{border-color:var(--navy);box-shadow:0 0 0 1px var(--navy) inset}.vdot{width:18px;height:18px;border-radius:50%;border:2px solid #C9C4D6;flex:none;display:grid;place-items:center}.vchoice button[aria-checked="true"] .vdot{border-color:var(--pink)}.vchoice button[aria-checked="true"] .vdot::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--pink)}
+.vread{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--sand,#F7F4F0);border-radius:14px;padding:12px 14px}.vread b{font-size:15px}
+@media(max-width:640px){
+ .tbl-wrap{overflow:visible;margin:0}
+ table.rt,table.rt tbody{display:block;width:100%}
+ table.rt thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+ table.rt tr{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;padding:14px 2px;border-bottom:1px solid var(--line)}
+ table.rt tr:last-child{border-bottom:0}
+ table.rt td{display:block;padding:0!important;border:0!important;min-width:0;font-size:14px;white-space:normal}
+ table.rt td[data-l]::before{content:attr(data-l);display:block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+ table.rt td:first-child{grid-column:1/-1;font-size:15px}
+ table.rt td:first-child::before{display:none}
+ table.rt td:empty{display:none}
+}
 </style>
 </head>
 <body>
 <div id="app" aria-live="polite"></div>
 <div class="toast" id="toast" role="status"></div>
 <script src="config.js?v=20261112m"></script>
-<script type="module" src="app.js?v=20261113e"></script>
+<script type="module" src="app.js?v=20261113f"></script>
 </body>
 </html>
