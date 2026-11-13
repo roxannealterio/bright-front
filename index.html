@@ -358,6 +358,26 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
 .lockb{margin-top:auto;display:flex;justify-content:space-between;padding:0 34px 14px}.lockb span{width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.25);display:grid;place-items:center;font-size:18px}
 @media(max-width:760px){.phui{padding:26px 10px}.iph{transform:scale(.92);transform-origin:top center;margin-bottom:-48px}}
 .hero-trust{flex-wrap:nowrap!important;gap:14px!important;white-space:nowrap}@media(max-width:520px){.hero-trust{gap:10px!important;font-size:13px!important}.hero-trust svg{width:13px;height:13px}}
+
+/* hero v3: video under headline, like Invoca */
+.hero-in{grid-template-columns:minmax(0,1fr)!important}
+.hero-in>div{max-width:1000px}
+.hero .console{max-width:920px;margin:40px 0 0}
+.hero .hero-cta{margin-top:40px}
+@media(max-width:640px){.hero .console{margin-top:30px}.hero .hero-cta{margin-top:28px}}
+/* results */
+.results{background:#fff;padding:90px 0}
+.res-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.rc{position:relative;border-radius:28px;min-height:300px;padding:28px;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;background-size:cover;background-position:center;color:var(--ink)}
+.rc>*{position:relative}.rc>.lab,.rc>.deco{position:absolute}
+.rc-a{background-color:var(--pinkl)}.rc-b{background-color:var(--vil)}.rc-c{background-color:var(--ink);color:#fff}
+.rc-p{color:#fff}.rc-p .lab,.rc-p .rc-n,.rc-p p{text-shadow:0 2px 14px rgba(0,0,0,.45)}.rc-p::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,11,46,.3),rgba(11,11,46,0) 25%,rgba(11,11,46,0) 35%,rgba(11,11,46,.85))}
+.rc-n{font-size:clamp(44px,4.6vw,64px);font-weight:800;letter-spacing:-.045em;line-height:1}
+.rc p{margin:10px 0 0;font-size:16px;font-weight:600;max-width:24em;opacity:.88}
+.rc-a .rc-n{color:var(--pinkd)}.rc-b .rc-n{color:var(--vi)}.rc-c .rc-n{color:var(--pink)}
+.rc .deco{position:absolute;top:26px;right:26px;width:58px;height:58px}
+.rc .lab{position:absolute;top:26px;left:28px;font-size:13px;font-weight:800;letter-spacing:.02em;opacity:.8}
+@media(max-width:900px){.res-grid{grid-template-columns:minmax(0,1fr)}.rc{min-height:250px}}
 </style>
 </head>
 <body>
@@ -400,14 +420,15 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
       <span class="pill-k"><img src="assets/roxy.webp" alt="" width="30" height="30"><i></i>Meet Tilly, your AI admin</span>
       <h1>Your office, <em>on autopilot.</em></h1>
       <p class="sub">Tilly follows up every quote, chases every overdue invoice and answers every call you miss, so more of your work turns into money in the bank. The admin you don’t have to hire, from $297 a month.</p>
-      <div class="hero-cta"><a class="btn btn-pink" href="book.html#start">Book a free demo <svg width="18" height="18"><use href="#arr"/></svg></a>
-        <a class="btn btn-line" href="portal/?demo">Try the live demo</a></div>
-      <div class="hero-trust"><span><svg width="16" height="16"><use href="#ck"/></svg>Set up for you</span><span><svg width="16" height="16"><use href="#ck"/></svg>Month to month</span><span><svg width="16" height="16"><use href="#ck"/></svg>Free demo</span></div>
-    </div>
     <div class="console" aria-label="Example of Tilly at work">
       <div class="chip c2"><span class="ci">$</span><span>Collected this week<b data-count="4820" data-pre="$">$4,820</b></span></div>
       <div class="hvid"><video id="heroVid" src="assets/autofice-hero.mp4" poster="assets/autofice-hero-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="Video: Tilly answers a late-night enquiry, books the job and chases an overdue invoice"></video></div>
       <div class="chip c1"><span class="ci">⚡</span><span>Average reply<b>38 seconds</b></span></div>
+    </div>
+
+      <div class="hero-cta"><a class="btn btn-pink" href="book.html#start">Book a free demo <svg width="18" height="18"><use href="#arr"/></svg></a>
+        <a class="btn btn-line" href="portal/?demo">Try the live demo</a></div>
+      <div class="hero-trust"><span><svg width="16" height="16"><use href="#ck"/></svg>Set up for you</span><span><svg width="16" height="16"><use href="#ck"/></svg>Month to month</span><span><svg width="16" height="16"><use href="#ck"/></svg>Free demo</span></div>
     </div>
   </div>
 </section>
@@ -418,6 +439,20 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
     <li><img src="assets/logos/xero.svg" alt="">Xero</li><li><img src="assets/logos/google-calendar.svg" alt="">Google Calendar</li><li><img src="assets/logos/instagram.svg" alt="">Instagram</li><li><img src="assets/logos/facebook.svg" alt="">Facebook</li><li><img src="assets/logos/messenger.svg" alt="">Messenger</li><li><img src="assets/logos/gmail.svg" alt="">Email</li><li><img src="assets/logos/google.svg" alt="">Google reviews</li><li><img src="assets/logos/stripe.svg" alt="">Stripe</li><li><img src="assets/logos/zapier.svg" alt="">Zapier</li><li><img src="assets/logos/make.svg" alt="">Make</li><li><img src="assets/logos/shopify.svg" alt="">Shopify</li><li><img src="assets/logos/wordpress.svg" alt="">WordPress</li>
   </ul></div>
 </div>
+
+<section class="results" id="results">
+  <div class="wrap">
+    <div class="shead rv"><span class="kick">The results</span><h2 class="h2">What changes when <span class="grad-t">Tilly starts.</span></h2></div>
+    <div class="res-grid">
+      <div class="rc rc-a rv"><span class="lab">Speed</span><svg class="deco" style="color:var(--pink)" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" fill="currentColor"/></svg><div class="rc-n">&lt;60 sec</div><p>Every enquiry answered, day or night, while the lead is still hot.</p></div>
+      <div class="rc rc-p rv" style="background-image:url(assets/res-couch.jpg)"><span class="lab">After hours</span><div class="rc-n">24/7</div><p>Calls, texts and DMs handled while you’re off the clock.</p></div>
+      <div class="rc rc-b rv"><span class="lab">Getting paid</span><svg class="deco" style="color:var(--vi)" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" fill="currentColor"/></svg><div class="rc-n">Day 1, 7, 14</div><p>Friendly invoice reminders with a pay-now link, until it’s paid.</p></div>
+      <div class="rc rc-p rv" style="background-image:url(assets/res-door.jpg)"><span class="lab">Bookings</span><div class="rc-n">Booked</div><p>Jobs land straight in your Google Calendar, no back and forth.</p></div>
+      <div class="rc rc-c rv"><span class="lab">Missed calls</span><svg class="deco" style="color:var(--pink)" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" fill="currentColor"/></svg><div class="rc-n">0</div><p>Missed calls left without a reply. Tilly texts them back in seconds.</p></div>
+      <div class="rc rc-p rv" style="background-image:url(assets/res-ute.jpg)"><span class="lab">Cost</span><div class="rc-n">$297/mo</div><p>Instead of a $67,898 a year admin wage.</p></div>
+    </div>
+  </div>
+</section>
 
 <section class="cost" id="cost">
   <div class="wrap">
