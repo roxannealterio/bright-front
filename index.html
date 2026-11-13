@@ -30,7 +30,7 @@ document.addEventListener('click',function(e){var a=e.target.closest&&e.target.c
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <link rel="canonical" href="https://autofice.com.au/">
 <link rel="alternate" hreflang="en-AU" href="https://autofice.com.au/">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is Tilly a real person?", "acceptedAnswer": {"@type": "Answer", "text": "No. Tilly is an AI admin. She introduces herself as your business’s automated assistant, and hands anything she can’t answer to you."}}, {"@type": "Question", "name": "Do I need Xero?", "acceptedAnswer": {"@type": "Answer", "text": "No. Tilly answers enquiries, calls and DMs and follows up quotes without it. Connect Xero and she also chases overdue invoices and stops the moment they’re paid."}}, {"@type": "Question", "name": "How does invoice chasing work?", "acceptedAnswer": {"@type": "Answer", "text": "Tilly checks Xero for overdue invoices each weekday and sends a friendly reminder 1, 7 and 14 days after the due date, with Xero’s pay-online link. If the customer replies, she answers them and lets you know."}}, {"@type": "Question", "name": "What if a customer asks about price?", "acceptedAnswer": {"@type": "Answer", "text": "Tilly only shares prices you’ve told her she can. Anything else, she says you’ll confirm and passes it to you with a summary."}}, {"@type": "Question", "name": "Do I need a new phone number?", "acceptedAnswer": {"@type": "Answer", "text": "We set you up with an Australian number for Tilly. Calls can ring your mobile first, and Tilly picks up when you can’t. Prefer your current number? Forward unanswered calls to her."}}, {"@type": "Question", "name": "Does it work with my job software?", "acceptedAnswer": {"@type": "Answer", "text": "Tilly works with Xero, Google Calendar and ServiceM8, and can send leads to most other tools, like Tradify or Fergus, through Zapier or Make."}}, {"@type": "Question", "name": "Is there a lock-in contract?", "acceptedAnswer": {"@type": "Answer", "text": "No. Plans are month to month with 30 days’ notice, after a one-off setup fee."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is Tilly a real person?", "acceptedAnswer": {"@type": "Answer", "text": "No. Tilly is an AI admin. She introduces herself as your business’s automated assistant, and hands anything she can’t answer to you."}}, {"@type":  "Question", "name":  "How does Tilly know when I’m free?", "acceptedAnswer":  {"@type":  "Answer", "text":  "She reads your Google or Outlook calendar to see your real availability, only offers times you’re free, and adds the booking straight in. Block out time in your calendar and she won’t book over it."}}, {"@type": "Question", "name": "Do I need Xero?", "acceptedAnswer": {"@type": "Answer", "text": "No. Tilly answers enquiries, calls and DMs and follows up quotes without it. Connect Xero and she also chases overdue invoices and stops the moment they’re paid."}}, {"@type": "Question", "name": "How does invoice chasing work?", "acceptedAnswer": {"@type": "Answer", "text": "Tilly checks Xero for overdue invoices each weekday and sends a friendly reminder 1, 7 and 14 days after the due date, with Xero’s pay-online link. If the customer replies, she answers them and lets you know."}}, {"@type": "Question", "name": "What if a customer asks about price?", "acceptedAnswer": {"@type": "Answer", "text": "Tilly only shares prices you’ve told her she can. Anything else, she says you’ll confirm and passes it to you with a summary."}}, {"@type": "Question", "name": "Do I need a new phone number?", "acceptedAnswer": {"@type": "Answer", "text": "We set you up with an Australian number for Tilly. Calls can ring your mobile first, and Tilly picks up when you can’t. Prefer your current number? Forward unanswered calls to her."}}, {"@type": "Question", "name": "Does it work with my job software?", "acceptedAnswer": {"@type": "Answer", "text": "Tilly works with Xero, Google Calendar and ServiceM8, and can send leads to most other tools, like Tradify or Fergus, through Zapier or Make."}}, {"@type": "Question", "name": "Is there a lock-in contract?", "acceptedAnswer": {"@type": "Answer", "text": "No. Plans are month to month with 30 days’ notice, after a one-off setup fee."}}]}</script>
 <meta name="theme-color" content="#0B0B2E">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -134,8 +134,8 @@ section{padding:110px 0}
 /* logos */
 .logos{padding:46px 0 40px;background:#fff;border-bottom:1px solid var(--line)}
 .logos p{text-align:center;font-size:14px;font-weight:800;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:24px}
-.marq{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
-.marq ul{display:flex;gap:44px;list-style:none;margin:0;padding:0;width:max-content;animation:marq 38s linear infinite}
+.marq{overflow:hidden;position:relative}.marq::before,.marq::after{content:"";position:absolute;top:0;bottom:0;width:12%;z-index:1;pointer-events:none}.marq::before{left:0;background:linear-gradient(90deg,#fff,rgba(255,255,255,0))}.marq::after{right:0;background:linear-gradient(270deg,#fff,rgba(255,255,255,0))}
+.marq ul{display:flex;gap:44px;list-style:none;margin:0;padding:0;width:max-content;animation:marq 38s linear infinite;will-change:transform;-webkit-backface-visibility:hidden}
 .marq li{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;color:#3A3A5C;white-space:nowrap}
 .marq img{width:30px;height:30px}
 @keyframes marq{to{transform:translateX(-50%)}}
@@ -378,6 +378,22 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
 .rc .deco{position:absolute;top:26px;right:26px;width:58px;height:58px}
 .rc .lab{position:absolute;top:26px;left:28px;font-size:13px;font-weight:800;letter-spacing:.02em;opacity:.8}
 @media(max-width:900px){.res-grid{grid-template-columns:minmax(0,1fr)}.rc{min-height:250px}}
+
+.hvid{position:relative}.snd{position:absolute;right:16px;bottom:16px;z-index:3;display:inline-flex;align-items:center;gap:8px;border:0;cursor:pointer;font:inherit;font-weight:800;font-size:14px;color:#fff;background:rgba(11,11,46,.62);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:10px 16px}.snd:hover{background:rgba(11,11,46,.8)}.snd .s-on{display:none}.snd.on .s-on{display:block}.snd.on .s-off{display:none}
+
+/* mobile swipe carousels */
+@media(max-width:760px){
+.swipe{display:flex!important;overflow-x:auto!important;scroll-snap-type:x mandatory;gap:14px!important;margin:0 -18px!important;padding:6px 18px 8px!important;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.swipe::-webkit-scrollbar{display:none}
+.swipe>*{flex:0 0 84%!important;scroll-snap-align:center;min-width:0}
+.pgrid.swipe{padding-top:22px!important}.pgrid.swipe>*{flex-basis:86%!important}
+.res-grid.swipe .rc{min-height:300px}
+.sdots{display:flex;justify-content:center;gap:7px;margin:16px 0 0}
+.sdots i{width:7px;height:7px;border-radius:9px;background:rgba(11,11,46,.18);transition:width .3s,background .3s}
+.sdots i.on{width:22px;background:var(--pink)}
+.trust .sdots i{background:rgba(255,255,255,.25)}.trust .sdots i.on{background:var(--pink)}
+}
+@media(min-width:761px){.sdots{display:none}}
 </style>
 </head>
 <body>
@@ -396,12 +412,12 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
     <nav class="nav" aria-label="Main">
       <div class="dd" id="dd"><button type="button" aria-expanded="false" aria-controls="mega">Product ▾</button>
         <div class="mega" id="mega">
-          <a href="#platform" data-tab="0"><span class="mi">💬</span><span><b>Answers everything</b><span>Enquiries, calls, texts, emails, DMs and comments</span></span></a>
-          <a href="#platform" data-tab="1"><span class="mi">💸</span><span><b>Chases the money</b><span>Quote follow-ups and overdue invoices in Xero</span></span></a>
-          <a href="#platform" data-tab="2"><span class="mi">📅</span><span><b>Books the job</b><span>Real free times from your calendar</span></span></a>
-          <a href="#platform" data-tab="3"><span class="mi">📊</span><span><b>Reports to you</b><span>A daily wrap-up of what got done</span></span></a>
+          <a href="#platform" data-tab="0"><span class="mi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></span><span><b>Answers everything</b><span>Enquiries, calls, texts, emails, DMs and comments</span></span></a>
+          <a href="#platform" data-tab="1"><span class="mi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M17 6.5C17 4.6 14.8 4 12 4S7 5 7 7.5 9.5 10.5 12 11s5 1.5 5 4-2.2 3.5-5 3.5-5-.8-5-2.5"/></svg></span><span><b>Chases the money</b><span>Quote follow-ups and overdue invoices in Xero</span></span></a>
+          <a href="#platform" data-tab="2"><span class="mi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zM16 3v4M8 3v4M3 11h18"/></svg></span><span><b>Books the job</b><span>Real free times from your calendar</span></span></a>
+          <a href="#platform" data-tab="3"><span class="mi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><span><b>Reports to you</b><span>A daily wrap-up of what got done</span></span></a>
         </div></div>
-      <a href="#day">How it works</a><a href="#industries">Industries</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a>
+      <a href="#product">How it works</a><a href="#industries">Industries</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a>
     </nav>
     <div class="hdr-cta"><a class="login" href="portal/">Log in</a><a class="btn btn-pink" href="book.html#start">Book a demo</a>
       <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mnav"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button></div>
@@ -409,7 +425,7 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
 </header>
 <nav class="mnav" id="mnav" aria-label="Mobile">
   <div class="mnav-h"><a class="wm" href="index.html">aut<span class="i">o</span>fice</a><button class="burger" id="mclose" type="button" aria-label="Close menu" style="display:grid"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button></div>
-  <a class="l" href="#platform">What Tilly does</a><a class="l" href="#day">How it works</a><a class="l" href="#calc">What admin costs you</a><a class="l" href="#industries">Industries</a><a class="l" href="#pricing">Pricing</a><a class="l" href="#faq">FAQ</a><a class="l" href="portal/">Log in</a>
+  <a class="l" href="#platform">What Tilly does</a><a class="l" href="#product">How it works</a><a class="l" href="#calc">What admin costs you</a><a class="l" href="#industries">Industries</a><a class="l" href="#pricing">Pricing</a><a class="l" href="#faq">FAQ</a><a class="l" href="portal/">Log in</a>
   <a class="btn btn-pink" href="book.html#start">Book a free demo</a>
 </nav>
 
@@ -422,8 +438,8 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
       <p class="sub">Tilly follows up every quote, chases every overdue invoice and answers every call you miss, so more of your work turns into money in the bank. The admin you don’t have to hire, from $297 a month.</p>
     <div class="console" aria-label="Example of Tilly at work">
       <div class="chip c2"><span class="ci">$</span><span>Collected this week<b data-count="4820" data-pre="$">$4,820</b></span></div>
-      <div class="hvid"><video id="heroVid" src="assets/autofice-hero.mp4" poster="assets/autofice-hero-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="Video: Tilly answers a late-night enquiry, books the job and chases an overdue invoice"></video></div>
-      <div class="chip c1"><span class="ci">⚡</span><span>Average reply<b>38 seconds</b></span></div>
+      <div class="hvid"><video id="heroVid" src="assets/autofice-hero.mp4" poster="assets/autofice-hero-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="Video: Tilly answers a late-night enquiry, books the job and chases an overdue invoice"></video><button class="snd" id="sndBtn" type="button" aria-label="Turn sound on" aria-pressed="false"><svg class="s-off" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4zM23 9l-6 6M17 9l6 6"/></svg><svg class="s-on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4zM15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg><span>Sound on</span></button></div>
+      <div class="chip c1"><span class="ci"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z" fill="currentColor"/></svg></span><span>Average reply<b>38 seconds</b></span></div>
     </div>
 
       <div class="hero-cta"><a class="btn btn-pink" href="book.html#start">Book a free demo <svg width="18" height="18"><use href="#arr"/></svg></a>
@@ -443,11 +459,11 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
 <section class="results" id="results">
   <div class="wrap">
     <div class="shead rv"><span class="kick">The results</span><h2 class="h2">What changes when <span class="grad-t">Tilly starts.</span></h2></div>
-    <div class="res-grid">
+    <div class="res-grid swipe" data-auto="5200">
       <div class="rc rc-a rv"><span class="lab">Speed</span><svg class="deco" style="color:var(--pink)" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" fill="currentColor"/></svg><div class="rc-n">&lt;60 sec</div><p>Every enquiry answered, day or night, while the lead is still hot.</p></div>
       <div class="rc rc-p rv" style="background-image:url(assets/res-couch.jpg)"><span class="lab">After hours</span><div class="rc-n">24/7</div><p>Calls, texts and DMs handled while you’re off the clock.</p></div>
       <div class="rc rc-b rv"><span class="lab">Getting paid</span><svg class="deco" style="color:var(--vi)" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" fill="currentColor"/></svg><div class="rc-n">Day 1, 7, 14</div><p>Friendly invoice reminders with a pay-now link, until it’s paid.</p></div>
-      <div class="rc rc-p rv" style="background-image:url(assets/res-door.jpg)"><span class="lab">Bookings</span><div class="rc-n">Booked</div><p>Jobs land straight in your Google Calendar, no back and forth.</p></div>
+      <div class="rc rc-p rv" style="background-image:url(assets/res-door.jpg)"><span class="lab">Bookings</span><div class="rc-n">Booked</div><p>Tilly checks your calendar for free times, offers them and books the job.</p></div>
       <div class="rc rc-c rv"><span class="lab">Missed calls</span><svg class="deco" style="color:var(--pink)" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" fill="currentColor"/></svg><div class="rc-n">0</div><p>Missed calls left without a reply. Tilly texts them back in seconds.</p></div>
       <div class="rc rc-p rv" style="background-image:url(assets/res-ute.jpg)"><span class="lab">Cost</span><div class="rc-n">$297/mo</div><p>Instead of a $67,898 a year admin wage.</p></div>
     </div>
@@ -487,7 +503,7 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
   <div class="wrap">
     <div class="shead c rv"><span class="kick">The platform</span><h2 class="h2">One Tilly. <span class="grad-t">Every admin job.</span></h2><p class="lede">Most businesses juggle five apps and still miss things. Tilly does the whole office job in one place, in your business’s name.</p></div>
     <div class="tabs" role="tablist" aria-label="What Tilly does">
-      <button role="tab" aria-selected="true" aria-controls="p0" id="t0">💬 Answers</button><button role="tab" aria-selected="false" aria-controls="p1" id="t1">💸 Chases</button><button role="tab" aria-selected="false" aria-controls="p2" id="t2">📅 Books</button><button role="tab" aria-selected="false" aria-controls="p3" id="t3">📊 Reports</button>
+      <button role="tab" aria-selected="true" aria-controls="p0" id="t0">Answers</button><button role="tab" aria-selected="false" aria-controls="p1" id="t1">Chases</button><button role="tab" aria-selected="false" aria-controls="p2" id="t2">Books</button><button role="tab" aria-selected="false" aria-controls="p3" id="t3">Reports</button>
     </div>
     <div class="pane on" id="p0" role="tabpanel" aria-labelledby="t0">
       <div><h3>Every enquiry answered in seconds.</h3><p>Calls, texts, emails, website forms, Instagram and Facebook DMs, even comments on your posts. Tilly replies to all of them in your business’s name, asks your questions and books the job.</p>
@@ -506,8 +522,8 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
 <div class="cmp"><span class="pl">+</span><span class="in">Text Message • SMS</span></div><div class="hb"></div></div></div></div>
     </div>
     <div class="pane" id="p2" role="tabpanel" aria-labelledby="t2">
-      <div><h3>Booked straight into your calendar.</h3><p>Tilly checks your real free times and offers them while the customer’s keen. Then she reminds them before the job, and again when it’s time to book the next one.</p>
-        <ul><li>Offers real times from Google Calendar</li><li>Creates the job in ServiceM8 or Xero</li><li>Rebooking reminders for repeat work</li></ul></div>
+      <div><h3>Booked straight into your calendar.</h3><p>Tilly reads your calendar to see when you’re actually free, then offers those times while the customer’s keen. Then she reminds them before the job, and again when it’s time to book the next one.</p>
+        <ul><li>Reads your Google or Outlook calendar for real availability</li><li>Never double-books or books over blocked-out time</li><li>Creates the job in ServiceM8 or Xero</li><li>Rebooking reminders for repeat work</li></ul></div>
       <div class="ui phui"><div class="iph"><div class="isl"></div><div class="scr lockscr"><div class="sb"><b></b><span class="sbi"><svg width="17" height="11" viewBox="0 0 17 11"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg><svg width="15" height="11" viewBox="0 0 15 11"><path d="M7.5 2.2c2.2 0 4.2.8 5.7 2.2l1.2-1.2A9.7 9.7 0 0 0 7.5.5 9.7 9.7 0 0 0 .6 3.2l1.2 1.2a8 8 0 0 1 5.7-2.2zm0 3.3c1.3 0 2.5.5 3.4 1.3l1.2-1.2a6.6 6.6 0 0 0-9.2 0l1.2 1.2c.9-.8 2.1-1.3 3.4-1.3zm0 3.2c.5 0 1 .2 1.3.5L7.5 10.5 6.2 9.2c.3-.3.8-.5 1.3-.5z"/></svg><svg width="25" height="12" viewBox="0 0 25 12"><rect x=".5" y=".5" width="21" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="16" height="8" rx="2"/><path d="M23 4v4a2 2 0 0 0 0-4z" opacity=".5"/></svg></span></div>
 <div class="ld">Thursday 12 November</div><div class="lt">7:02</div>
 <div class="nt"><div class="nh"><span class="na ap-c">12</span><b>CALENDAR</b><small>now</small></div><b>Hot water: Jess M.</b><p>Tomorrow 1:00 – 2:30 pm · 14 Creek Rd, Carindale</p></div>
@@ -520,26 +536,9 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
         <ul><li>A nightly wrap-up by text</li><li>Every conversation and call transcript saved</li><li>Download your leads any time</li></ul></div>
       <div class="ui phui"><div class="iph"><div class="isl"></div><div class="scr"><div class="sb"><b>6:01</b><span class="sbi"><svg width="17" height="11" viewBox="0 0 17 11"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg><svg width="15" height="11" viewBox="0 0 15 11"><path d="M7.5 2.2c2.2 0 4.2.8 5.7 2.2l1.2-1.2A9.7 9.7 0 0 0 7.5.5 9.7 9.7 0 0 0 .6 3.2l1.2 1.2a8 8 0 0 1 5.7-2.2zm0 3.3c1.3 0 2.5.5 3.4 1.3l1.2-1.2a6.6 6.6 0 0 0-9.2 0l1.2 1.2c.9-.8 2.1-1.3 3.4-1.3zm0 3.2c.5 0 1 .2 1.3.5L7.5 10.5 6.2 9.2c.3-.3.8-.5 1.3-.5z"/></svg><svg width="25" height="12" viewBox="0 0 25 12"><rect x=".5" y=".5" width="21" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="16" height="8" rx="2"/><path d="M23 4v4a2 2 0 0 0 0-4z" opacity=".5"/></svg></span></div>
 <div class="inav"><svg class="bk" width="12" height="20" viewBox="0 0 12 20"><path d="M10 2 2 10l8 8" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="av"><img src="assets/roxy.webp" alt=""></div><b>Tilly <svg width="7" height="11" viewBox="0 0 7 11"><path d="m1.5 1.5 4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></b></div>
-<div class="msgs"><div class="kind">Text Message • SMS</div><div class="ts"><b>Today</b> 6:00 pm</div><div class="bi">Hi Dave! Here’s your day 👇<br>• 14 enquiries answered, 3 calls<br>• 2 jobs booked (Wed 1pm, Thu 3pm)<br>• 4 quotes followed up</div><div class="bi">💸 Harbour Cafe paid $620. 2 invoices still overdue ($595), I’m on them.</div><div class="bi">👉 Need you: Tom’s reno quote and a callback for Mark in Wynnum.</div><div class="bo">Champion 🙌</div><div class="dl">Delivered</div></div>
+<div class="msgs"><div class="kind">Text Message • SMS</div><div class="ts"><b>Today</b> 6:00 pm</div><div class="bi">Hi Dave! Here’s your day 👇<br>• 14 enquiries answered, 3 calls<br>• 2 jobs booked (Wed 1pm, Thu 3pm)<br>• 4 quotes followed up</div><div class="bi">Harbour Cafe paid $620. 2 invoices still overdue ($595), I’m on them.</div><div class="bi">👉 Need you: Tom’s reno quote and a callback for Mark in Wynnum.</div><div class="bo">Champion 🙌</div><div class="dl">Delivered</div></div>
 <div class="cmp"><span class="pl">+</span><span class="in">Text Message • SMS</span></div><div class="hb"></div></div></div></div>
     </div>
-  </div>
-</section>
-
-<section class="day" id="day">
-  <div class="wrap">
-    <div class="shead rv"><span class="kick">A day with Tilly</span><h2 class="h2">While you’re on the tools, <span class="grad-t">Tilly runs the office.</span></h2><p class="lede">What a normal Tuesday looks like for a plumber with Tilly on the team.</p></div>
-    <div class="track">
-      <article class="dcard rv"><span class="fi">📞</span><time>7:02 AM</time><b>Answered a call you missed on the road</b><p>Burst pipe in Coorparoo. Booked for 10am and texted you the details.</p></article>
-      <article class="dcard rv"><span class="fi"><img src="assets/logos/instagram.svg" alt="" width="22" height="22"></span><time>9:15 AM</time><b>Replied to 3 Instagram comments</b><p>Answered two price questions with your set prices, and hid one spam bot.</p></article>
-      <article class="dcard rv"><span class="fi">📝</span><time>11:40 AM</time><b>Followed up last week’s quote</b><p>Bathroom reno, $14,800. They said yes, so Tilly booked a measure-up.</p></article>
-      <article class="dcard rv"><span class="fi"><img src="assets/logos/xero.svg" alt="" width="22" height="22"></span><time>2:30 PM</time><b>Chased two overdue invoices</b><p>One paid within the hour. The other asked to pay Friday, and Tilly said no worries.</p></article>
-      <article class="dcard rv"><span class="fi">💬</span><time>5:48 PM</time><b>Texted back an after-hours caller</b><p>Gas smell. Gave the safety line, and booked first thing tomorrow.</p></article>
-      <article class="dcard rv"><span class="fi">📊</span><time>6:00 PM</time><b>Sent you the wrap-up</b><p>Everything done, $1,240 paid today, 2 things for you to check.</p></article>
-      <article class="dcard rv"><span class="fi"><img src="assets/logos/google.svg" alt="" width="22" height="22"></span><time>6:30 PM</time><b>Asked happy customers for reviews</b><p>Sent 4 Google review requests from today’s finished jobs.</p></article>
-      <article class="dcard rv"><span class="fi">🌙</span><time>9:41 PM</time><b>Answered a website enquiry</b><p>Leaking tap in Wilston. Booked into Thursday’s free slot.</p></article>
-    </div>
-    <div class="you rv"><span>🧑‍🔧</span>Your admin for the whole day: reading one text.</div>
   </div>
 </section>
 
@@ -567,7 +566,7 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
 <section id="control">
   <div class="wrap">
     <div class="shead rv"><span class="kick">You’re still the pilot</span><h2 class="h2">Automation <span class="grad-t">on your terms.</span></h2><p class="lede">Choose how much Tilly does on her own. Start careful and give her more as you trust her. Change it any time.</p></div>
-    <div class="ctrl-grid">
+    <div class="ctrl-grid swipe">
       <article class="lvl rv"><span class="num">1</span><small>Review</small><b>Approve every reply</b><p>Tilly drafts each reply. Nothing is sent until you tap approve.</p></article>
       <article class="lvl mid rv"><span class="num">2</span><small>Assisted</small><b>Routine replies send themselves</b><p>Prices, bookings, refunds and anything unusual wait for your OK.</p></article>
       <article class="lvl rv"><span class="num">3</span><small>Autopilot</small><b>Tilly handles it end to end</b><p>She answers, quotes your set prices, books and chases, then tells you what she did.</p></article>
@@ -584,7 +583,7 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
 <section class="ind" id="industries">
   <div class="wrap">
     <div class="shead rv"><span class="kick">Who it’s for</span><h2 class="h2">Built for businesses <span class="grad-t">that are flat out.</span></h2></div>
-    <div class="ind-grid">
+    <div class="ind-grid swipe" data-auto="4200">
       <a class="icard rv" href="book.html#start"><img src="assets/p-trades.jpg" alt=""><b>Trades</b><p>Plumbers, sparkies, roofers, HVAC</p></a>
       <a class="icard rv" href="book.html#start"><img src="assets/img11.jpg" alt=""><b>Home services</b><p>Cleaners, pest control, gardeners, pools</p></a>
       <a class="icard rv" href="book.html#start"><img src="assets/p-builders.jpg" alt=""><b>Builders &amp; renovators</b><p>Quotes, variations and progress invoices</p></a>
@@ -596,13 +595,13 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
 <section class="trust" id="trust">
   <div class="wrap">
     <div class="shead rv"><span class="kick">Trust</span><h2 class="h2">Your business. <span class="grad-t">Your customers. Your data.</span></h2><p class="lede">Tilly speaks for your business, so we built her to be careful, honest and easy to switch off.</p></div>
-    <div class="tgrid">
+    <div class="tgrid swipe">
       <article class="tcard rv"><span class="ti"><svg width="22" height="22"><use href="#shield"/></svg></span><b>Honest with customers</b><p>Tilly introduces herself as your business’s automated assistant, and anyone can reply STOP to opt out.</p></article>
-      <article class="tcard rv"><span class="ti">🔐</span><b>Locked-down access</b><p>Staff logins need two-step verification, and each business can only ever see its own customers.</p></article>
-      <article class="tcard rv"><span class="ti">📦</span><b>You own your data</b><p>Every conversation, call transcript and lead is yours. Download it any time, and take it with you if you leave.</p></article>
+      <article class="tcard rv"><span class="ti"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 10V7a6 6 0 0 1 12 0v3M5 10h14v11H5z"/></svg></span><b>Locked-down access</b><p>Staff logins need two-step verification, and each business can only ever see its own customers.</p></article>
+      <article class="tcard rv"><span class="ti"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg></span><b>You own your data</b><p>Every conversation, call transcript and lead is yours. Download it any time, and take it with you if you leave.</p></article>
       
-      <article class="tcard rv"><span class="ti">🔌</span><b>Connects, doesn’t replace</b><p>Xero stays your books. Your calendar stays your calendar. Tilly works inside the tools you already use.</p></article><article class="tcard rv"><span class="ti">🛠️</span><b>Set up and tested for you</b><p>We train Tilly on your prices, services and tone, connect your tools and test every reply before she talks to a single customer.</p></article>
-      <article class="tcard rv"><span class="ti">↩️</span><b>No lock-in</b><p>Month to month with 30 days’ notice. Pause Tilly with one tap whenever you want to.</p></article>
+      <article class="tcard rv"><span class="ti"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 7V3M15 7V3M6 7h12v4a6 6 0 0 1-12 0zM12 17v4"/></svg></span><b>Connects, doesn’t replace</b><p>Xero stays your books. Your calendar stays your calendar. Tilly works inside the tools you already use.</p></article><article class="tcard rv"><span class="ti"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><b>Set up and tested for you</b><p>We train Tilly on your prices, services and tone, connect your tools and test every reply before she talks to a single customer.</p></article>
+      <article class="tcard rv"><span class="ti"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5M4 9h11a5 5 0 0 1 0 10h-3"/></svg></span><b>No lock-in</b><p>Month to month with 30 days’ notice. Pause Tilly with one tap whenever you want to.</p></article>
     </div>
   </div>
 </section>
@@ -610,11 +609,11 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
 <section class="price" id="pricing">
   <div class="wrap">
     <div class="shead c rv"><span class="kick">Pricing</span><h2 class="h2">Less than a week’s wages. <span class="grad-t">Every month.</span></h2><p class="lede">Simple plans, month to month. Prices exclude GST.</p></div>
-    <div class="pgrid">
+    <div class="pgrid swipe">
       <article class="plan rv"><small>Answers</small><h3>Starter</h3><div class="amt">$297<span>/month</span></div><span class="setup">+ $490 one-off setup</span>
         <ul><li>Replies to forms, email and Facebook leads</li><li>Quote follow-ups by email</li><li>Nightly wrap-up by email</li><li>Up to 100 enquiries a month</li><li>Your portal and lead list</li></ul><a class="btn btn-line" href="book.html#start">Book a demo</a></article>
       <article class="plan pop rv"><span class="badge">Most popular</span><small>Answers + chases</small><h3>Growth</h3><div class="amt">$497<span>/month</span></div><span class="setup">+ $490 one-off setup</span>
-        <ul><li>Everything in Starter</li><li>Tilly answers your phone</li><li>Missed-call text-back</li><li>Two-way texts, DMs and comments <span class="ea">Rolling out</span></li><li>Overdue invoice chasing from Xero <span class="ea">Rolling out</span></li><li>Up to 300 enquiries a month</li></ul><a class="btn btn-pink" href="book.html#start">Book a demo</a></article>
+        <ul><li>Everything in Starter</li><li>Tilly answers your phone</li><li>Books jobs into your free calendar times</li><li>Missed-call text-back</li><li>Two-way texts, DMs and comments <span class="ea">Rolling out</span></li><li>Overdue invoice chasing from Xero <span class="ea">Rolling out</span></li><li>Up to 300 enquiries a month</li></ul><a class="btn btn-pink" href="book.html#start">Book a demo</a></article>
       <article class="plan rv"><small>For teams</small><h3>Team</h3><div class="amt">$797<span>/month</span></div><span class="setup">+ $990 one-off setup</span>
         <ul><li>Everything in Growth</li><li>Unlimited enquiries, within fair use</li><li>Up to 5 team members</li><li>Separate numbers per location</li><li>Emails from your own domain</li><li>Priority support</li></ul><a class="btn btn-line" href="book.html#start">Book a demo</a></article>
     </div>
@@ -628,6 +627,7 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
     <div class="shead rv" style="margin:0"><span class="kick">FAQ</span><h2 class="h2">Questions, <span class="grad-t">answered.</span></h2><p class="lede">Can’t see yours? Email <a href="mailto:help@autofice.com.au">help@autofice.com.au</a>.</p></div>
     <div>
       <details open><summary>Is Tilly a real person?</summary><p>No. Tilly is an AI admin. She introduces herself as your business’s automated assistant, and hands anything she can’t answer to you.</p></details>
+      <details><summary>How does Tilly know when I’m free?</summary><p>She reads your Google or Outlook calendar to see your real availability, only offers times you’re free, and adds the booking straight in. Block out time in your calendar and she won’t book over it.</p></details>
       <details><summary>Do I need Xero?</summary><p>No. Tilly answers enquiries, calls and DMs and follows up quotes without it. Connect Xero and she also chases overdue invoices and stops the moment they’re paid.</p></details>
       <details><summary>How does invoice chasing work?</summary><p>Tilly checks Xero for overdue invoices each weekday and sends a friendly reminder 1, 7 and 14 days after the due date, with Xero’s pay-online link. If the customer replies, she answers them and lets you know.</p></details>
       <details><summary>What if a customer asks about price?</summary><p>Tilly only shares prices you’ve told her she can. Anything else, she says you’ll confirm and passes it to you with a summary.</p></details>
@@ -635,14 +635,6 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
       <details><summary>Does it work with my job software?</summary><p>Tilly works with Xero, Google Calendar and ServiceM8, and can send leads to most other tools, like Tradify or Fergus, through Zapier or Make.</p></details>
       <details><summary>Is there a lock-in contract?</summary><p>No. Plans are month to month with 30 days’ notice, after a one-off setup fee.</p></details>
     </div>
-  </div>
-</section>
-
-<section class="founder" id="why">
-  <div class="wrap fnote rv">
-    <span class="kick">Why we built Autofice</span>
-    <blockquote>“Every tradie and small business owner we know loses money the same way. Not on the tools, but in the inbox: the quote nobody followed up, the invoice nobody chased, the call that rang out while they were on a roof. Tilly does that work for them, every day, so they can get back to the job and their evenings.”</blockquote>
-    <div class="fsig"><span class="fav"><img src="assets/favicon.svg" alt="" width="46" height="46"></span><div><b>The Autofice team</b><span>Why we do this</span></div></div>
   </div>
 </section>
 
@@ -716,6 +708,7 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
     c[0]+=1;if(fi%3===0)c[1]+=1;if(fi%2===0)c[2]+=1;document.getElementById('k1').textContent=c[0];document.getElementById('k2').textContent=c[1];document.getElementById('k3').textContent=c[2]}
   if(feed&&!reduce)setInterval(tick,2600);
   var hv=document.getElementById('heroVid');if(hv&&reduce){hv.removeAttribute('autoplay');hv.pause()}
+  var sb=document.getElementById('sndBtn');if(sb&&hv)sb.addEventListener('click',function(){var on=hv.muted;hv.muted=!on;if(on){if(hv.paused)hv.play();if(hv.currentTime>2&&!sb.dataset.r){hv.currentTime=0;sb.dataset.r=1}}sb.classList.toggle('on',on);sb.setAttribute('aria-pressed',on);sb.setAttribute('aria-label',on?'Turn sound off':'Turn sound on');sb.querySelector('span').textContent=on?'Sound off':'Sound on'});
   // tabs
   var tabs=document.querySelectorAll('.tabs [role=tab]'),panes=document.querySelectorAll('.pane'),cur=0,auto=reduce?null:setInterval(function(){goTab((cur+1)%tabs.length)},8000);
   function goTab(n,stop){cur=n;tabs.forEach(function(t,i){t.setAttribute('aria-selected',i===n)});panes.forEach(function(p,i){p.classList.toggle('on',i===n)});if(stop&&auto){clearInterval(auto);auto=null}}
@@ -737,6 +730,28 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
 const bs=document.querySelectorAll('.ptabs [data-shot]'),fr=document.getElementById('shotFrame'),box=document.getElementById('frameBox'),cap=document.getElementById('shotCap');if(!fr)return;
 const fit=()=>{const w=box.clientWidth,vw=w<700?1000:1440,sc=w/vw;fr.style.width=vw+'px';fr.style.height=(vw*.62)+'px';fr.style.transform='scale('+sc+')';box.style.height=(vw*.62*sc)+'px';};fit();addEventListener('resize',fit);
 bs.forEach(b=>b.onclick=()=>{const k=+b.dataset.shot;bs.forEach(x=>x.setAttribute('aria-selected',x===b));try{fr.contentWindow.document.querySelector('[data-go="'+V[k][0]+'"]').click();}catch(e){fr.src='portal/?demo&embed&view='+V[k][0];}cap.textContent=V[k][1];});})();
+</script>
+
+<script>
+(function(){
+  var mob=matchMedia('(max-width:760px)'),reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  [].slice.call(document.querySelectorAll('.swipe')).forEach(function(g){
+    var kids=[].slice.call(g.children);if(kids.length<2)return;
+    var d=document.createElement('div');d.className='sdots';d.setAttribute('aria-hidden','true');
+    kids.forEach(function(){d.appendChild(document.createElement('i'))});g.parentNode.insertBefore(d,g.nextSibling);
+    function cur(){var c=g.scrollLeft+g.clientWidth/2,best=0,bd=1e9;kids.forEach(function(k,i){var m=k.offsetLeft+k.offsetWidth/2,dd=Math.abs(m-c);if(dd<bd){bd=dd;best=i}});return best}
+    function paint(){var c=cur();[].slice.call(d.children).forEach(function(x,i){x.classList.toggle('on',i===c)})}
+    function go(i){var k=kids[i];g.scrollTo({left:k.offsetLeft-(g.clientWidth-k.offsetWidth)/2,behavior:'smooth'})}
+    g.addEventListener('scroll',function(){window.requestAnimationFrame(paint)},{passive:true});
+    if(g.classList.contains('pgrid')&&mob.matches){var pop=g.querySelector('.pop');if(pop)setTimeout(function(){g.scrollLeft=pop.offsetLeft-(g.clientWidth-pop.offsetWidth)/2;paint()},60)}
+    paint();
+    var ms=+g.getAttribute('data-auto');if(!ms||reduce)return;
+    var hold=0,vis=false;
+    ['touchstart','pointerdown','wheel'].forEach(function(e){g.addEventListener(e,function(){hold=Date.now()+8000},{passive:true})});
+    if('IntersectionObserver' in window)new IntersectionObserver(function(es){vis=es[0].isIntersecting},{threshold:.4}).observe(g);
+    setInterval(function(){if(!mob.matches||!vis||Date.now()<hold||document.hidden)return;var c=cur();go(c+1>=kids.length?0:c+1)},ms);
+  });
+})();
 </script>
 </body>
 </html>
