@@ -1,6 +1,6 @@
 /* "Text us" website widget. White-labelled: shows only the client's business name and colour.
    Add to any website, before </body>:
-   <script src="https://brightfrontstudio.com/widget.js" data-key="CLIENT_KEY" data-name="Business Name" data-color="#0B0B2E" async></script>
+   <script src="https://autofice.com.au/widget.js" data-key="CLIENT_KEY" data-name="Business Name" data-color="#0B0B2E" async></script>
 */
 (function () {
   var s = document.currentScript || document.querySelector('script[data-key][src*="widget.js"]');
