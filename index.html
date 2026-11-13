@@ -394,6 +394,11 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
 .trust .sdots i{background:rgba(255,255,255,.25)}.trust .sdots i.on{background:var(--pink)}
 }
 @media(min-width:761px){.sdots{display:none}}
+@keyframes swnudge{0%,100%{transform:none}35%{transform:translateX(-44px)}62%{transform:translateX(0)}78%{transform:translateX(-12px)}}
+.swipe.nudge>*{animation:swnudge 1.4s cubic-bezier(.3,.7,.3,1)}
+/* content is just there: no fade-in on scroll */
+.rv,.rv.in{opacity:1!important;transform:none!important;transition:none!important}
+html{background:var(--ink)}
 </style>
 </head>
 <body>
@@ -405,7 +410,7 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
 <symbol id="pause" viewBox="0 0 24 24"><rect x="5" y="4" width="5" height="16" rx="1.5" fill="currentColor"/><rect x="14" y="4" width="5" height="16" rx="1.5" fill="currentColor"/></symbol>
 </defs></svg>
 <a class="sr" href="#main">Skip to content</a>
-<div class="ann">Tilly can answer your phone now. <button type="button" data-play>Hear her take a real call (0:25) →</button></div>
+<div class="ann">Tilly can answer your phone now. <button type="button" data-play>Hear her take a real call (0:47) →</button></div>
 <header class="hdr" id="hdr">
   <div class="wrap hdr-in">
     <a class="wm" href="index.html" aria-label="Autofice home">aut<span class="i">o</span>fice</a>
@@ -642,7 +647,7 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
   <div class="wrap">
     <div class="fcta rv">
       <div><h2>Hand Tilly the admin. <span class="grad-t">Get your evenings back.</span></h2><p>Book a 15-minute demo. We’ll show you Tilly answering, booking and chasing for a business like yours.</p>
-        <div class="hero-cta"><a class="btn btn-pink" href="book.html#start">Book a free demo <svg width="18" height="18"><use href="#arr"/></svg></a><a class="btn btn-line" href="portal/?demo">Try the live demo</a><button class="play" type="button" data-play><span class="pc"><svg class="ip1" width="16" height="16"><use href="#play"/></svg><svg class="ip2" width="16" height="16"><use href="#pause"/></svg></span><span>Hear Tilly <small data-time>0:25</small></span></button></div></div>
+        <div class="hero-cta"><a class="btn btn-pink" href="book.html#start">Book a free demo <svg width="18" height="18"><use href="#arr"/></svg></a><a class="btn btn-line" href="portal/?demo">Try the live demo</a><button class="play" type="button" data-play><span class="pc"><svg class="ip1" width="16" height="16"><use href="#play"/></svg><svg class="ip2" width="16" height="16"><use href="#pause"/></svg></span><span>Hear Tilly <small data-time>0:47</small></span></button></div></div>
       <div class="tilly-card"><div class="ring"><img src="assets/roxy.webp" alt="Tilly, the Autofice AI admin" width="220" height="220" loading="lazy"></div><b>Tilly</b><span>Your AI admin · on duty 24/7</span></div>
     </div>
   </div>
@@ -661,7 +666,7 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
     <div class="ft-bot"><span>© <span id="yr">2026</span> Autofice · Australia</span><a href="mailto:help@autofice.com.au">help@autofice.com.au</a></div>
   </div>
 </footer>
-<audio id="tAudio" src="assets/tilly-demo.mp3" preload="none"></audio>
+<audio id="tAudio" src="assets/tilly-call.m4a" preload="none"></audio>
 
 <script>
 (function(){
@@ -683,7 +688,7 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
   // audio
   var au=document.getElementById('tAudio'),pb=document.querySelectorAll('[data-play]');
   function f(t){t=Math.max(0,Math.round(t));return Math.floor(t/60)+':'+('0'+t%60).slice(-2)}
-  function ui(){var on=!au.paused;pb.forEach(function(b){b.classList.toggle('on',on)});document.querySelectorAll('[data-time]').forEach(function(s){s.textContent=au.duration?f(on||au.currentTime?au.duration-au.currentTime:au.duration):'0:25'})}
+  function ui(){var on=!au.paused;pb.forEach(function(b){b.classList.toggle('on',on)});document.querySelectorAll('[data-time]').forEach(function(s){s.textContent=au.duration?f(on||au.currentTime?au.duration-au.currentTime:au.duration):'0:47'})}
   ['play','pause','timeupdate','ended','loadedmetadata'].forEach(function(e){au.addEventListener(e,ui)});au.addEventListener('ended',function(){au.currentTime=0;ui()});
   pb.forEach(function(b){b.addEventListener('click',function(){au.paused?au.play():au.pause()})});
   // live feed
@@ -743,13 +748,9 @@ bs.forEach(b=>b.onclick=()=>{const k=+b.dataset.shot;bs.forEach(x=>x.setAttribut
     function paint(){var c=cur();[].slice.call(d.children).forEach(function(x,i){x.classList.toggle('on',i===c)})}
     function go(i){var k=kids[i];g.scrollTo({left:k.offsetLeft-(g.clientWidth-k.offsetWidth)/2,behavior:'smooth'})}
     g.addEventListener('scroll',function(){window.requestAnimationFrame(paint)},{passive:true});
-    if(g.classList.contains('pgrid')&&mob.matches){var pop=g.querySelector('.pop');if(pop)setTimeout(function(){g.scrollLeft=pop.offsetLeft-(g.clientWidth-pop.offsetWidth)/2;paint()},60)}
     paint();
-    var ms=+g.getAttribute('data-auto');if(!ms||reduce)return;
-    var hold=0,vis=false;
-    ['touchstart','pointerdown','wheel'].forEach(function(e){g.addEventListener(e,function(){hold=Date.now()+8000},{passive:true})});
-    if('IntersectionObserver' in window)new IntersectionObserver(function(es){vis=es[0].isIntersecting},{threshold:.4}).observe(g);
-    setInterval(function(){if(!mob.matches||!vis||Date.now()<hold||document.hidden)return;var c=cur();go(c+1>=kids.length?0:c+1)},ms);
+    if(reduce||!('IntersectionObserver' in window))return;
+    var hio=new IntersectionObserver(function(es){if(es[0].isIntersecting&&mob.matches){hio.disconnect();g.classList.add('nudge');setTimeout(function(){g.classList.remove('nudge')},1600)}},{threshold:.6});hio.observe(g);
   });
 })();
 </script>
