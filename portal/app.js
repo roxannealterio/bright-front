@@ -1,8 +1,9 @@
-if (window.top !== window.self && /(^|\.)brightfrontstudio\.com$/.test(location.hostname)) { try { window.top.location = window.location.href; } catch { document.documentElement.style.display = 'none'; } }
+if (window.top !== window.self && !/[?&]demo/.test(location.search) && /(^|\.)brightfrontstudio\.com$/.test(location.hostname)) { try { window.top.location = window.location.href; } catch { document.documentElement.style.display = 'none'; } }
 // Autofice client portal
 // Runs on Supabase when config.js has keys, otherwise in demo mode with sample data.
 const CFG = window.BF_CONFIG || {};
-const LIVE = !!(CFG.SUPABASE_URL && CFG.SUPABASE_ANON_KEY);
+const DEMOQ = new URLSearchParams(location.search).get('demo');
+const LIVE = DEMOQ === null && !!(CFG.SUPABASE_URL && CFG.SUPABASE_ANON_KEY);
 const $app = document.getElementById('app');
 
 /* ---------------- helpers ---------------- */
@@ -86,8 +87,8 @@ function demoData() {
       [c3]: []
     },
     invoices: {
-      [c1]: [{ id: uid(), number: 'BF-0012', description: 'Tilly Team · monthly fee', amount: null, issued_on: d(-4).slice(0, 10), due_date: d(3).slice(0, 10), status: 'due', pay_url: '' }, { id: uid(), number: 'BF-0011', description: 'Tilly Team · monthly fee', amount: null, issued_on: d(-34).slice(0, 10), due_date: d(-27).slice(0, 10), status: 'paid' }, { id: uid(), number: 'BF-0010', description: 'Set-up and onboarding', amount: null, issued_on: d(-55).slice(0, 10), due_date: d(-48).slice(0, 10), status: 'paid' }],
-      [c2]: [{ id: uid(), number: 'BF-0013', description: 'Tilly Growth · monthly fee', amount: null, issued_on: d(-2).slice(0, 10), due_date: d(5).slice(0, 10), status: 'due' }], [c3]: []
+      [c1]: [{ id: uid(), number: 'AF-0012', description: 'Autofice Team · monthly fee', amount: null, issued_on: d(-4).slice(0, 10), due_date: d(3).slice(0, 10), status: 'due', pay_url: '' }, { id: uid(), number: 'AF-0011', description: 'Tilly Team · monthly fee', amount: null, issued_on: d(-34).slice(0, 10), due_date: d(-27).slice(0, 10), status: 'paid' }, { id: uid(), number: 'AF-0010', description: 'Set-up and onboarding', amount: null, issued_on: d(-55).slice(0, 10), due_date: d(-48).slice(0, 10), status: 'paid' }],
+      [c2]: [{ id: uid(), number: 'AF-0013', description: 'Autofice Growth · monthly fee', amount: null, issued_on: d(-2).slice(0, 10), due_date: d(5).slice(0, 10), status: 'due' }], [c3]: []
     },
     steps: {
       [c1]: [['Sign your agreement', '', true], ['Setup call', '', true], ['Tell Tilly about your business', '', true], ['Set up your Tilly number', 'Forward unanswered calls to your Tilly number. Takes 2 minutes.', false], ['Connect your calendar', 'So Tilly can offer your real free times.', false], ['Connect Xero (optional)', 'So Tilly can chase overdue invoices.', false]].map(([title, detail, done], i) => ({ id: uid(), title, detail, done, sort: i })),
@@ -99,6 +100,8 @@ function demoData() {
       const srcs = ['Google Ads', 'Meta lead form', 'Website quiz', 'Google Business', 'Website chat', 'Instagram'];
       const sts = ['booked', 'new', 'follow_up', 'won', 'booked', 'follow_up', 'new', 'lost', 'booked', 'follow_up', 'won', 'new'];
       const leads = names.map((name, i) => ({ id: 'l' + i, name, source: srcs[i % srcs.length], enquiry: ['Blocked drain', 'Hot water system', 'Leaking tap', 'Bathroom renovation quote', 'Gas fitting', 'Toilet replacement'][i % 6], quoted_at: [1, 3, 5, 9].includes(i) ? d(-[2, 4, 6, 1][[1, 3, 5, 9].indexOf(i)]) : null, chase_step: [1, 3, 5, 9].includes(i) ? [1, 1, 2, 0][[1, 3, 5, 9].indexOf(i)] : 0, status: sts[i], score: [92, 48, 71, 95, 84, 66, 41, 22, 88, 59, 97, 52][i], value: [2400, 1800, 650, 5200, 1400, 980, 760, 0, 3100, 1250, 4600, 900][i], first_reply_seconds: [38, 41, 52, 35, 29, 47, 44, 61, 33, 39, 31, 55][i], phone: '04' + String(12345678 + i * 1111).slice(0, 8), email: name.split(' ')[0].toLowerCase() + '@example.com', created_at: d(-i * 0.7) }));
+      { const fn = ['Josh', 'Emily', 'Ryan', 'Olivia', 'Liam', 'Sophie', 'Matt', 'Hannah', 'Luke', 'Zara', 'Sam', 'Ella', 'Dan', 'Kate', 'Nick', 'Amy'], ln = 'ABCDFGHJKLMNPRSTW', jobs = ['Blocked drain', 'Hot water system', 'Leaking tap', 'Bathroom renovation quote', 'Gas fitting', 'Toilet replacement', 'Burst pipe', 'Tap and mixer install'], hist = ['won', 'lost', 'won', 'booked', 'lost', 'won', 'follow_up'];
+        [11, 9, 12, 10, 8, 7, 9].forEach((n, w) => { for (let j = 0; j < n; j++) { const k = w * 13 + j, st = hist[k % hist.length]; leads.push({ id: 'h' + k, name: fn[k % fn.length] + ' ' + ln[(k * 7) % ln.length] + '.', source: srcs[k % srcs.length], enquiry: jobs[k % jobs.length], status: st, score: 40 + (k * 17) % 58, value: [450, 980, 2400, 320, 1600, 5200, 760][k % 7], first_reply_seconds: 28 + (k * 11) % 40, rebook_at: st === 'won' && k % 3 === 0 ? d(3 + k % 20) : null, chase_step: 0, created_at: d(-(7 * (7 - w)) - (j % 7) - 0.3) }); } }); }
       const outcomes = ['booked', 'no_answer', 'callback', 'booked', 'sold', 'not_interested', 'no_answer', 'booked', 'callback', 'booked'];
       const calls = outcomes.map((o, i) => ({ id: 'k' + i, lead_name: names[i], caller: ['Jess', 'Marco'][i % 2], outcome: o, duration_seconds: o === 'no_answer' ? 0 : [214, 0, 96, 305, 422, 71, 0, 188, 64, 251][i], notes: ['Booked site visit Thu 2pm. 1960s house, wants upgrade before selling.', '', 'Asked to call back after 5pm.', 'Booked quote for two hot water units.', 'Paid deposit over the phone for safety switch install.', 'Already went with another sparky.', '', 'Booked solar inspection Sat 9am.', 'Checking with partner, call Monday.', 'Booked rewire quote next Tue.'][i], called_at: d(-i * 0.6) }));
       const reviews = [['Megan R.', 5, 'Replied to my enquiry at 9pm on a Sunday and had someone out Tuesday. Brilliant service.', 'Thanks Megan, glad we could get you sorted so quickly!'], ['Daniel K.', 5, 'Fast, tidy and the quote was spot on. Would use again.', ''], ['Alisha P.', 4, 'Good work, just took a bit longer than expected to finish.', ''], ['Chris W.', 5, 'Easy to book, great communication the whole way.', 'Cheers Chris, appreciate it!'], ['Sam T.', 3, 'Job was fine but I had to chase the invoice.', '']].map(([author, rating, body, reply], i) => ({ id: 'r' + i, platform: i === 3 ? 'Facebook' : 'Google', author, rating, body, reply, created_at: d(-i * 4 - 1) }));
@@ -271,14 +274,14 @@ if (LIVE) {
   const ok = (v) => Promise.resolve(v);
   Object.assign(api, {
     session: () => ok(who), signIn: () => ok(), signUp: () => ok(), reset: () => ok(), signOut() { who = null; return ok(); },
-    demoAs(role, email) { who = role === 'agency' ? { full_name: 'Roxanne Alterio', email: 'info@brightfrontstudio.com', role: 'agency', client_id: null } : /store|shop/i.test(email || '') ? { full_name: 'Maya Chen', email, role: 'client', client_id: 'c4' } : { full_name: 'Dave Smith', email: email || 'client@example.com', role: 'client', client_id: 'c1' }; },
+    demoAs(role, email) { who = role === 'agency' ? { full_name: 'Autofice team', email: 'info@brightfrontstudio.com', role: 'agency', client_id: null } : /store|shop/i.test(email || '') ? { full_name: 'Maya Chen', email, role: 'client', client_id: 'c4' } : { full_name: 'Dave Smith', email: email || 'client@example.com', role: 'client', client_id: 'c1' }; },
     me: () => ok(who),
     clients: () => ok(D.clients.slice()),
     metrics: (c) => ok(D.metrics[c] || []), leads: (c) => ok(c === 'c1' ? D.extra.leads : (D.leads[c] || [])), posts: (c) => ok(D.posts[c] || []),
     comments: () => ok(D.comments), requests: (c) => ok(D.requests[c] || []), invoices: (c) => ok(D.invoices[c] || []),
     steps: (c) => ok(D.steps[c] || []), files: (c) => ok(D.files[c] || []),
     decide(id, decision) { Object.values(D.posts).flat().forEach((p) => { if (p.id === id) { p.status = decision; p.decided_at = new Date().toISOString(); } }); return ok(); },
-    addComment(post, c, body) { (D.comments[post] ||= []).push({ id: uid(), author_name: who.role === 'agency' ? 'Roxanne' : 'You', role: who.role, body, created_at: new Date().toISOString() }); return ok(); },
+    addComment(post, c, body) { (D.comments[post] ||= []).push({ id: uid(), author_name: who.role === 'agency' ? 'Autofice' : 'You', role: who.role, body, created_at: new Date().toISOString() }); return ok(); },
     addRequest(c, r) { (D.requests[c] ||= []).unshift({ id: uid(), status: 'submitted', created_at: new Date().toISOString(), ...r }); return ok(); },
     setRequest(id, status) { Object.values(D.requests).flat().forEach((r) => { if (r.id === id) r.status = status; }); return ok(); },
     completeStep(id) { Object.values(D.steps).flat().forEach((s) => { if (s.id === id) s.done = true; }); return ok(); },
@@ -407,6 +410,7 @@ async function load() {
 }
 async function boot() {
   try {
+    if (DEMOQ !== null && !state.me && !boot.demoed) { boot.demoed = true; api.demoAs('client', /store|shop/i.test(DEMOQ) ? 'maya@lunaandsage.com.au' : 'dave@smithplumbing.com.au'); const qp = new URLSearchParams(location.search); state.view = qp.get('view') || 'dashboard'; if (qp.has('embed')) document.body.classList.add('embed'); else demoBar(); }
     const s = await api.session();
     if (!s) return renderLogin();
     state.me = await api.me();
@@ -477,7 +481,6 @@ function renderLogin(mode = 'in', msg = '') {
   <section class="login-side" aria-label="About the portal">
     ${WM()}
     <div>
-      <h1>Tilly’s office, in one place.</h1>
       <ul><li>Every enquiry, call and text Tilly handled for you</li><li>Approve replies, chase quotes and track invoices</li><li>See what’s booked, what’s paid and who needs you</li><li>Change what Tilly says, any time</li></ul>
     </div>
     <p class="small" style="color:#8C8CB0;position:relative;z-index:1;margin:0">Need help? <a href="mailto:${esc(SUPPORT())}" style="color:#fff">${esc(SUPPORT())}</a></p>
@@ -1384,7 +1387,7 @@ const ACTS = {
   addMetric: () => dialog('Add a week of results', `${F('Week starting', 'week_start', 'date', `required value="${today()}"`)}<div class="two">${F('Leads', 'leads', 'number', 'min="0" required')}${F('Booked calls', 'booked_calls', 'number', 'min="0" required')}</div>${F('Ad spend ($)', 'ad_spend', 'number', 'step="0.01" min="0" required')}`, (o) => api.addMetric(state.clientId, { week_start: o.week_start, leads: +o.leads, booked_calls: +o.booked_calls, ad_spend: +o.ad_spend })),
   addLead: () => dialog('Add lead', `${F('Name', 'name', 'text', 'required')}<div class="two">${F('Source', 'source', 'text', 'placeholder="Google Ads"')}${F('Enquiry', 'enquiry')}</div>`, (o) => api.addLead(state.clientId, { name: o.name, source: o.source, enquiry: o.enquiry, status: 'new' })),
   addPost: () => dialog('Add post for approval', `<div class="two"><label class="lab">Channel<select class="field" name="channel"><option>Instagram Reel</option><option>Instagram post</option><option>Instagram carousel</option><option>Meta ad</option><option>Google Ads</option><option>Google Business</option><option>TikTok</option><option>Email</option></select></label>${F('Goes live', 'scheduled_for', 'datetime-local', 'required')}</div>${F('Title', 'title', 'text', 'required')}<label class="lab">Caption<textarea class="field" name="caption"></textarea></label>`, (o) => api.addPost(state.clientId, { channel: o.channel, title: o.title, caption: o.caption, scheduled_for: new Date(o.scheduled_for).toISOString(), status: 'waiting' })),
-  addInvoice: () => dialog('New invoice', `<div class="two">${F('Invoice number', 'number', 'text', 'required placeholder="BF-0014"')}${F('Amount ($)', 'amount', 'number', 'step="0.01" min="0" required')}</div>${F('Description', 'description', 'text', 'placeholder="Tilly Growth · monthly fee"')}<div class="two">${F('Issued', 'issued_on', 'date', `value="${today()}"`)}${F('Due', 'due_date', 'date', 'required')}</div>${F('Payment link (optional)', 'pay_url', 'url', 'placeholder="https://buy.stripe.com/…"')}`, (o) => api.addInvoice(state.clientId, { number: o.number, amount: +o.amount, description: o.description, issued_on: o.issued_on, due_date: o.due_date, pay_url: o.pay_url || null, status: 'due' })),
+  addInvoice: () => dialog('New invoice', `<div class="two">${F('Invoice number', 'number', 'text', 'required placeholder="AF-0014"')}${F('Amount ($)', 'amount', 'number', 'step="0.01" min="0" required')}</div>${F('Description', 'description', 'text', 'placeholder="Tilly Growth · monthly fee"')}<div class="two">${F('Issued', 'issued_on', 'date', `value="${today()}"`)}${F('Due', 'due_date', 'date', 'required')}</div>${F('Payment link (optional)', 'pay_url', 'url', 'placeholder="https://buy.stripe.com/…"')}`, (o) => api.addInvoice(state.clientId, { number: o.number, amount: +o.amount, description: o.description, issued_on: o.issued_on, due_date: o.due_date, pay_url: o.pay_url || null, status: 'due' })),
   refreshReplies: () => reload(),
   async csvLeads() { try { const rows = await api.allLeads(state.clientId); if (!rows.length) return toast('No leads to download yet.'); downloadCsv(rows, `${slug(client()?.name)}-leads-${today()}.csv`); toast(`Downloaded ${rows.length} lead${rows.length === 1 ? '' : 's'}.`); } catch (e) { toast(e.message); } },
   async csvAll() { try { const rows = await api.everyLead(); if (!rows.length) return toast('No leads yet.'); downloadCsv(rows, `autofice-all-leads-${today()}.csv`, true); toast(`Downloaded ${rows.length} leads.`); } catch (e) { toast(e.message); } },
@@ -1404,7 +1407,7 @@ async function reload() { await load(); render(); }
 function wire() {
   const side = document.getElementById('side'), mb = document.getElementById('menuBtn');
   mb && (mb.onclick = () => { const o = side.classList.toggle('open'); mb.setAttribute('aria-expanded', o); });
-  document.getElementById('signOut').onclick = async () => { await api.signOut(); state.me = null; state.clientId = null; renderLogin(); };
+  document.getElementById('signOut').onclick = async () => { if (DEMOQ !== null) { location.href = '/'; return; } await api.signOut(); state.me = null; state.clientId = null; renderLogin(); };
   document.getElementById('clientSel')?.addEventListener('change', (e) => e.target.value ? go(state.view === 'overview' ? 'dashboard' : state.view, e.target.value) : go('overview', null));
   $app.querySelectorAll('[data-go]').forEach((b) => b.onclick = () => { side.classList.remove('open'); go(b.dataset.go === 'overview' ? 'overview' : b.dataset.go, b.dataset.go === 'overview' ? null : undefined); });
   $app.querySelectorAll('[data-act]').forEach((b) => b.onclick = () => ACTS[b.dataset.act]());
@@ -1478,5 +1481,12 @@ function wire() {
 }
 function scrollMsgs() { const m = document.getElementById('rpMsgs'); if (m) m.scrollTop = m.scrollHeight; }
 
+function demoBar() {
+  if (document.getElementById('demoBar')) return;
+  const store = /store|shop/i.test(DEMOQ || '');
+  const d = document.createElement('div'); d.id = 'demoBar'; d.setAttribute('role', 'region'); d.setAttribute('aria-label', 'Demo');
+  d.innerHTML = `<span><b>Live demo</b> · sample data for ${store ? 'an online store' : 'a plumbing business'}. Click anything.</span><a class="sw" href="?demo=${store ? 'trades' : 'store'}">${store ? 'See a trades business' : 'See an online store'}</a><a class="go" href="/book.html">Get Tilly for your business →</a>`;
+  document.body.appendChild(d); document.body.classList.add('has-demo');
+}
 if (LIVE) sb.auth.onAuthStateChange((ev) => { if (ev === 'SIGNED_OUT') renderLogin(); if (ev === 'PASSWORD_RECOVERY') { const p = prompt('Enter a new password (8+ characters)'); if (p) sb.auth.updateUser({ password: p }).then(() => toast('Password updated')); } });
 boot();
