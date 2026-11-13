@@ -1,5 +1,5 @@
 if (window.top !== window.self && /(^|\.)brightfrontstudio\.com$/.test(location.hostname)) { try { window.top.location = window.location.href; } catch { document.documentElement.style.display = 'none'; } }
-// Frontos client portal
+// Autofice client portal
 // Runs on Supabase when config.js has keys, otherwise in demo mode with sample data.
 const CFG = window.BF_CONFIG || {};
 const LIVE = !!(CFG.SUPABASE_URL && CFG.SUPABASE_ANON_KEY);
@@ -358,7 +358,7 @@ const state = { me: null, clients: [], clientId: null, view: 'dashboard', data: 
 const isAgency = () => ['agency', 'partner'].includes(state.me?.role);
 const isOwner = () => state.me?.role === 'agency';
 const SUPPORT = () => state.brand?.support_email || CFG.SUPPORT_EMAIL;
-const WM = () => state.brand ? (state.brand.logo_url ? `<img class="wm-img" src="${esc(state.brand.logo_url)}" alt="${esc(state.brand.name)}">` : `<span class="wm wm-p">${esc(state.brand.name)}</span>`) : '<span class="wm" aria-label="Frontos">front<span class="wi">o</span>s</span>';
+const WM = () => state.brand ? (state.brand.logo_url ? `<img class="wm-img" src="${esc(state.brand.logo_url)}" alt="${esc(state.brand.name)}">` : `<span class="wm wm-p">${esc(state.brand.name)}</span>`) : '<span class="wm" aria-label="Autofice">aut<span class="wi">o</span>fice</span>';
 function applyBrand() { const c = state.brand?.brand_color; if (c && /^#[0-9a-f]{6}$/i.test(c)) document.documentElement.style.setProperty('--pink', c); }
 const client = () => state.clients.find((c) => c.id === state.clientId);
 const VERTS = {
@@ -533,7 +533,7 @@ function render() {
   const clientNav = state.clientId ? `
     ${isAgency() ? `<div class="nav-label">${esc(client()?.name || 'Client')}</div>` : ''}
     ${navBtn('dashboard', 'Home', 'dash')}
-    <div class="nav-label">Front office</div>
+    <div class="nav-label">Front desk</div>
     ${navBtn('replies', 'Inbox', 'inbox', c.needYou)}
     ${navBtn('voice', 'Calls', 'phone')}
     ${VERT() === 'store' ? navBtn('orders', 'Orders & returns', 'box', c.returns) : ''}
@@ -553,14 +553,14 @@ function render() {
   <div class="shell">
     <aside class="side" id="side">
       <div class="brand">${WM()}</div>
-      <div class="brand-sub">${isOwner() ? 'Frontos admin' : isAgency() ? 'Partner workspace' : esc(VW()?.label || 'Client portal')}</div>
+      <div class="brand-sub">${isOwner() ? 'Autofice admin' : isAgency() ? 'Partner workspace' : esc(VW()?.label || 'Client portal')}</div>
       ${isAgency() ? `<div class="switch"><label class="sr" for="clientSel">Viewing client</label><select id="clientSel"><option value="">All clients</option>${state.clients.map((x) => `<option value="${esc(x.id)}" ${x.id === state.clientId ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select></div>` : ''}
       <nav class="nav" aria-label="Portal">
         ${isAgency() ? navBtn('overview', 'All clients', 'users') : ''}
         ${isAgency() ? navBtn('partners', isOwner() ? 'Partner agencies' : 'Your agency', 'flag') : ''}
         ${clientNav}
       </nav>
-      <div class="side-foot"><div class="avatar">${esc(initials(me.full_name || me.email))}</div><div class="who"><b>${esc(me.full_name || me.email)}</b><span>${isAgency() ? esc(state.brand?.name || 'Frontos') : esc(client()?.name || '')}</span></div><button type="button" id="signOut" aria-label="Log out">${ic('out')}</button></div>
+      <div class="side-foot"><div class="avatar">${esc(initials(me.full_name || me.email))}</div><div class="who"><b>${esc(me.full_name || me.email)}</b><span>${isAgency() ? esc(state.brand?.name || 'Autofice') : esc(client()?.name || '')}</span></div><button type="button" id="signOut" aria-label="Log out">${ic('out')}</button></div>
     </aside>
     <main class="main" id="main">${VIEWS[state.view]()}</main>
   </div>`;
@@ -693,7 +693,7 @@ const VIEWS = {
     const rep = L.filter((l) => l.first_reply_seconds != null); const avg = rep.length ? rep.reduce((a, l) => a + l.first_reply_seconds, 0) / rep.length : null;
     const cols = [['new', 'New'], ['follow_up', 'Follow-up'], ['booked', 'Booked'], ['won', 'Won']];
     const sorted = [...L].sort((a, b) => scoreOf(b) - scoreOf(a));
-    return head('Front office', VW().leads, 'Every enquiry, scored and tracked from first message to sale. Hot leads first.', `<div class="seg" role="tablist" aria-label="View"><button role="tab" data-leadmode="table" aria-selected="${mode === 'table'}">List</button><button role="tab" data-leadmode="board" aria-selected="${mode === 'board'}">Board</button></div><button class="btn btn-ghost" data-act="csvLeads">${ic('down', 16)} Download CSV</button>${isAgency() ? `<button class="btn btn-pink" data-act="addLead">${ic('plus', 16)} Add lead</button>` : ''}`) + `
+    return head('Front desk', VW().leads, 'Every enquiry, scored and tracked from first message to sale. Hot leads first.', `<div class="seg" role="tablist" aria-label="View"><button role="tab" data-leadmode="table" aria-selected="${mode === 'table'}">List</button><button role="tab" data-leadmode="board" aria-selected="${mode === 'board'}">Board</button></div><button class="btn btn-ghost" data-act="csvLeads">${ic('down', 16)} Download CSV</button>${isAgency() ? `<button class="btn btn-pink" data-act="addLead">${ic('plus', 16)} Add lead</button>` : ''}`) + `
     <section class="grid g4">
       <div class="card kpi"><span class="lab">Hot leads to action</span><span class="val">${hot}</span><span class="delta muted">Score 75 and up</span></div>
       <div class="card kpi"><span class="lab">Open pipeline value</span><span class="val">${money0(pipe)}</span><span class="delta muted">${open.length} open leads</span></div>
@@ -711,7 +711,7 @@ const VIEWS = {
     const booked = C.filter((c) => ['booked', 'sold'].includes(c.outcome)).length;
     const talk = conn.length ? conn.reduce((a, c) => a + (+c.duration_seconds || 0), 0) / conn.length : 0;
     const outs = ['booked', 'sold', 'callback', 'no_answer', 'not_interested', 'wrong_number'].map((k) => ({ label: PILL[k][0], value: C.filter((c) => c.outcome === k).length })).filter((x) => x.value);
-    return head('Frontos Calls', 'Calls', 'Every call our sales team makes to your leads, with the outcome and notes.', isAgency() ? `<button class="btn btn-pink" data-act="addCall">${ic('plus', 16)} Log call</button>` : '') + `
+    return head('Autofice Calls', 'Calls', 'Every call our sales team makes to your leads, with the outcome and notes.', isAgency() ? `<button class="btn btn-pink" data-act="addCall">${ic('plus', 16)} Log call</button>` : '') + `
     <section class="grid g4">
       <div class="card kpi"><span class="lab">Calls made</span><span class="val">${C.length}</span></div>
       <div class="card kpi"><span class="lab">Spoke to</span><span class="val">${C.length ? Math.round((100 * conn.length) / C.length) : 0}%</span><span class="delta muted">${conn.length} conversations</span></div>
@@ -1059,7 +1059,7 @@ EXTRA_ACTS.editPlan = () => { const p = state.data.plan || {}; dialog('Billing p
   (o) => api.saveBillingPlan(state.clientId, { monthly_fee: +o.monthly_fee || 0, per_booking: +o.per_booking || 0, per_won: +o.per_won || 0, won_percent: Math.min(100, +o.won_percent || 0), billing_email: o.billing_email.trim() || null, active: !!o.active })); };
 EXTRA_ACTS.billNow = async () => { const m = state.billMonth; if (!confirm(`Create the invoice for ${m}? Each booking and sale is only ever charged once.`)) return; try { const r = await api.billMonth(state.clientId, m); toast(r.note || 'Invoice created'); reload(); } catch (e) { toast(e.message); } };
 
-/* ---------------- Frontos: calls, Tilly settings, money, orders & returns, social comments ---------------- */
+/* ---------------- Autofice: calls, Tilly settings, money, orders & returns, social comments ---------------- */
 const LEVELS = [
   ['draft', 'Review', 'Approve every reply', 'Tilly drafts each reply. Nothing is sent until you approve it.'],
   ['simple', 'Assisted', 'Routine replies send automatically', 'Prices, bookings, refunds and anything unusual wait for your OK.'],
@@ -1076,7 +1076,7 @@ VIEWS.voice = function () {
   const booked = M.filter((v) => /\bbook/i.test(v.summary || '')).length;
   const after = M.filter((v) => afterHours(v.created_at || v.last_message_at)).length;
   const mode = r.voice_enabled ? (r.voice_mode === 'always' ? 'Answering every call' : 'Answering calls you miss') : 'Texting back missed calls';
-  return head('Front office', 'Calls', 'Every call Tilly answered, with the transcript and what happened next.', `<span class="pill ${r.voice_enabled ? 'p-green' : 'p-grey'}" style="align-self:center">${mode}</span><button class="btn btn-ghost" data-go="tilly">Call settings</button>`) + `
+  return head('Front desk', 'Calls', 'Every call Tilly answered, with the transcript and what happened next.', `<span class="pill ${r.voice_enabled ? 'p-green' : 'p-grey'}" style="align-self:center">${mode}</span><button class="btn btn-ghost" data-go="tilly">Call settings</button>`) + `
   <section class="grid g4" aria-label="Last 30 days">
     <div class="card kpi"><span class="lab">Calls answered</span><span class="val">${M.length}</span><span class="delta muted">Last 30 days</span></div>
     <div class="card kpi"><span class="lab">Booked on the call</span><span class="val">${booked}</span><span class="delta muted">${M.length ? Math.round((100 * booked) / M.length) + '% of calls' : '—'}</span></div>
@@ -1160,7 +1160,7 @@ VIEWS.orders = function () {
   const d = state.data, R = d.returns || [], convs = d.convs || [], r = d.reply || {}, shop = (d.ints || []).find((x) => x.provider === 'shopify');
   const orderQs = convs.filter((v) => v.topic === 'order' || /order|tracking|deliver|ship/i.test(v.summary || '')).filter((v) => sinceDays(v.last_message_at, 30));
   const wait = R.filter((x) => x.status === 'requested');
-  return head('Front office', 'Orders & returns', '“Where’s my order?”, returns and exchanges, answered in seconds. Refunds always wait for your OK.', shop ? '<span class="pill p-green" style="align-self:center">Shopify connected</span>' : '<button class="btn btn-pink" data-go="channels">Connect Shopify</button>') + `
+  return head('Front desk', 'Orders & returns', '“Where’s my order?”, returns and exchanges, answered in seconds. Refunds always wait for your OK.', shop ? '<span class="pill p-green" style="align-self:center">Shopify connected</span>' : '<button class="btn btn-pink" data-go="channels">Connect Shopify</button>') + `
   ${shop ? '' : '<div class="card note-card" style="margin-bottom:16px"><b>Connect your Shopify store</b><p class="small muted" style="margin:4px 0 0">Tilly needs read access to your orders to answer “where’s my order?” with real tracking. Until then she collects the order number and hands it to you.</p></div>'}
   <section class="grid g4">
     <div class="card kpi"><span class="lab">Order questions answered</span><span class="val">${orderQs.length}</span><span class="delta muted">Last 30 days</span></div>
@@ -1180,7 +1180,7 @@ VIEWS.orders = function () {
 VIEWS.social = function () {
   const S = state.data.social || [], r = state.data.reply || {}, M = S.filter((m) => sinceDays(m.created_at, 30));
   const mode = { off: 'Off', draft: 'Drafts for your OK', simple: 'Replies to simple questions', auto: 'Replies to everything' }[r.comment_mode || 'draft'];
-  return head('Front office', 'Social comments', 'Comments on your Facebook and Instagram posts, answered in your voice. Spam is hidden.', `<span class="pill p-violet" style="align-self:center">${esc(mode)}</span><button class="btn btn-ghost" data-go="tilly">Settings</button>`) + `
+  return head('Front desk', 'Social comments', 'Comments on your Facebook and Instagram posts, answered in your voice. Spam is hidden.', `<span class="pill p-violet" style="align-self:center">${esc(mode)}</span><button class="btn btn-ghost" data-go="tilly">Settings</button>`) + `
   <section class="grid g4">
     <div class="card kpi"><span class="lab">Comments</span><span class="val">${M.length}</span><span class="delta muted">Last 30 days</span></div>
     <div class="card kpi"><span class="lab">Replied</span><span class="val">${M.filter((m) => m.status === 'replied').length}</span></div>
@@ -1195,7 +1195,7 @@ VIEWS.social = function () {
 };
 
 EXTRA_ACTS.editKnow = () => { state.replyTab = 'settings'; go('replies'); };
-function wireFrontos() {
+function wireAutofice() {
   $app.querySelectorAll('[data-call]').forEach((b) => b.onclick = async () => { state.callId = b.dataset.call; state.callMsgs = await api.messages(state.callId).catch(() => []); render(); });
   $app.querySelectorAll('[data-vplay]').forEach((b) => b.onclick = () => { const a = document.getElementById('vAudio'); if (!a) return; if (a.paused) { a.play(); b.classList.add('on'); } else { a.pause(); b.classList.remove('on'); } a.onended = () => b.classList.remove('on'); });
   const saveR = async (o, msg) => { try { await api.saveReply(state.clientId, { ...(state.data.reply || {}), ...o }); toast(msg || 'Saved'); reload(); } catch (e) { toast(e.message || 'Could not save'); } };
@@ -1222,7 +1222,7 @@ VIEWS.partners = function () {
   const link = (a) => `https://brightfrontstudio.com/portal/?a=${a.slug || ''}`;
   if (!isOwner()) {
     const a = A[0];
-    if (!a) return head('Partner', 'Your agency', '') + '<div class="card empty">Your agency isn’t set up yet. Contact Frontos.</div>';
+    if (!a) return head('Partner', 'Your agency', '') + '<div class="card empty">Your agency isn’t set up yet. Contact Autofice.</div>';
     return head('Partner', esc(a.name), 'Your clients see your name, logo and colours everywhere in this portal.') + `
     <section class="grid g2" style="align-items:start">
       <form class="card ch-form" id="agForm" novalidate><input type="hidden" name="id" value="${esc(a.id)}"><h2>Your branding</h2>${F('Agency name', 'name', 'text', `required maxlength="120" value="${esc(a.name)}"`)}${F('Logo link (https, PNG or SVG)', 'logo_url', 'url', `value="${esc(a.logo_url || '')}"`)}<div class="two"><label class="lab">Brand colour<input class="field" name="brand_color" type="color" value="${esc(a.brand_color || '#0B0B2E')}"></label>${F('Support email', 'support_email', 'email', `value="${esc(a.support_email || '')}"`)}</div>${F('Website', 'website', 'url', `value="${esc(a.website || '')}"`)}<button class="btn btn-navy" type="submit" style="align-self:flex-start">Save</button></form>
@@ -1233,14 +1233,14 @@ VIEWS.partners = function () {
   }
   const active = (id) => state.clients.filter((c) => c.agency_id === id && c.status !== 'paused').length;
   const owed = A.reduce((t, a) => t + active(a.id) * Number(a.wholesale_fee || 0), 0);
-  return head('Resale', 'Partner agencies', 'Other agencies resell Frontos under their own brand. Their clients only ever see the partner’s name.', `<button class="btn btn-pink" data-act="addAgency">${ic('plus', 16)} Add partner</button>`) + `
+  return head('Resale', 'Partner agencies', 'Other agencies resell Autofice under their own brand. Their clients only ever see the partner’s name.', `<button class="btn btn-pink" data-act="addAgency">${ic('plus', 16)} Add partner</button>`) + `
   <section class="grid g4"><div class="card kpi"><span class="lab">Partners</span><span class="val">${A.length}</span></div><div class="card kpi"><span class="lab">Partner clients</span><span class="val">${state.clients.filter((c) => c.agency_id).length}</span></div><div class="card kpi"><span class="lab">Partner revenue / month</span><span class="val">${money0(owed)}</span><span class="delta muted">Active clients × wholesale fee</span></div><div class="card kpi"><span class="lab">Direct clients</span><span class="val">${state.clients.filter((c) => !c.agency_id).length}</span></div></section>
   <section class="card" style="margin-top:16px"><div class="tbl-wrap"><table><thead><tr><th scope="col">Partner</th><th scope="col">Clients</th><th scope="col">Wholesale / client</th><th scope="col">Monthly</th><th scope="col">Login link</th><th scope="col"><span class="sr">Actions</span></th></tr></thead><tbody>
   ${A.map((a) => `<tr><td><b>${esc(a.name)}</b><div class="small muted">${esc(a.support_email || '')}</div></td><td>${count(a.id)}</td><td>${money0(a.wholesale_fee)}</td><td>${money0(active(a.id) * Number(a.wholesale_fee || 0))}</td><td><button type="button" class="btn btn-ghost btn-sm" data-copy="${esc(link(a))}">Copy link</button></td><td style="text-align:right"><span class="pill ${a.status === 'active' ? 'p-green' : 'p-grey'}">${a.status === 'active' ? 'Active' : 'Paused'}</span> <button class="btn btn-ghost btn-sm" data-editag="${esc(a.id)}">Edit</button></td></tr>`).join('') || '<tr><td colspan="6" class="empty">No partners yet. Add an agency to start reselling.</td></tr>'}
   </tbody></table></div></section>
   <section class="grid g2" style="margin-top:16px;align-items:start">
     <div class="card ch-form"><h2>Give a partner login</h2><p class="small muted" style="margin:0">They sign up on the portal first, then you link them to their agency here.</p><form id="ptForm" class="ch-form" novalidate>${F('Their email', 'email', 'email', 'required')}<label class="lab">Agency<select class="field" name="agency">${A.map((a) => `<option value="${esc(a.id)}">${esc(a.name)}</option>`).join('')}</select></label><button class="btn btn-navy" type="submit" style="align-self:flex-start">Link as partner</button></form></div>
-    <div class="card ch-form"><h2>Move a client to a partner</h2><form id="mvForm" class="ch-form" novalidate><label class="lab">Client<select class="field" name="client">${state.clients.map((c) => `<option value="${esc(c.id)}">${esc(c.name)}${c.agency_id ? ' · ' + esc(A.find((a) => a.id === c.agency_id)?.name || '') : ''}</option>`).join('')}</select></label><label class="lab">Partner<select class="field" name="agency"><option value="">Frontos (direct)</option>${A.map((a) => `<option value="${esc(a.id)}">${esc(a.name)}</option>`).join('')}</select></label><button class="btn btn-navy" type="submit" style="align-self:flex-start">Move</button></form></div>
+    <div class="card ch-form"><h2>Move a client to a partner</h2><form id="mvForm" class="ch-form" novalidate><label class="lab">Client<select class="field" name="client">${state.clients.map((c) => `<option value="${esc(c.id)}">${esc(c.name)}${c.agency_id ? ' · ' + esc(A.find((a) => a.id === c.agency_id)?.name || '') : ''}</option>`).join('')}</select></label><label class="lab">Partner<select class="field" name="agency"><option value="">Autofice (direct)</option>${A.map((a) => `<option value="${esc(a.id)}">${esc(a.name)}</option>`).join('')}</select></label><button class="btn btn-navy" type="submit" style="align-self:flex-start">Move</button></form></div>
   </section>`;
 };
 const agencyFields = (a = {}) => `${F('Agency name', 'name', 'text', `required maxlength="120" value="${esc(a.name || '')}"`)}<div class="two">${F('Short name for their link', 'slug', 'text', `required pattern="[a-z0-9-]{2,40}" placeholder="northside" value="${esc(a.slug || '')}"`)}${F('Wholesale fee per client / month ($)', 'wholesale_fee', 'number', `min="0" step="1" value="${esc(a.wholesale_fee ?? 149)}"`)}</div>${F('Logo link (https)', 'logo_url', 'url', `value="${esc(a.logo_url || '')}"`)}<div class="two"><label class="lab">Brand colour<input class="field" name="brand_color" type="color" value="${esc(a.brand_color || '#0B0B2E')}"></label>${F('Support email', 'support_email', 'email', `value="${esc(a.support_email || '')}"`)}</div>${F('Website', 'website', 'url', `value="${esc(a.website || '')}"`)}${a.id ? `<label class="lab">Status<select class="field" name="status"><option value="active" ${a.status === 'active' ? 'selected' : ''}>Active</option><option value="paused" ${a.status === 'paused' ? 'selected' : ''}>Paused</option></select></label>` : ''}`;
@@ -1387,7 +1387,7 @@ const ACTS = {
   addInvoice: () => dialog('New invoice', `<div class="two">${F('Invoice number', 'number', 'text', 'required placeholder="BF-0014"')}${F('Amount ($)', 'amount', 'number', 'step="0.01" min="0" required')}</div>${F('Description', 'description', 'text', 'placeholder="Tilly Growth · monthly fee"')}<div class="two">${F('Issued', 'issued_on', 'date', `value="${today()}"`)}${F('Due', 'due_date', 'date', 'required')}</div>${F('Payment link (optional)', 'pay_url', 'url', 'placeholder="https://buy.stripe.com/…"')}`, (o) => api.addInvoice(state.clientId, { number: o.number, amount: +o.amount, description: o.description, issued_on: o.issued_on, due_date: o.due_date, pay_url: o.pay_url || null, status: 'due' })),
   refreshReplies: () => reload(),
   async csvLeads() { try { const rows = await api.allLeads(state.clientId); if (!rows.length) return toast('No leads to download yet.'); downloadCsv(rows, `${slug(client()?.name)}-leads-${today()}.csv`); toast(`Downloaded ${rows.length} lead${rows.length === 1 ? '' : 's'}.`); } catch (e) { toast(e.message); } },
-  async csvAll() { try { const rows = await api.everyLead(); if (!rows.length) return toast('No leads yet.'); downloadCsv(rows, `frontos-all-leads-${today()}.csv`, true); toast(`Downloaded ${rows.length} leads.`); } catch (e) { toast(e.message); } },
+  async csvAll() { try { const rows = await api.everyLead(); if (!rows.length) return toast('No leads yet.'); downloadCsv(rows, `autofice-all-leads-${today()}.csv`, true); toast(`Downloaded ${rows.length} leads.`); } catch (e) { toast(e.message); } },
   async metaCheck() { toast('Checking with Facebook…'); try { const r = await api.metaConnect(state.clientId); toast(`Connected: ${r.page}${r.instagram ? ' + @' + r.instagram : ''}`); reload(); } catch (e) { toast(e.message); } },
   addCall: () => dialog('Log a call', `<label class="lab">Lead<select class="field" name="lead">${state.data.leads.map((l) => `<option value="${esc(l.id)}">${esc(l.name)}</option>`).join('')}<option value="">Someone else</option></select></label>${F('Name (if someone else)', 'lead_name')}<div class="two"><label class="lab">Outcome<select class="field" name="outcome">${['booked', 'sold', 'callback', 'no_answer', 'not_interested', 'wrong_number'].map((k) => `<option value="${k}">${PILL[k][0]}</option>`).join('')}</select></label>${F('Length (minutes)', 'mins', 'number', 'min="0" step="0.5"')}</div>${F('Caller', 'caller', 'text', `value="${esc((state.me.full_name || '').split(' ')[0])}"`)}<label class="lab">Notes<textarea class="field" name="notes"></textarea></label>`,
     async (o) => { const l = state.data.leads.find((x) => x.id === o.lead); await api.addCall(state.clientId, { lead_id: l ? l.id : null, lead_name: l ? l.name : o.lead_name, outcome: o.outcome, duration_seconds: Math.round((+o.mins || 0) * 60), caller: o.caller, notes: o.notes }); if (l && ['booked', 'sold'].includes(o.outcome)) await api.setLead(l.id, o.outcome === 'sold' ? 'won' : 'booked'); }),
@@ -1473,7 +1473,7 @@ function wire() {
   mf && (mf.onsubmit = async (e) => { e.preventDefault(); const f = Object.fromEntries(new FormData(mf)); const id = f.meta_page_id.trim(); if (id && !/^\d{5,25}$/.test(id)) return toast('The Page ID is a number, e.g. 1029384756.'); const o = { meta_page_id: id || null, lead_ads: !!f.lead_ads, dms: !!f.dms }; if (f.meta_page_token.trim()) o.meta_page_token = f.meta_page_token.trim(); try { await api.saveConn(state.clientId, o); toast('Saved. Now click Connect & check.'); reload(); } catch (err) { toast(/duplicate|unique/i.test(err.message) ? 'That Page is already connected to another client.' : err.message); } });
   const ef = document.getElementById('emailForm');
   ef && (ef.onsubmit = async (e) => { e.preventDefault(); const v = ef.inbound_email.value.trim(); if (v && !ef.inbound_email.checkValidity()) return ef.inbound_email.reportValidity(); try { await api.saveConn(state.clientId, { inbound_email: v || null }); toast('Saved'); reload(); } catch (err) { toast(err.message); } });
-  wireBilling(); wirePartners(); wireFrontos();
+  wireBilling(); wirePartners(); wireAutofice();
   if (state.view === 'overview') fillOverview();
 }
 function scrollMsgs() { const m = document.getElementById('rpMsgs'); if (m) m.scrollTop = m.scrollHeight; }
