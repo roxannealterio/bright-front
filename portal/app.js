@@ -34,7 +34,12 @@ const ICON = {
   report: '<path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/>',
   inbox: '<path d="M3 13h5l1 3h6l1-3h5"/><path d="M5 5h14l2 8v6H3v-6z"/>',
   plug: '<path d="M9 2v6M15 2v6M6 8h12v4a6 6 0 0 1-12 0zM12 18v4"/>',
-  down: '<path d="M12 4v12M7 11l5 5 5-5M4 20h16"/>'
+  down: '<path d="M12 4v12M7 11l5 5 5-5M4 20h16"/>',
+  box: '<path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/>',
+  at: '<circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8"/>',
+  cash: '<rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/>',
+  spark: '<path d="M12 3l2.2 6.8L21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2z"/>',
+  play: '<path d="M7 4v16l13-8z"/>'
 };
 const ic = (n, s = 18) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[n]}</svg>`;
 const PILL = {
@@ -44,7 +49,9 @@ const PILL = {
   due: ['Due', 'p-amber'], paid: ['Paid', 'p-green'], overdue: ['Overdue', 'p-pink'],
   onboarding: ['Onboarding', 'p-violet'], active: ['Active', 'p-green'], paused: ['Paused', 'p-grey'],
   ontrack: ['On track', 'p-green'], attention: ['Needs attention', 'p-amber'],
-  ai: ['Assistant replying', 'p-violet'], to_approve: ['Reply to approve', 'p-pink'], callback: ['Call back', 'p-amber'], no_answer: ['No answer', 'p-grey'], not_interested: ['Not interested', 'p-grey'], sold: ['Sold', 'p-green'], wrong_number: ['Wrong number', 'p-grey'], hot: ['Hot', 'p-pink'], warm: ['Warm', 'p-amber'], cold: ['Cold', 'p-grey'], published: ['Published', 'p-green'], sent: ['Sent', 'p-violet'], clicked: ['Clicked', 'p-amber'], reviewed: ['Reviewed', 'p-green'], failed: ['Failed', 'p-pink'], live: ['Live', 'p-green'], ended: ['Ended', 'p-grey'], human: ['With you', 'p-amber'], closed: ['Closed', 'p-grey'], opted_out: ['Opted out', 'p-grey']
+  ai: ['Assistant replying', 'p-violet'], to_approve: ['Reply to approve', 'p-pink'], callback: ['Call back', 'p-amber'], no_answer: ['No answer', 'p-grey'], not_interested: ['Not interested', 'p-grey'], sold: ['Sold', 'p-green'], wrong_number: ['Wrong number', 'p-grey'], hot: ['Hot', 'p-pink'], warm: ['Warm', 'p-amber'], cold: ['Cold', 'p-grey'], published: ['Published', 'p-green'], sent: ['Sent', 'p-violet'], clicked: ['Clicked', 'p-amber'], reviewed: ['Reviewed', 'p-green'], failed: ['Failed', 'p-pink'], live: ['Live', 'p-green'], ended: ['Ended', 'p-grey'], human: ['With you', 'p-amber'], closed: ['Closed', 'p-grey'], opted_out: ['Opted out', 'p-grey'],
+  requested: ['Waiting for your OK', 'p-pink'], declined: ['Declined', 'p-grey'], refunded: ['Refunded', 'p-green'], received: ['Item received', 'p-violet'], exchanged: ['Exchanged', 'p-green'],
+  replied: ['Replied', 'p-green'], drafted: ['Reply to approve', 'p-pink'], hidden: ['Hidden', 'p-grey'], needs_you: ['Needs you', 'p-amber'], skipped: ['No reply needed', 'p-grey']
 };
 const pill = (k) => { const p = PILL[k] || [k, 'p-grey']; return `<span class="pill ${p[1]}">${esc(p[0])}</span>`; };
 
@@ -57,7 +64,8 @@ function demoData() {
     clients: [
       { id: c1, name: 'Smith Plumbing', industry: 'Plumber', plan: 'Tilly Team', baseline_cpl: 39.8, guarantee_start: d(-47).slice(0, 10), monthly_budget: 2500, status: 'active' },
       { id: c2, name: 'Bright Spark Electrical', industry: 'Electrician', plan: 'Tilly Growth', baseline_cpl: 45, guarantee_start: d(-30).slice(0, 10), monthly_budget: 1500, status: 'active' },
-      { id: c3, name: 'Bug Off Pest Control', industry: 'Pest control', plan: 'Tilly Team', baseline_cpl: 95, guarantee_start: d(-61).slice(0, 10), monthly_budget: 3000, status: 'active' }
+      { id: c3, name: 'Bug Off Pest Control', industry: 'Pest control', plan: 'Tilly Team', baseline_cpl: 95, guarantee_start: d(-61).slice(0, 10), monthly_budget: 3000, status: 'active' },
+      { id: 'c4', name: 'Luna & Sage Skincare', industry: 'Online store', vertical: 'store', plan: 'Tilly Growth', status: 'active' }
     ],
     metrics: {
       [c1]: weeks([[9, 3, 410], [11, 4, 430], [10, 4, 420], [13, 5, 450], [15, 6, 470], [14, 5, 455], [17, 7, 480], [19, 8, 490], [18, 7, 470], [21, 9, 505]]),
@@ -67,7 +75,8 @@ function demoData() {
     leads: {
       [c1]: [['Sarah K.', 'Google Ads', 'Blocked drain', 'booked', -1], ['Tom R.', 'Website form', 'Bathroom renovation quote', 'new', -1], ['Priya N.', 'Phone call', 'Leaking tap', 'booked', -2], ['Ben L.', 'Facebook', 'Hot water system', 'follow_up', -3], ['Grace W.', 'Google Business', 'Gas fitting', 'won', -5]].map(([name, source, enquiry, status, n]) => ({ id: uid(), name, source, enquiry, status, created_at: d(n) })),
       [c2]: [['Liam P.', 'Phone call', 'Switchboard upgrade', 'booked', -1], ['Ava S.', 'Website form', 'Ceiling fans', 'new', -2]].map(([name, source, enquiry, status, n]) => ({ id: uid(), name, source, enquiry, status, created_at: d(n) })),
-      [c3]: [['Chloe M.', 'Google Ads', 'Termite inspection', 'follow_up', -1]].map(([name, source, enquiry, status, n]) => ({ id: uid(), name, source, enquiry, status, created_at: d(n) }))
+      [c3]: [['Chloe M.', 'Google Ads', 'Termite inspection', 'follow_up', -1]].map(([name, source, enquiry, status, n]) => ({ id: uid(), name, source, enquiry, status, created_at: d(n) })),
+      c4: [['Hannah L.', 'Instagram DM', 'Where is my order #1042?', 'won', -0.1, 64], ['Olivia P.', 'Email', 'Return: serum caused irritation', 'follow_up', -0.4, 89], ['Zoe K.', 'Website chat', 'Is the night cream safe in pregnancy?', 'booked', -0.6, 0], ['Emma R.', 'Facebook', 'Do you ship to New Zealand?', 'won', -1.2, 132], ['Isla M.', 'Instagram DM', 'Gift wrapping for #1051', 'won', -1.6, 45], ['Ruby T.', 'Email', 'Exchange cleanser for a bigger size', 'follow_up', -2.1, 38], ['Grace H.', 'Instagram comment', 'Restock date for the clay mask?', 'new', -2.4, 0], ['Chloe W.', 'Website chat', 'Discount code not working', 'won', -3, 118]].map(([name, source, enquiry, status, n, value]) => ({ id: uid(), name, source, enquiry, status, value, first_reply_seconds: 20 + Math.round(Math.random() * 40), created_at: d(n) }))
     },
     posts: { [c1]: [], [c2]: [], [c3]: [] },
     comments: {},
@@ -89,7 +98,7 @@ function demoData() {
       const names = ['Sarah K.', 'Tom R.', 'Priya N.', 'Ben L.', 'Grace W.', 'Liam P.', 'Ava S.', 'Noah M.', 'Mia T.', 'Jack H.', 'Chloe M.', 'Ethan B.'];
       const srcs = ['Google Ads', 'Meta lead form', 'Website quiz', 'Google Business', 'Website chat', 'Instagram'];
       const sts = ['booked', 'new', 'follow_up', 'won', 'booked', 'follow_up', 'new', 'lost', 'booked', 'follow_up', 'won', 'new'];
-      const leads = names.map((name, i) => ({ id: 'l' + i, name, source: srcs[i % srcs.length], enquiry: ['Switchboard upgrade', 'Hot water system', 'Ceiling fans', 'Solar inspection', 'Rewire quote', 'Safety switch'][i % 6], status: sts[i], score: [92, 48, 71, 95, 84, 66, 41, 22, 88, 59, 97, 52][i], value: [2400, 1800, 650, 5200, 1400, 980, 760, 0, 3100, 1250, 4600, 900][i], first_reply_seconds: [38, 41, 52, 35, 29, 47, 44, 61, 33, 39, 31, 55][i], phone: '04' + String(12345678 + i * 1111).slice(0, 8), email: name.split(' ')[0].toLowerCase() + '@example.com', created_at: d(-i * 0.7) }));
+      const leads = names.map((name, i) => ({ id: 'l' + i, name, source: srcs[i % srcs.length], enquiry: ['Blocked drain', 'Hot water system', 'Leaking tap', 'Bathroom renovation quote', 'Gas fitting', 'Toilet replacement'][i % 6], quoted_at: [1, 3, 5, 9].includes(i) ? d(-[2, 4, 6, 1][[1, 3, 5, 9].indexOf(i)]) : null, chase_step: [1, 3, 5, 9].includes(i) ? [1, 1, 2, 0][[1, 3, 5, 9].indexOf(i)] : 0, status: sts[i], score: [92, 48, 71, 95, 84, 66, 41, 22, 88, 59, 97, 52][i], value: [2400, 1800, 650, 5200, 1400, 980, 760, 0, 3100, 1250, 4600, 900][i], first_reply_seconds: [38, 41, 52, 35, 29, 47, 44, 61, 33, 39, 31, 55][i], phone: '04' + String(12345678 + i * 1111).slice(0, 8), email: name.split(' ')[0].toLowerCase() + '@example.com', created_at: d(-i * 0.7) }));
       const outcomes = ['booked', 'no_answer', 'callback', 'booked', 'sold', 'not_interested', 'no_answer', 'booked', 'callback', 'booked'];
       const calls = outcomes.map((o, i) => ({ id: 'k' + i, lead_name: names[i], caller: ['Jess', 'Marco'][i % 2], outcome: o, duration_seconds: o === 'no_answer' ? 0 : [214, 0, 96, 305, 422, 71, 0, 188, 64, 251][i], notes: ['Booked site visit Thu 2pm. 1960s house, wants upgrade before selling.', '', 'Asked to call back after 5pm.', 'Booked quote for two hot water units.', 'Paid deposit over the phone for safety switch install.', 'Already went with another sparky.', '', 'Booked solar inspection Sat 9am.', 'Checking with partner, call Monday.', 'Booked rewire quote next Tue.'][i], called_at: d(-i * 0.6) }));
       const reviews = [['Megan R.', 5, 'Replied to my enquiry at 9pm on a Sunday and had someone out Tuesday. Brilliant service.', 'Thanks Megan, glad we could get you sorted so quickly!'], ['Daniel K.', 5, 'Fast, tidy and the quote was spot on. Would use again.', ''], ['Alisha P.', 4, 'Good work, just took a bit longer than expected to finish.', ''], ['Chris W.', 5, 'Easy to book, great communication the whole way.', 'Cheers Chris, appreciate it!'], ['Sam T.', 3, 'Job was fine but I had to chase the invoice.', '']].map(([author, rating, body, reply], i) => ({ id: 'r' + i, platform: i === 3 ? 'Facebook' : 'Google', author, rating, body, reply, created_at: d(-i * 4 - 1) }));
@@ -100,22 +109,45 @@ function demoData() {
       return { leads, calls, reviews, reqs, creatives, reports };
     })(),
     reply: {
-      [c1]: { client_id: c1, enabled: true, business_name: 'Smith Plumbing', about: 'Licensed plumbers and gasfitters servicing Brisbane’s south side. Blocked drains, hot water, leaks, gas and bathroom renovations. $99 call-out, free quotes on bigger jobs. Fully insured.', questions: 'What do you need done?\nWhat suburb is the job in?\nIs it urgent, or when would suit?\nCan you send a photo?', booking_url: '', hours: 'Mon to Sat, 7am to 5pm. Emergencies 24/7.', tone: 'Friendly, practical and quick', handoff_email: 'dave@smithplumbing.com.au', handoff_phone: '', sms_enabled: true, email_enabled: true, sms_number: '+61400000000', intake_key: 'demo-key-c1', assistant_name: 'Tilly', sign_off: 'Tilly, Smith Plumbing', brand_color: '#1F4F8F', website: 'https://smithplumbing.com.au', logo_url: '' }
+      c4: { client_id: 'c4', enabled: true, business_name: 'Luna & Sage Skincare', about: 'Australian-made, fragrance-free skincare. Shipping: free over $80 in Australia (2–5 business days), NZ $15 (7–10 days).', questions: 'What’s your order number?\nWhat would you like help with?', hours: 'Team online Mon to Fri, 9am to 5pm', tone: 'Warm, calm and friendly, light emoji', handoff_email: 'maya@lunaandsage.com.au', email_enabled: true, intake_key: 'demo-key-c4', assistant_name: 'Tilly', sign_off: 'Tilly, Luna & Sage', approval_mode: 'simple', returns_policy: 'Returns within 30 days of delivery. Unopened items: full refund. Opened items: refund for skin reactions or damage only. Customer pays return postage unless faulty.', return_window_days: 30, refunds_need_approval: true, comment_mode: 'simple' },
+      [c1]: { client_id: c1, enabled: true, business_name: 'Smith Plumbing', approval_mode: 'simple', voice_enabled: true, voice_mode: 'missed', comment_mode: 'draft', about: 'Licensed plumbers and gasfitters servicing Brisbane’s south side. Blocked drains, hot water, leaks, gas and bathroom renovations. $99 call-out, free quotes on bigger jobs. Fully insured.', questions: 'What do you need done?\nWhat suburb is the job in?\nIs it urgent, or when would suit?\nCan you send a photo?', booking_url: '', hours: 'Mon to Sat, 7am to 5pm. Emergencies 24/7.', tone: 'Friendly, practical and quick', handoff_email: 'dave@smithplumbing.com.au', handoff_phone: '', sms_enabled: true, email_enabled: true, sms_number: '+61400000000', intake_key: 'demo-key-c1', assistant_name: 'Tilly', sign_off: 'Tilly, Smith Plumbing', brand_color: '#1F4F8F', website: 'https://smithplumbing.com.au', logo_url: '' }
     },
     convs: {
       [c1]: [
         { id: 'v1', channel: 'sms', contact: '+61412345678', status: 'human', summary: 'Sarah K., Wilston: blocked kitchen drain, water backing up. Booked today 3pm.', last_message_at: d(-0.02), lead_name: 'Sarah K.' },
         { id: 'v9', channel: 'voice', contact: '+61412000381', status: 'human', origin: 'voice', summary: 'Jess, Carindale: hot water system not working. Booked today 1pm.', last_message_at: d(-0.05), lead_name: 'Jess M.' },
         { id: 'v2', channel: 'email', contact: 'tom@example.com', status: 'ai', summary: 'Tom R., Newmarket: wants a quote to renovate the main bathroom.', last_message_at: d(-0.2), lead_name: 'Tom R.', pending_draft: true },
-        { id: 'v3', channel: 'sms', contact: '+61498765432', status: 'opted_out', summary: 'Asked not to be contacted.', last_message_at: d(-3), lead_name: 'Ben L.' }
+        { id: 'v3', channel: 'sms', contact: '+61498765432', status: 'opted_out', summary: 'Asked not to be contacted.', last_message_at: d(-3), lead_name: 'Ben L.' },
+        { id: 'v10', channel: 'voice', contact: '+61411222333', status: 'human', origin: 'voice', summary: 'Mark, Wynnum: gas smell near the meter. Told him to call the gas emergency line now and booked Dave first thing tomorrow.', created_at: d(-0.6), last_message_at: d(-0.6), lead_name: 'Mark D.' },
+        { id: 'v11', channel: 'voice', contact: '+61400555444', status: 'closed', origin: 'voice', summary: 'Price check for a new toilet install. Gave the $99 call-out, said Dave will quote on site. Booked Thursday 10am.', created_at: d(-1.3), last_message_at: d(-1.3), lead_name: 'Priya N.' },
+        { id: 'v12', channel: 'voice', contact: '+61433777888', status: 'closed', origin: 'voice', summary: 'Supplier calling about an invoice. Took a message for Dave.', created_at: d(-2.2), last_message_at: d(-2.2), lead_name: 'Reece Plumbing Supplies' }
+      ],
+      c4: [
+        { id: 'w1', channel: 'instagram', contact: 'hannah.l', status: 'closed', summary: 'Where is order #1042? Tilly looked it up: shipped Monday with Australia Post, out for delivery today. Sent the tracking link.', last_message_at: d(-0.1), lead_name: 'Hannah L.', topic: 'order' },
+        { id: 'w2', channel: 'email', contact: 'olivia@example.com', status: 'human', summary: 'Return request for order #1047 (Vitamin C Serum, irritation). Within the 30-day policy. Refund waiting for your OK.', last_message_at: d(-0.4), lead_name: 'Olivia P.', topic: 'return' },
+        { id: 'w3', channel: 'messenger', contact: 'Emma R.', status: 'closed', summary: 'Asked about shipping to New Zealand. Tilly gave the NZ rate ($15, 7–10 days). She ordered.', last_message_at: d(-1.2), lead_name: 'Emma R.', topic: 'order' }
       ]
     },
     msgs: {
       v1: [['lead', 'Hi, kitchen sink is blocked and water is backing up. Can someone come today? Wilston', -0.05], ['ai', 'Hi Sarah, it’s Tilly from Smith Plumbing, their automated assistant. Sorry to hear that! Is it just the kitchen sink, or are other drains slow too? Reply STOP to opt out.', -0.0499], ['lead', 'Just the kitchen', -0.04], ['ai', 'Thanks. Our call-out is $99. Dave can come today at 3pm or tomorrow at 8am. Which suits?', -0.0399], ['lead', '3pm today please', -0.03], ['ai', 'Done, you’re booked for 3pm today. Dave will text when he’s on the way.', -0.0299]],
       v9: [['ai', 'Hi, thanks for calling Smith Plumbing. I’m Tilly, their automated assistant. How can I help you today?', -0.051], ['lead', 'Hi, my hot water’s gone cold, I’m in Carindale', -0.0505], ['ai', 'Sorry to hear that. Is it gas or electric, and roughly how old is it?', -0.0503], ['lead', 'Electric, about twelve years', -0.0501], ['ai', 'Thanks Jess. We can come today at 1pm or tomorrow at 8am. Which suits?', -0.05], ['lead', 'One today please', -0.0499], ['ai', 'Lovely, you’re booked in for 1pm today. Thanks for calling!', -0.0498]],
       v2: [['lead', 'Looking to get a quote to redo our main bathroom in Newmarket', -0.21], ['ai', 'Hi Tom, thanks for getting in touch with Smith Plumbing. I’m Tilly, their automated assistant. Roughly how big is the bathroom, and are you keeping the same layout?', -0.2], ['ai', 'Thanks Tom. Dave can come out to measure up and quote for free. Would Thursday at 10am or Friday at 2pm suit?', -0.0001, 'draft']],
+      v10: [['ai', 'Hi, thanks for calling Smith Plumbing, you’re speaking with Tilly. How can I help?', -0.6], ['lead', 'Yeah hi, I can smell gas near my meter, I’m in Wynnum', -0.5999], ['ai', 'Okay, for your safety please call the gas emergency line on 1800 GAS LEAK straight away and don’t use any switches near the meter. Once it’s safe, Dave can come first thing tomorrow at 7am. Shall I book that?', -0.5998], ['lead', 'Yes please', -0.5997], ['ai', 'Done, you’re booked for 7am tomorrow and I’ve let Dave know it’s urgent. Take care, Mark.', -0.5996]],
+      v11: [['ai', 'Hi, thanks for calling Smith Plumbing, you’re speaking with Tilly. How can I help?', -1.3], ['lead', 'How much to put in a new toilet?', -1.2999], ['ai', 'Our call-out is $99, and Dave gives you a fixed price on site before he starts. Would Thursday at 10am or Friday at 2pm suit?', -1.2998], ['lead', 'Thursday works', -1.2997], ['ai', 'Lovely, you’re booked for Thursday at 10am. I’ll text you the details now.', -1.2996]],
+      v12: [['ai', 'Hi, thanks for calling Smith Plumbing, you’re speaking with Tilly. How can I help?', -2.2], ['lead', 'It’s Reece Plumbing Supplies, just calling about invoice 5521', -2.1999], ['ai', 'Thanks for calling. I’ll pass that to Dave and he’ll get back to you today. What’s the best number to reach you?', -2.1998], ['lead', 'This one is fine', -2.1997], ['ai', 'Perfect, I’ve sent Dave a message. Have a good day!', -2.1996]],
+      w1: [['lead', 'Hi! Where’s my order? #1042', -0.11], ['ai', 'Hi Hannah! I’ve checked order #1042. It shipped Monday with Australia Post and it’s out for delivery today 📦 Track it here: auspost.com.au/track/…', -0.1099], ['lead', 'Amazing thank you!!', -0.1]],
+      w2: [['lead', 'Hi, I bought the Vitamin C serum (order 1047) and it’s irritated my skin after two uses. Can I return it?', -0.41], ['ai', 'Hi Olivia, I’m so sorry about that. You’re within our 30-day returns window, and we do refund for skin reactions. I’ve passed this to the team to approve your refund, and you’ll hear back today. Could you stop using it in the meantime?', -0.4]],
+      w3: [['lead', 'Do you ship to New Zealand?', -1.21], ['ai', 'Hi Emma! Yes we do. Shipping to NZ is $15 and takes 7–10 business days. Free over $120 🌿', -1.2]],
       v3: [['ai', 'Hi Ben, thanks for your enquiry with Smith Plumbing. I’m Tilly, their automated assistant. Is your hot water system gas or electric? Reply STOP to opt out.', -3.01], ['lead', 'STOP', -3]]
     },
+    returns: {
+      c4: [['#1047', 'Olivia P.', 'Vitamin C Serum 30ml', 'Irritation after two uses', 64, 'requested', -0.4], ['#1039', 'Ruby T.', 'Gentle Cleanser 100ml (wants 200ml)', 'Exchange for a bigger size', 38, 'requested', -2.1], ['#1033', 'Mia S.', 'Clay Mask', 'Arrived damaged (photo sent)', 42, 'refunded', -4], ['#1028', 'Ava J.', 'Night Cream', 'Changed mind, unopened', 72, 'approved', -6], ['#1012', 'Leah B.', 'Body Oil', 'Opened and used, 45 days after delivery', 55, 'declined', -9]].map(([order, customer, items, reason, value, status, n], i) => ({ id: 'rt' + i, order_number: order, customer, items, reason, value, status, within_policy: status !== 'declined', created_at: d(n), note: status === 'declined' ? 'Outside the 30-day window and opened. Tilly offered a 15% code instead.' : status === 'requested' && i === 0 ? 'Within 30 days. Customer sent a photo. Policy allows a refund for reactions.' : '' }))
+    },
+    social: {
+      [c1]: [['Instagram', 'Before-and-after: full bathroom reno in Carindale', 'jess.renovates', 'How much would something like this cost for a small ensuite?', 'Hi Jess! Every bathroom is different, but small ensuites usually start from around $18k. Send us a DM with a few photos and we’ll give you a free quote 😊', 'drafted', -0.1], ['Facebook', 'Hot water tips for winter', 'Mark Davies', 'Do you service Wynnum?', 'Hi Mark, yes we do! We cover Wynnum and all of the bayside. Give us a call or send a message to book.', 'replied', -0.8], ['Instagram', 'Meet Dave, 20 years on the tools', 'bestdeals_4u', 'Get 10k followers fast!! DM us', '', 'hidden', -1], ['Facebook', 'Blocked drain? Here’s what not to do', 'Karen W.', 'Great tips, thanks!', 'Thanks Karen, glad it helped!', 'replied', -2]].map(([platform, post, author, body, reply, status, n], i) => ({ id: 'sc' + i, platform, post, author, body, reply, status, created_at: d(n) })),
+      c4: [['Instagram', 'New: Vitamin C Serum', 'em.glows', 'Is this ok for sensitive skin?', 'Hi Em! It’s fragrance-free and suits most skin types, but if you’re sensitive we suggest a patch test first. Happy to help in DMs 💛', 'replied', -0.05], ['Instagram', 'New: Vitamin C Serum', 'sophie_r', 'Price??', 'Hi Sophie! It’s $64 for 30ml, with free shipping over $80. Link’s in our bio ✨', 'replied', -0.2], ['Facebook', 'Winter skin bundle', 'Claire Thompson', 'My order hasn’t arrived and it’s been 10 days', 'Hi Claire, so sorry about that! We’ve sent you a DM so we can look up your order straight away.', 'drafted', -0.3], ['Instagram', 'Clay mask is back', 'grace.h', 'When will the clay mask be back in the 100g size?', '', 'needs_you', -0.5], ['Instagram', 'New: Vitamin C Serum', 'crypto_gains88', 'Earn $5000 a week from home 💰 DM me', '', 'hidden', -0.6]].map(([platform, post, author, body, reply, status, n], i) => ({ id: 'sd' + i, platform, post, author, body, reply, status, created_at: d(n) }))
+    },
+    chases: [['INV-0418', 'Coorparoo Body Corporate', 1840, -9, 2], ['INV-0422', 'Liam Porter', 385, -4, 1], ['INV-0425', 'Harbour Cafe', 620, -2, 1], ['INV-0409', 'Nina Walsh', 210, -16, 3]].map(([invoice_number, contact_name, amount_due, n, step], i) => ({ invoice_id: 'x' + i, invoice_number, contact_name, amount_due, due_date: d(n).slice(0, 10), step, stopped: step >= 3, note: step >= 3 ? 'All reminders sent. Over to you.' : '', last_sent_at: d(-1) })),
     files: { [c1]: [{ id: uid(), name: 'logo.svg', size: 12000, created_at: d(-40) }, { id: uid(), name: 'price-list.pdf', size: 420000, created_at: d(-38) }, { id: uid(), name: 'service-areas.pdf', size: 180000, created_at: d(-38) }], [c2]: [], [c3]: [] }
   };
 }
@@ -199,7 +231,7 @@ if (LIVE) {
     async saveReply(c, o) {
       const up = (x) => sb.from('reply_settings').upsert({ ...x, client_id: c, updated_at: new Date().toISOString() }, { onConflict: 'client_id' }).select().single();
       let { data, error } = await up(o);
-      if (error && /column/i.test(error.message)) { const { assistant_name, sign_off, brand_color, website, logo_url, email_from, review_url, approval_mode, missed_call_enabled, forward_phone, missed_call_text, quote_chase_enabled, daily_summary_enabled, daily_summary_hour, rebook_enabled, rebook_default_days, rebook_text, booked_until, booked_note, voice_enabled, voice_mode, voice_greeting, ...rest } = o; ({ data, error } = await up(rest)); }
+      if (error && /column/i.test(error.message)) { const { assistant_name, sign_off, brand_color, website, logo_url, email_from, review_url, approval_mode, missed_call_enabled, forward_phone, missed_call_text, quote_chase_enabled, daily_summary_enabled, daily_summary_hour, rebook_enabled, rebook_default_days, rebook_text, booked_until, booked_note, voice_enabled, voice_mode, voice_greeting, returns_policy, return_window_days, shipping_info, refunds_need_approval, comment_mode, ...rest } = o; ({ data, error } = await up(rest)); }
       if (error) throw error; return data;
     },
     async conversations(c) { const rows = await q(sb.from('conversations').select('*, leads(name)').eq('client_id', c).order('last_message_at', { ascending: false }).limit(100)); return rows.map((r) => ({ ...r, lead_name: r.leads?.name })); },
@@ -227,14 +259,19 @@ if (LIVE) {
     saveBillingPlan: (c, o) => q(sb.from('billing_plans').upsert({ ...o, client_id: c, updated_at: new Date().toISOString() }, { onConflict: 'client_id' })),
     billable(c, m) { const a = new Date(m + '-01T00:00:00+10:00'), b = new Date(a); b.setMonth(b.getMonth() + 1); return q(sb.from('billable_events').select('*, leads(name)').eq('client_id', c).gte('occurred_at', a.toISOString()).lt('occurred_at', b.toISOString()).order('occurred_at', { ascending: false })); },
     setBillable: (id, status) => q(sb.from('billable_events').update({ status }).eq('id', id)),
-    billMonth(c, month) { return api.replyFn({ action: 'bill_month', client_id: c, month }); }
+    billMonth(c, month) { return api.replyFn({ action: 'bill_month', client_id: c, month }); },
+    returns: (c) => q(sb.from('returns').select('*').eq('client_id', c).order('created_at', { ascending: false }).limit(200)),
+    returnDecision(id, decision, note) { return api.replyFn({ action: 'return_decision', return_id: id, decision, note }); },
+    socialComments: (c) => q(sb.from('social_comments').select('*').eq('client_id', c).order('created_at', { ascending: false }).limit(200)),
+    commentDecision(id, decision, body) { return api.replyFn({ action: 'comment_decision', comment_id: id, decision, body }); },
+    invoiceChases: (c) => q(sb.from('invoice_chases').select('*').eq('client_id', c).order('due_date').limit(200))
   });
 } else {
   const D = demoData(); let who = null;
   const ok = (v) => Promise.resolve(v);
   Object.assign(api, {
     session: () => ok(who), signIn: () => ok(), signUp: () => ok(), reset: () => ok(), signOut() { who = null; return ok(); },
-    demoAs(role, email) { who = role === 'agency' ? { full_name: 'Roxanne Alterio', email: 'info@brightfrontstudio.com', role: 'agency', client_id: null } : { full_name: 'Sample client', email: email || 'client@example.com', role: 'client', client_id: 'c1' }; },
+    demoAs(role, email) { who = role === 'agency' ? { full_name: 'Roxanne Alterio', email: 'info@brightfrontstudio.com', role: 'agency', client_id: null } : /store|shop/i.test(email || '') ? { full_name: 'Maya Chen', email, role: 'client', client_id: 'c4' } : { full_name: 'Dave Smith', email: email || 'client@example.com', role: 'client', client_id: 'c1' }; },
     me: () => ok(who),
     clients: () => ok(D.clients.slice()),
     metrics: (c) => ok(D.metrics[c] || []), leads: (c) => ok(c === 'c1' ? D.extra.leads : (D.leads[c] || [])), posts: (c) => ok(D.posts[c] || []),
@@ -290,7 +327,7 @@ if (LIVE) {
     conn: (c) => ok(D.conn?.[c] || (c === 'c1' ? { meta_page_id: '1029384756', meta_page_name: 'Sample Electrical', meta_ig_username: 'sampleelectrical', meta_page_token: 'set', lead_ads: true, dms: true } : null)),
     saveConn(c, o) { (D.conn ||= {})[c] = { ...(D.conn[c] || {}), ...o }; return ok(); },
     metaConnect: () => ok({ ok: true, page: 'Sample Electrical', instagram: 'sampleelectrical' }),
-    intStatus: (c) => ok(c === 'c1' ? (D.ints ||= [{ provider: 'xero', status: 'connected', account_name: 'Sample Electrical Pty Ltd', config: {} }, { provider: 'gcal', status: 'connected', account_name: 'bookings@sampleelectrical.com.au', config: { start_hour: 7, end_hour: 16 } }]) : []),
+    intStatus: (c) => ok(c === 'c4' ? (D.ints4 ||= [{ provider: 'shopify', status: 'connected', account_name: 'lunaandsage.myshopify.com', config: { shop: 'lunaandsage.myshopify.com' } }]) : c === 'c1' ? (D.ints ||= [{ provider: 'xero', status: 'connected', account_name: 'Sample Electrical Pty Ltd', config: {} }, { provider: 'gcal', status: 'connected', account_name: 'bookings@sampleelectrical.com.au', config: { start_hour: 7, end_hour: 16 } }]) : []),
     ints: (c) => api.intStatus(c),
     trackNums: (c) => ok(c === 'c1' ? (D.tn ||= [{ number: '+61480000099', source: 'Google Ads', forward_to: '', last_call_at: new Date(Date.now() - 7200e3).toISOString() }, { number: '+61480000098', source: 'Van signage', forward_to: '', last_call_at: null }]) : (D.tn2 ||= [])),
     addTrack: (c, o) => { (c === 'c1' ? (D.tn ||= []) : (D.tn2 ||= [])).push({ ...o, last_call_at: null }); return ok(); },
@@ -307,6 +344,11 @@ if (LIVE) {
     quote(leadId, decision) { [...Object.values(D.leads).flat(), ...D.extra.leads].forEach((l) => { if (l.id === leadId) Object.assign(l, decision === 'stop' ? { chase_step: 9 } : { quoted_at: new Date().toISOString(), chase_step: 0 }); }); return ok(); },
     rebook(leadId, days) { [...Object.values(D.leads).flat(), ...D.extra.leads].forEach((l) => { if (l.id === leadId) Object.assign(l, days ? { rebook_days: days, rebook_at: new Date(Date.now() + days * 86400000).toISOString() } : { rebook_at: null }); }); return ok(); },
     sendMsg(id, body) { (D.msgs[id] ||= []).push(['human', body, 0]); Object.values(D.convs).flat().forEach((v) => { if (v.id === id) { v.status = 'human'; v.last_message_at = new Date().toISOString(); } }); return ok(); },
+    returns: (c) => ok(D.returns[c] || []),
+    returnDecision(id, decision) { Object.values(D.returns).flat().forEach((r) => { if (r.id === id) { r.status = decision === 'approve' ? 'approved' : decision === 'refund' ? 'refunded' : 'declined'; r.decided_at = new Date().toISOString(); } }); return ok({ ok: true }); },
+    socialComments: (c) => ok(D.social[c] || []),
+    commentDecision(id, decision, body) { Object.values(D.social).flat().forEach((m) => { if (m.id === id) { if (decision === 'post') { m.reply = body || m.reply; m.status = 'replied'; m.replied_at = new Date().toISOString(); } else if (decision === 'hide') m.status = 'hidden'; else m.status = 'skipped'; } }); return ok({ ok: true }); },
+    invoiceChases: (c) => ok(c === 'c1' ? D.chases : []),
     testLead(c, o) { const id = uid(); (D.convs[c] ||= []).unshift({ id, channel: o.phone ? 'sms' : 'email', contact: o.phone || o.email, status: 'ai', summary: 'Test lead', last_message_at: new Date().toISOString(), lead_name: o.name }); D.msgs[id] = [['lead', o.message || 'Hi, I’d like to know more.', 0], ['ai', `Hi ${o.name.split(' ')[0]}, thanks for getting in touch with ${D.reply[c]?.business_name || 'us'}. I’m their automated assistant. What are you looking for, and when?` + (o.phone ? ' Reply STOP to opt out.' : ''), 0]]; return ok({ ok: true }); }
   });
 }
@@ -319,6 +361,14 @@ const SUPPORT = () => state.brand?.support_email || CFG.SUPPORT_EMAIL;
 const WM = () => state.brand ? (state.brand.logo_url ? `<img class="wm-img" src="${esc(state.brand.logo_url)}" alt="${esc(state.brand.name)}">` : `<span class="wm wm-p">${esc(state.brand.name)}</span>`) : '<span class="wm" aria-label="Frontos">front<span class="wi">o</span>s</span>';
 function applyBrand() { const c = state.brand?.brand_color; if (c && /^#[0-9a-f]{6}$/i.test(c)) document.documentElement.style.setProperty('--pink', c); }
 const client = () => state.clients.find((c) => c.id === state.clientId);
+const VERTS = {
+  trades: { label: 'Trades & home services', leads: 'Leads & jobs', booked: 'Jobs booked', thing: 'job' },
+  clinic: { label: 'Clinics & salons', leads: 'Bookings', booked: 'Appointments booked', thing: 'appointment' },
+  store: { label: 'Online store', leads: 'Customers', booked: 'Sales helped', thing: 'order' }
+};
+const vertOf = (cl) => VERTS[cl?.vertical] ? cl.vertical : /store|shop|ecom|e-com|retail|online/i.test(cl?.industry || '') ? 'store' : /clinic|physio|dental|salon|beauty|spa|health|chiro|vet|massage/i.test(cl?.industry || '') ? 'clinic' : 'trades';
+const VERT = () => vertOf(client());
+const VW = () => VERTS[VERT()];
 
 async function load() {
   if (state.view === 'partners') { state.data = { agencies: await api.agencies().catch(() => []) }; return; }
@@ -328,8 +378,17 @@ async function load() {
   const safe = (p) => p.catch(() => []);
   const [calls, reviews, reqs, creatives, reports] = await Promise.all([safe(api.calls(c)), safe(api.reviews(c)), safe(api.reviewRequests(c)), safe(api.creatives(c)), safe(api.reports(c))]);
   Object.assign(state.data, { calls, reviews, reqs, creatives, reports });
-  if (state.view === 'replies' || state.view === 'dashboard') { state.data.convs = await api.conversations(c).catch(() => []); }
-  if (state.view === 'dashboard') state.data.reply = await api.replySettings(c).catch(() => null);
+  state.data.convs = await api.conversations(c).catch(() => []);
+  if (['dashboard', 'voice', 'tilly', 'money', 'orders', 'social'].includes(state.view)) state.data.reply = await api.replySettings(c).catch(() => null);
+  if (VERT() === 'store') state.data.returns = await api.returns(c).catch(() => []);
+  state.data.social = await api.socialComments(c).catch(() => []);
+  if (['money', 'orders', 'tilly'].includes(state.view)) state.data.ints = await (isAgency() ? api.ints(c) : api.intStatus(c)).catch(() => []);
+  if (state.view === 'money') state.data.chases = await api.invoiceChases(c).catch(() => []);
+  if (state.view === 'voice') {
+    const calls = (state.data.convs || []).filter((v) => v.channel === 'voice'); state.data.vcalls = calls;
+    if (!calls.find((v) => v.id === state.callId)) state.callId = calls[0]?.id || null;
+    state.callMsgs = state.callId ? await api.messages(state.callId).catch(() => []) : [];
+  }
   if (state.view === 'invoices') {
     state.billMonth ||= new Date().toISOString().slice(0, 7);
     const [plan, bev] = await Promise.all([api.billingPlan(c).catch(() => null), api.billable(c, state.billMonth).catch(() => [])]);
@@ -464,7 +523,7 @@ function renderError(e) { $app.innerHTML = `<div class="login-main" style="min-h
 /* ---------------- shell ---------------- */
 function counts() {
   const d = state.data;
-  return { needYou: (d.convs || []).filter((v) => v.status === 'human').length, unreplied: (d.reviews || []).filter((r) => !r.reply).length, approvals: (d.posts || []).filter((p) => p.status === 'waiting').length, requests: (d.requests || []).filter((r) => r.status !== 'done').length, steps: (d.steps || []).filter((s) => !s.done).length };
+  return { needYou: (d.convs || []).filter((v) => v.status === 'human').length, unreplied: (d.reviews || []).filter((r) => !r.reply).length, approvals: (d.posts || []).filter((p) => p.status === 'waiting').length, requests: (d.requests || []).filter((r) => r.status !== 'done').length, steps: (d.steps || []).filter((s) => !s.done).length, returns: (d.returns || []).filter((r) => r.status === 'requested').length, comments: (d.social || []).filter((m) => ['drafted', 'needs_you'].includes(m.status)).length };
 }
 function navBtn(view, label, icon, count) {
   return `<button type="button" data-go="${view}" ${state.view === view ? 'aria-current="page"' : ''}>${ic(icon)}<span>${label}</span>${count ? `<span class="count" aria-label="${count} open">${count}</span>` : ''}</button>`;
@@ -474,21 +533,27 @@ function render() {
   const clientNav = state.clientId ? `
     ${isAgency() ? `<div class="nav-label">${esc(client()?.name || 'Client')}</div>` : ''}
     ${navBtn('dashboard', 'Home', 'dash')}
-    <div class="nav-label">Tilly</div>
+    <div class="nav-label">Front office</div>
     ${navBtn('replies', 'Inbox', 'inbox', c.needYou)}
-    ${navBtn('leads', 'Leads & jobs', 'leads')}
+    ${navBtn('voice', 'Calls', 'phone')}
+    ${VERT() === 'store' ? navBtn('orders', 'Orders & returns', 'box', c.returns) : ''}
+    ${navBtn('social', 'Social comments', 'at', c.comments)}
+    ${navBtn('leads', VW().leads, 'leads')}
     ${navBtn('reviews', 'Reviews', 'star', c.unreplied)}
+    <div class="nav-label">Business</div>
+    ${navBtn('money', 'Money', 'cash')}
+    ${navBtn('tilly', 'Tilly settings', 'spark')}
     ${navBtn('channels', 'Connections', 'plug')}
     <div class="nav-label">Account</div>
-    ${navBtn('requests', 'Requests', 'chat', c.requests)}
-    ${navBtn('invoices', 'Invoices', 'doc')}
-    ${navBtn('onboarding', 'Onboarding & files', 'flag', c.steps)}` : '';
+    ${navBtn('invoices', 'Plan & billing', 'doc')}
+    ${navBtn('requests', 'Help & requests', 'chat', c.requests)}
+    ${navBtn('onboarding', 'Setup & files', 'flag', c.steps)}` : '';
   $app.innerHTML = `
   <div class="mobilebar">${WM()}<button type="button" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="side">${ic('menu', 22)}</button></div>
   <div class="shell">
     <aside class="side" id="side">
       <div class="brand">${WM()}</div>
-      <div class="brand-sub">${isOwner() ? 'Agency workspace' : isAgency() ? 'Partner workspace' : 'Client portal'}</div>
+      <div class="brand-sub">${isOwner() ? 'Frontos admin' : isAgency() ? 'Partner workspace' : esc(VW()?.label || 'Client portal')}</div>
       ${isAgency() ? `<div class="switch"><label class="sr" for="clientSel">Viewing client</label><select id="clientSel"><option value="">All clients</option>${state.clients.map((x) => `<option value="${esc(x.id)}" ${x.id === state.clientId ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select></div>` : ''}
       <nav class="nav" aria-label="Portal">
         ${isAgency() ? navBtn('overview', 'All clients', 'users') : ''}
@@ -577,24 +642,32 @@ const VIEWS = {
       drafts && [`${drafts} ${drafts === 1 ? 'reply is' : 'replies are'} waiting for your OK`, 'replies', 'Review'],
       withYou && [`${withYou} ${withYou === 1 ? 'conversation needs' : 'conversations need'} you`, 'replies', 'Open'],
       steps[0] && [steps[0].title, 'onboarding', 'Do it now'],
-      due[0] && [`Invoice ${due[0].number} due ${fmtDate(due[0].due_date)}`, 'invoices', 'View']
+      due[0] && [`Invoice ${due[0].number} due ${fmtDate(due[0].due_date)}`, 'invoices', 'View'],
+      (d.returns || []).filter((x) => x.status === 'requested').length && [`${(d.returns || []).filter((x) => x.status === 'requested').length} return${(d.returns || []).filter((x) => x.status === 'requested').length === 1 ? '' : 's'} waiting for your OK`, 'orders', 'Review'],
+      (d.social || []).filter((m) => ['drafted', 'needs_you'].includes(m.status)).length && [`${(d.social || []).filter((m) => ['drafted', 'needs_you'].includes(m.status)).length} comment repl${(d.social || []).filter((m) => ['drafted', 'needs_you'].includes(m.status)).length === 1 ? 'y' : 'ies'} to check`, 'social', 'Review']
     ].filter(Boolean);
     const name = esc(state.data.reply?.assistant_name || 'Tilly');
     return head(isAgency() ? client().name : `Hi ${esc((state.me.full_name || '').split(' ')[0] || 'there')}`, `What ${name} did for you`, 'Last 30 days.', `<button class="btn btn-ghost" data-act="csvLeads">${ic('down', 16)} Download leads</button>`) + `
     <section class="grid g4" aria-label="Key numbers">
       <div class="card kpi"><span class="lab">Enquiries answered</span><span class="val">${L.length}</span><span class="delta muted">${rep.length ? Math.round((100 * rep.filter((l) => l.first_reply_seconds <= 60).length) / rep.length) + '% within a minute' : 'No enquiries yet'}</span></div>
       <div class="card kpi"><span class="lab">Average first reply</span><span class="val">${secs(avg)}</span><span class="delta muted">Day or night</span></div>
-      <div class="card kpi"><span class="lab">Missed calls texted back</span><span class="val">${missed}</span><span class="delta muted">Callers who’d have rung someone else</span></div>
-      <div class="card kpi"><span class="lab">Jobs booked</span><span class="val">${booked}</span><span class="delta muted">${L.length ? Math.round((100 * booked) / L.length) + '% of enquiries' : '—'}</span></div>
+      ${VERT() === 'store' ? `<div class="card kpi"><span class="lab">Order questions answered</span><span class="val">${convs.filter((v) => (v.topic === 'order' || /order|tracking|deliver|ship/i.test(v.summary || '')) && Date.parse(v.last_message_at) >= since).length}</span><span class="delta muted">“Where’s my order?” and more</span></div>` : `<div class="card kpi"><span class="lab">Calls answered or texted back</span><span class="val">${missed + convs.filter((v) => v.channel === 'voice' && Date.parse(v.created_at || v.last_message_at) >= since).length}</span><span class="delta muted">Callers who’d have rung someone else</span></div>`}
+      <div class="card kpi"><span class="lab">${esc(VW().booked)}</span><span class="val">${booked}</span><span class="delta muted">${L.length ? Math.round((100 * booked) / L.length) + '% of enquiries' : '—'}</span></div>
     </section>
     <section class="grid g2" style="margin-top:16px">
-      <div class="card"><div class="card-head"><h2>Following up for you</h2></div>
+      ${VERT() === 'store' ? `<div class="card"><div class="card-head"><h2>Orders & returns</h2><button class="btn btn-ghost btn-sm" data-go="orders">Open</button></div>
+        <ul class="list">
+          <li><span><b>${(d.returns || []).filter((x) => x.status === 'requested').length}</b> returns waiting for your OK</span><button class="btn btn-ghost btn-sm" data-go="orders">Review</button></li>
+          <li><span><b>${(d.returns || []).filter((x) => ['approved', 'refunded', 'exchanged'].includes(x.status) && Date.parse(x.created_at) >= since).length}</b> returns sorted this month</span><button class="btn btn-ghost btn-sm" data-go="orders">See all</button></li>
+          <li><span><b>${(d.social || []).filter((m) => m.status === 'replied').length}</b> comments answered on Instagram and Facebook</span><button class="btn btn-ghost btn-sm" data-go="social">Comments</button></li>
+        </ul>
+      </div>` : `<div class="card"><div class="card-head"><h2>Following up for you</h2></div>
         <ul class="list">
           <li><span><b>${chasing.length}</b> ${chasing.length === 1 ? 'quote' : 'quotes'} being chased${chaseVal ? ` · ${money0(chaseVal)}` : ''}</span><button class="btn btn-ghost btn-sm" data-go="leads">See leads</button></li>
           <li><span><b>${rebooks.length}</b> ${rebooks.length === 1 ? 'customer' : 'customers'} due a rebooking reminder</span><button class="btn btn-ghost btn-sm" data-go="leads">See leads</button></li>
-          <li><span>Overdue invoices from Xero</span><button class="btn btn-ghost btn-sm" data-go="channels">Connections</button></li>
+          <li><span>Overdue invoices from Xero</span><button class="btn btn-ghost btn-sm" data-go="money">Money</button></li>
         </ul>
-      </div>
+      </div>`}
       <div class="card"><div class="card-head"><h2>Enquiries per week</h2><span class="small muted">Last 8 weeks</span></div>
         <div class="chart" role="img" aria-label="Enquiries per week: ${weeks.map((w) => w.value).join(', ')}">${weeks.map((w) => `<div class="col"><span class="v">${w.value}</span><div class="b" style="height:${Math.max(4, (w.value / wmax) * 130)}px"></div><span class="lbl">${w.label}</span></div>`).join('')}</div>
       </div>
@@ -607,7 +680,7 @@ const VIEWS = {
     </section>
     <section class="grid g2" style="margin-top:16px">
       <div class="card"><div class="card-head"><h2>Where your work comes from</h2><span class="small muted">Last 30 days</span></div>${L.length ? hBars(Object.entries(L.reduce((a, l) => ((a[l.source || 'Other'] = (a[l.source || 'Other'] || 0) + 1), a), {})).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([label, value]) => ({ label, value }))) : '<p class="empty">No enquiries yet.</p>'}</div>
-      <div class="card"><div class="card-head"><h2>Calls Tilly answered</h2><span class="small muted">Last 30 days</span></div><div class="kpi"><span class="val">${convs.filter((v) => v.channel === 'voice' && Date.parse(v.created_at || v.last_message_at) >= since).length}</span><span class="delta muted">Full transcripts are in your inbox</span></div><button class="btn btn-ghost btn-sm" data-go="channels" style="margin-top:12px">Call tracking numbers</button></div>
+      <div class="card"><div class="card-head"><h2>Calls Tilly answered</h2><span class="small muted">Last 30 days</span></div><div class="kpi"><span class="val">${convs.filter((v) => v.channel === 'voice' && Date.parse(v.created_at || v.last_message_at) >= since).length}</span><span class="delta muted">With full transcripts</span></div><button class="btn btn-ghost btn-sm" data-go="voice" style="margin-top:12px">Open calls</button></div>
     </section>`;
   },
 
@@ -620,7 +693,7 @@ const VIEWS = {
     const rep = L.filter((l) => l.first_reply_seconds != null); const avg = rep.length ? rep.reduce((a, l) => a + l.first_reply_seconds, 0) / rep.length : null;
     const cols = [['new', 'New'], ['follow_up', 'Follow-up'], ['booked', 'Booked'], ['won', 'Won']];
     const sorted = [...L].sort((a, b) => scoreOf(b) - scoreOf(a));
-    return head('Pipeline', 'Leads & pipeline', 'Every enquiry, scored and tracked from first message to sale. Hot leads first.', `<div class="seg" role="tablist" aria-label="View"><button role="tab" data-leadmode="table" aria-selected="${mode === 'table'}">List</button><button role="tab" data-leadmode="board" aria-selected="${mode === 'board'}">Board</button></div><button class="btn btn-ghost" data-act="csvLeads">${ic('down', 16)} Download CSV</button>${isAgency() ? `<button class="btn btn-pink" data-act="addLead">${ic('plus', 16)} Add lead</button>` : ''}`) + `
+    return head('Front office', VW().leads, 'Every enquiry, scored and tracked from first message to sale. Hot leads first.', `<div class="seg" role="tablist" aria-label="View"><button role="tab" data-leadmode="table" aria-selected="${mode === 'table'}">List</button><button role="tab" data-leadmode="board" aria-selected="${mode === 'board'}">Board</button></div><button class="btn btn-ghost" data-act="csvLeads">${ic('down', 16)} Download CSV</button>${isAgency() ? `<button class="btn btn-pink" data-act="addLead">${ic('plus', 16)} Add lead</button>` : ''}`) + `
     <section class="grid g4">
       <div class="card kpi"><span class="lab">Hot leads to action</span><span class="val">${hot}</span><span class="delta muted">Score 75 and up</span></div>
       <div class="card kpi"><span class="lab">Open pipeline value</span><span class="val">${money0(pipe)}</span><span class="delta muted">${open.length} open leads</span></div>
@@ -871,13 +944,13 @@ VIEWS.channels = function () {
 
   const flow = `<section class="card ch-flow" aria-label="How your leads flow"><div class="ch-flow-in">${['Website & chat', 'Facebook & Instagram', 'Email', 'Text', 'Zapier, Hipages & more'].map((t) => `<span>${t}</span>`).join('')}</div><div class="ch-arrow" aria-hidden="true">→</div><div class="ch-flow-mid"><b>Instant reply</b><span class="small">in your name, under a minute</span></div><div class="ch-arrow" aria-hidden="true">→</div><div class="ch-flow-out"><b>One lead list</b><span class="small">scored, tracked, downloadable</span></div></section>`;
 
-  const fb = card('Facebook & Instagram', 'Lead ad forms land here instantly. Instagram and Messenger DMs get an automatic reply inside the chat.', on(cs.facebook),
+  const fb = card('Facebook & Instagram', 'Lead ad forms land here instantly. Instagram and Messenger DMs get an automatic reply inside the chat, and comments on your posts are answered in Social comments.', on(cs.facebook),
     `${cs.facebook ? `<p class="small" style="margin:0">Page: <b>${esc(cs.meta_page_name || '')}</b>${cs.instagram ? ` · Instagram: <b>@${esc(cs.meta_ig_username || '')}</b>` : ' · <span class="muted">No Instagram account linked to this Page</span>'}</p>` : `<p class="small muted" style="margin:0">${isAgency() ? 'Add the client’s Facebook Page below.' : 'We connect this for you. Give us admin access to your Facebook Page in Onboarding.'}</p>`}
     ${isAgency() ? `<form id="metaForm" class="ch-form" novalidate>
       <div class="two">${F('Facebook Page ID', 'meta_page_id', 'text', `inputmode="numeric" value="${esc(cn.meta_page_id || '')}" placeholder="e.g. 1029384756"`)}<label class="lab">Page access token<span class="small muted">${cn.meta_page_token ? 'Saved. Paste a new one to replace it.' : 'Long-lived Page token from your Meta app.'}</span><input class="field" name="meta_page_token" type="password" autocomplete="off" placeholder="${cn.meta_page_token ? '••••••••' : 'Paste token'}"></label></div>
       <fieldset class="rp-ch"><legend class="lab">Use it for</legend><label><input type="checkbox" name="lead_ads" ${cn.lead_ads !== false ? 'checked' : ''}> Lead ad forms</label><label><input type="checkbox" name="dms" ${cn.dms !== false ? 'checked' : ''}> Auto-reply to DMs</label></fieldset>
       <div class="row" style="gap:8px"><button class="btn btn-navy" type="submit">Save</button><button class="btn btn-ghost" type="button" data-act="metaCheck">Connect & check</button></div></form>
-      <details><summary class="small" style="font-weight:700;cursor:pointer">Meta app settings (one time, for all clients)</summary><p class="small muted">Webhook callback URL and fields for your Meta app. Subscribe the Page object to <b>leadgen</b> and <b>messages</b>, and the Instagram object to <b>messages</b>.</p>${copy('Callback URL', fn + '/meta')}</details>` : ''}`);
+      <details><summary class="small" style="font-weight:700;cursor:pointer">Meta app settings (one time, for all clients)</summary><p class="small muted">Webhook callback URL and fields for your Meta app. Subscribe the Page object to <b>leadgen</b>, <b>messages</b> and <b>feed</b>, and the Instagram object to <b>messages</b> and <b>comments</b>.</p>${copy('Callback URL', fn + '/meta')}</details>` : ''}`);
 
   const web = card('Website form & chat button', 'Your website enquiry form and the “Text us” button.', on(L.some((l) => /website|chat/i.test(l.source || ''))),
     `<details><summary class="small" style="font-weight:700;cursor:pointer">“Text us” chat button</summary><p class="small muted">Paste just before &lt;/body&gt; on the website.</p><pre class="rp-code">${esc(`<script src="https://brightfrontstudio.com/widget.js" data-key="${key}" data-name="${r.business_name || ''}" data-color="${r.brand_color || '#0B0B2E'}" async></script>`)}</pre></details>
@@ -906,6 +979,7 @@ const INTS = [
   { k: 'xero', name: 'Xero', what: 'When a lead is marked Won, the customer and a draft invoice are created in Xero. Your assistant also chases overdue invoices with friendly reminders 1, 7 and 14 days after they’re due, and tells you what’s been paid in your daily wrap-up.', how: 'oauth' },
   { k: 'servicem8', name: 'ServiceM8', what: 'When a lead is booked, the customer and a quote job are created in ServiceM8, ready to schedule.', how: 'oauth' },
   { k: 'cliniko', name: 'Cliniko', what: 'When a lead is booked, they’re added as a new patient in Cliniko with their enquiry in the notes.', how: 'key' },
+  { k: 'shopify', name: 'Shopify', what: 'Tilly looks up orders, tracking and delivery status when customers ask “where’s my order?”, and checks return requests against your policy. Refunds always wait for your OK unless you allow otherwise.', how: 'shopify' },
   { k: 'gcal', name: 'Google Calendar', what: 'The assistant checks the calendar and offers real free times when a lead wants to book.', how: 'oauth' },
   { k: 'webhook', name: 'Any other app', what: 'Sends every new lead and stage change to Zapier, Make or your own system, so it works with Tradify, HubSpot, Pipedrive, Mindbody, Google Sheets, Slack and 7,000+ more.', how: 'url' }
 ];
@@ -926,6 +1000,7 @@ function integrationsSection(d) {
     if (on) body += `<p class="small" style="margin:0">${esc(it.account_name || 'Connected')}${it.last_sync_at ? ` · last sync ${fmtDT(it.last_sync_at)}` : ''}</p>${it.last_error ? `<p class="small" style="margin:0;color:var(--pinkd)">${esc(it.last_error)}</p>` : ''}`;
     if (isAgency()) {
       if (t.how === 'key') body += `<form class="ch-form" data-intkey="${t.k}" novalidate><label class="lab">Cliniko API key<span class="small muted">In Cliniko: My info → Manage API keys → Add an API key.</span><input class="field" name="api_key" type="password" autocomplete="off" placeholder="${on ? '•••••••• (saved)' : 'Paste API key'}"></label><button class="btn btn-navy btn-sm" type="submit" style="align-self:flex-start">${on ? 'Replace key' : 'Connect'}</button></form>`;
+      if (t.how === 'shopify') body += `<form class="ch-form" id="shopForm" novalidate>${F('Store address', 'shop', 'text', `required placeholder="yourstore.myshopify.com" value="${esc(it?.config?.shop || '')}"`)}<p class="small muted" style="margin:0">In Shopify: Settings → Apps → Develop apps → Build apps in Dev Dashboard. Create an app with <b>read_orders</b>, <b>read_customers</b> and <b>read_fulfillments</b>, install it on the store, then copy its Client ID and secret.</p><div class="two">${F('Client ID', 'client_id', 'text', 'autocomplete="off"')}<label class="lab">Client secret<input class="field" name="client_secret" type="password" autocomplete="off" placeholder="${on ? '•••••••• (saved)' : 'Paste secret'}"></label></div><details><summary class="small" style="font-weight:700;cursor:pointer">Have an older shpat_ access token instead?</summary><label class="lab" style="margin-top:8px">Admin API access token<input class="field" name="access_token" type="password" autocomplete="off" placeholder="shpat_…"></label></details><button class="btn btn-navy btn-sm" type="submit" style="align-self:flex-start">${on ? 'Update' : 'Connect'}</button></form>`;
       if (t.how === 'url') body += `<form class="ch-form" data-inturl novalidate><label class="lab">Send leads to this URL<span class="small muted">In Zapier: Webhooks by Zapier → Catch Hook, then paste its URL here.</span><input class="field" name="url" type="url" required placeholder="https://hooks.zapier.com/…" value="${esc(it?.config?.url || '')}"></label><button class="btn btn-navy btn-sm" type="submit" style="align-self:flex-start">Save</button></form>`;
       if (t.k === 'gcal' && on) body += `<form class="ch-form" data-inthours novalidate><div class="two">${F('Bookable from (hour, 24h)', 'start_hour', 'number', `min="0" max="23" value="${esc(it.config?.start_hour ?? 9)}"`)}${F('Until (hour, 24h)', 'end_hour', 'number', `min="1" max="24" value="${esc(it.config?.end_hour ?? 17)}"`)}</div><button class="btn btn-ghost btn-sm" type="submit" style="align-self:flex-start">Save hours</button></form>`;
       if (t.k === 'xero' && on) body += `<form class="ch-form" data-intxero novalidate>${F('Sales account code', 'account_code', 'text', `maxlength="10" value="${esc(it.config?.account_code || '200')}"`)}<label class="small"><input type="checkbox" name="chase_invoices" ${it.config?.chase_invoices !== false ? 'checked' : ''}> Chase overdue invoices by text or email</label><button class="btn btn-ghost btn-sm" type="submit" style="align-self:flex-start">Save</button></form>`;
@@ -936,7 +1011,7 @@ function integrationsSection(d) {
   const log = (d.ilog || []).length ? `<article class="card" style="margin-top:16px"><div class="card-head"><h2>Recent activity</h2></div><ul class="list">${d.ilog.map((l) => `<li class="row" style="justify-content:space-between;gap:12px"><span><b>${esc(NAMES_INT[l.provider] || l.provider)}</b> · ${esc(l.leads?.name || '')} · <span class="${l.ok ? 'muted' : ''}" style="${l.ok ? '' : 'color:var(--pinkd)'}">${esc(l.action)}${l.detail ? ': ' + esc(l.detail) : ''}</span></span><span class="small muted" style="white-space:nowrap">${fmtDT(l.created_at)}</span></li>`).join('')}</ul></article>` : '';
   return `<h2 class="sec-h" style="margin:32px 0 4px">Your business apps</h2><p class="muted small" style="margin:0 0 12px">Leads flow on into the tools the business already runs on. Nothing to copy across by hand.</p><section class="grid g2 ch-grid" style="align-items:start">${cards}</section>${log}`;
 }
-const NAMES_INT = { xero: 'Xero', servicem8: 'ServiceM8', cliniko: 'Cliniko', gcal: 'Google Calendar', webhook: 'Webhook' };
+const NAMES_INT = { xero: 'Xero', servicem8: 'ServiceM8', cliniko: 'Cliniko', gcal: 'Google Calendar', webhook: 'Webhook', shopify: 'Shopify' };
 
 /* ---------------- industry templates for the assistant ---------------- */
 const TEMPLATES = {
@@ -949,6 +1024,9 @@ const TEMPLATES = {
   'Handyman & maintenance': { tone: 'Friendly, practical and quick', about: 'We are [business], a handyman and maintenance service in [suburbs/area]. Repairs, assembly, painting, doors, fences, gutters and odd jobs. Hourly rate: [amount]. Fully insured.', questions: 'What needs doing?\nWhat suburb is the job in?\nRoughly how long do you think it will take?\nCan you send a photo?' },
   'Landscaping & gardening': { tone: 'Friendly, practical and quick', about: 'We are [business], servicing [suburbs/area]. Mowing, garden maintenance, hedging, turf, clean-ups and landscaping. Free quotes.', questions: 'What would you like done?\nWhat suburb is the property in?\nIs it a one-off job or regular maintenance?\nCan you send a photo?' },
   'Air conditioning': { tone: 'Friendly, practical and quick', about: 'We are [business], licensed air conditioning technicians servicing [suburbs/area]. Supply and install, servicing, cleaning and repairs. Free quotes on installs.', questions: 'Is it a new install, a service or a repair?\nWhat suburb is the job in?\nHow many rooms or units?\nWhen would suit?' },
+  'Online store (Shopify)': { tone: 'Warm, friendly and helpful, light emoji', about: 'We are [store], selling [products] online. Shipping: [free over $X], Australia [2–5] business days, international [rates]. Returns: [30] days from delivery, [unopened / faulty] items. Customer service hours: [hours].', questions: 'What’s your order number?\nWhat email did you order with?\nWhat can I help you with today?' },
+  'Clinic (physio, chiro, dental)': { tone: 'Warm, calm and professional', about: 'We are [clinic], in [suburb]. [Services]. Initial consult: [price] for [length]. Health fund rebates available. We do not give medical advice by message.', questions: 'Are you a new or existing patient?\nWhat would you like to come in for?\nWhat days and times suit you?\nDo you have private health insurance?' },
+  'Salon, beauty & spa': { tone: 'Warm, friendly and upbeat', about: 'We are [salon], in [suburb]. [Services and prices]. Cancellation policy: [policy]. Deposits: [policy].', questions: 'What service would you like?\nHave you visited us before?\nWhat day and time suit you?' },
   'Roofing & guttering': { tone: 'Friendly, practical and quick', about: 'We are [business], servicing [suburbs/area]. Roof repairs, restorations, re-roofs, leaks and gutter replacement. Free quotes.', questions: 'What do you need done?\nWhat suburb is the property in?\nIs it leaking right now?\nIs the roof tiles or metal?' }
 };
 
@@ -980,6 +1058,162 @@ function wireBilling() {
 EXTRA_ACTS.editPlan = () => { const p = state.data.plan || {}; dialog('Billing plan', `<p class="small muted" style="margin:0">Booked appointments and won sales are counted automatically from the lead pipeline, once per lead.</p><div class="two">${F('Monthly fee ($)', 'monthly_fee', 'number', `min="0" step="1" value="${esc(p.monthly_fee ?? 0)}"`)}${F('Per booked appointment ($)', 'per_booking', 'number', `min="0" step="1" value="${esc(p.per_booking ?? 0)}"`)}</div><div class="two">${F('Per sale won ($)', 'per_won', 'number', `min="0" step="1" value="${esc(p.per_won ?? 0)}"`)}${F('% of sale value', 'won_percent', 'number', `min="0" max="100" step="0.5" value="${esc(p.won_percent ?? 0)}"`)}</div>${F('Billing email', 'billing_email', 'email', `value="${esc(p.billing_email || '')}" placeholder="accounts@business.com.au"`)}<label class="row" style="gap:8px"><input type="checkbox" name="active" ${p.active !== false ? 'checked' : ''}> Billing is on</label>`,
   (o) => api.saveBillingPlan(state.clientId, { monthly_fee: +o.monthly_fee || 0, per_booking: +o.per_booking || 0, per_won: +o.per_won || 0, won_percent: Math.min(100, +o.won_percent || 0), billing_email: o.billing_email.trim() || null, active: !!o.active })); };
 EXTRA_ACTS.billNow = async () => { const m = state.billMonth; if (!confirm(`Create the invoice for ${m}? Each booking and sale is only ever charged once.`)) return; try { const r = await api.billMonth(state.clientId, m); toast(r.note || 'Invoice created'); reload(); } catch (e) { toast(e.message); } };
+
+/* ---------------- Frontos: calls, Tilly settings, money, orders & returns, social comments ---------------- */
+const LEVELS = [
+  ['draft', 'Review', 'Approve every reply', 'Tilly drafts each reply. Nothing is sent until you approve it.'],
+  ['simple', 'Assisted', 'Routine replies send automatically', 'Prices, bookings, refunds and anything unusual wait for your OK.'],
+  ['auto', 'Autonomous', 'Tilly handles it end to end', 'She answers, quotes the prices you’ve set and books, then hands over the job.']
+];
+const afterHours = (t) => { const x = new Date(t); const h = x.getHours(), wd = x.getDay(); return h < 7 || h >= 17 || wd === 0 || wd === 6; };
+const sinceDays = (t, n) => Date.parse(t || 0) >= Date.now() - n * 86400000;
+const msgList = (msgs, who) => msgs.filter((m) => !m.status || m.status === 'sent').map((m) => `<div class="rp-m ${m.sender === 'lead' ? 'in' : 'out'} ${m.sender}"><span class="small">${m.sender === 'lead' ? esc(who || 'Caller') : m.sender === 'ai' ? 'Tilly' : 'You'} · ${fmtDT(m.created_at)}</span><p>${esc(m.body)}</p></div>`).join('') || '<p class="empty">No transcript yet.</p>';
+const voiceCard = () => `<article class="card voice-card"><div class="row" style="gap:14px;align-items:center"><button type="button" class="vplay" data-vplay aria-label="Play Tilly’s voice">${ic('play', 18)}</button><div><b>Hear Tilly answer a call</b><div class="small muted">A 25-second sample in Tilly’s voice.</div></div></div><audio id="vAudio" src="../assets/tilly-demo.mp3" preload="none"></audio></article>`;
+
+VIEWS.voice = function () {
+  const d = state.data, r = d.reply || {}, C = d.vcalls || [], M = C.filter((v) => sinceDays(v.created_at || v.last_message_at, 30));
+  const cv = C.find((v) => v.id === state.callId);
+  const booked = M.filter((v) => /\bbook/i.test(v.summary || '')).length;
+  const after = M.filter((v) => afterHours(v.created_at || v.last_message_at)).length;
+  const mode = r.voice_enabled ? (r.voice_mode === 'always' ? 'Answering every call' : 'Answering calls you miss') : 'Texting back missed calls';
+  return head('Front office', 'Calls', 'Every call Tilly answered, with the transcript and what happened next.', `<span class="pill ${r.voice_enabled ? 'p-green' : 'p-grey'}" style="align-self:center">${mode}</span><button class="btn btn-ghost" data-go="tilly">Call settings</button>`) + `
+  <section class="grid g4" aria-label="Last 30 days">
+    <div class="card kpi"><span class="lab">Calls answered</span><span class="val">${M.length}</span><span class="delta muted">Last 30 days</span></div>
+    <div class="card kpi"><span class="lab">Booked on the call</span><span class="val">${booked}</span><span class="delta muted">${M.length ? Math.round((100 * booked) / M.length) + '% of calls' : '—'}</span></div>
+    <div class="card kpi"><span class="lab">After hours</span><span class="val">${after}</span><span class="delta muted">Calls you’d have missed</span></div>
+    <div class="card kpi"><span class="lab">Need you</span><span class="val">${M.filter((v) => v.status === 'human').length}</span><span class="delta muted">Call back or follow up</span></div>
+  </section>
+  <section class="rp-wrap" style="margin-top:16px">
+    <div class="card rp-list"><div class="card-head"><h2>Recent calls</h2></div>
+      ${C.length ? `<ul class="list rp-convs">${C.map((v) => `<li><button type="button" class="rp-conv" data-call="${esc(v.id)}" ${v.id === state.callId ? 'aria-current="true"' : ''}><span class="row" style="justify-content:space-between;gap:8px"><b>${esc(v.lead_name || v.contact)}</b><span class="small muted">${fmtDT(v.created_at || v.last_message_at)}</span></span><span class="row" style="gap:6px">${pill(v.status === 'human' ? 'needs_you' : 'closed')}${afterHours(v.created_at || v.last_message_at) ? '<span class="small muted">After hours</span>' : ''}</span>${v.summary ? `<span class="small muted rp-sum">${esc(v.summary)}</span>` : ''}</button></li>`).join('')}</ul>` : `<p class="empty">No calls yet. ${r.voice_enabled ? 'They’ll appear here as soon as Tilly answers one.' : 'Turn on Tilly’s phone answering in Tilly settings.'}</p>`}
+    </div>
+    <div class="card rp-thread">${cv ? `<div class="card-head" style="align-items:flex-start"><div><h2>${esc(cv.lead_name || cv.contact)}</h2><span class="small muted">Phone call · ${fmtDT(cv.created_at || cv.last_message_at)}</span></div>${cv.contact && /^\+?\d/.test(cv.contact) ? `<a class="btn btn-pink btn-sm" href="tel:${esc(cv.contact)}">${ic('phone', 15)} Call back</a>` : ''}</div>
+      ${cv.summary ? `<p class="rp-note"><b>What happened</b> ${esc(cv.summary)}</p>` : ''}
+      <div class="rp-msgs" id="rpMsgs">${msgList(state.callMsgs || [], cv.lead_name)}</div>` : '<p class="empty">Pick a call to read the transcript.</p>'}</div>
+  </section>
+  <section class="grid g2" style="margin-top:16px;align-items:start">${voiceCard()}
+    <article class="card"><h2 style="margin-bottom:6px">Which ads make the phone ring?</h2><p class="small muted" style="margin:0 0 12px">Give each ad, van or flyer its own number and every call is counted against it.</p><button class="btn btn-ghost btn-sm" data-go="channels">Call tracking numbers</button></article>
+  </section>`;
+};
+
+VIEWS.tilly = function () {
+  const r = state.data.reply || {}, cur = r.approval_mode || 'auto', v = VERT(), shop = (state.data.ints || []).find((x) => x.provider === 'shopify');
+  const voice = r.voice_enabled ? (r.voice_mode === 'always' ? 'every' : 'missed') : 'off';
+  const short = (t, n = 220) => { t = String(t || '').trim(); return t.length > n ? esc(t.slice(0, n)) + '…' : esc(t); };
+  return head('Business', 'Tilly settings', 'How much Tilly does on her own, what she knows, and how she answers your phone.') + `
+  <section class="card"><div class="card-head"><div><h2>Automation level</h2><p class="small muted" style="margin:4px 0 0">Applies to texts, emails, DMs and comments. Change it any time.</p></div></div>
+    <div class="lvl" role="radiogroup" aria-label="Automation level">${LEVELS.map(([k, tag, t, d], i) => `<button type="button" role="radio" aria-checked="${cur === k}" data-level="${k}"><span class="n">${i + 1}</span><small>${tag}</small><b>${t}</b><span class="small muted">${d}</span></button>`).join('')}</div>
+    <p class="small muted" style="margin:12px 0 0">Whatever the level, Tilly only quotes the prices and policies you give her, and hands anything she isn’t sure about to you.</p>
+  </section>
+  <section class="grid g2" style="margin-top:16px;align-items:start">
+    <article class="card"><div class="card-head"><h2>What Tilly knows</h2><button class="btn btn-ghost btn-sm" data-act="editKnow">Edit</button></div>
+      <dl class="kn"><div><dt>About the business</dt><dd>${short(r.about) || '<span class="muted">Not filled in yet</span>'}</dd></div><div><dt>Hours</dt><dd>${short(r.hours, 120) || '<span class="muted">Not set</span>'}</dd></div><div><dt>Questions she asks</dt><dd>${r.questions ? esc(r.questions).split('\n').slice(0, 4).join('<br>') : '<span class="muted">None yet</span>'}</dd></div><div><dt>Tone</dt><dd>${short(r.tone, 80) || '—'}</dd></div></dl>
+    </article>
+    <article class="card"><div class="card-head"><h2>Business type</h2></div>
+      <p class="small muted" style="margin:0 0 10px">Sets Tilly’s questions, words and screens for your kind of business.</p>
+      <div class="seg" role="radiogroup" aria-label="Business type">${Object.entries(VERTS).map(([k, x]) => `<button type="button" role="radio" aria-checked="${v === k}" data-vert="${k}" ${isAgency() ? '' : 'disabled'}>${esc(x.label)}</button>`).join('')}</div>
+      ${isAgency() ? '' : '<p class="small muted" style="margin:10px 0 0">Need to change this? Send us a request.</p>'}
+    </article>
+  </section>
+  <section class="grid g2" style="margin-top:16px;align-items:start">
+    <form class="card ch-form" id="voiceForm" novalidate><h2>Phone answering</h2><p class="small muted" style="margin:0">Tilly answers in a natural Australian voice, books the job and puts the transcript in Calls.</p>
+      <label class="lab">When should Tilly answer?<select class="field" name="voice">${[['off', 'Off: just text back missed calls'], ['missed', 'When I don’t pick up in 20 seconds'], ['every', 'Every call, straight away']].map(([k, l]) => `<option value="${k}" ${voice === k ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
+      ${F('Ring this mobile first', 'forward_phone', 'tel', `maxlength="20" placeholder="04…" value="${esc(r.forward_phone || '')}"`)}
+      <button class="btn btn-navy btn-sm" type="submit" style="align-self:flex-start">Save</button></form>
+    <div style="display:flex;flex-direction:column;gap:16px">${voiceCard()}
+      <form class="card ch-form" id="commentForm" novalidate><h2>Social comments</h2><p class="small muted" style="margin:0">Replies to comments on your Facebook and Instagram posts. Spam is hidden automatically.</p>
+        <label class="lab">Comment replies<select class="field" name="comment_mode">${[['off', 'Off'], ['draft', 'Draft replies for my OK'], ['simple', 'Reply to simple questions, hold the rest'], ['auto', 'Reply to everything']].map(([k, l]) => `<option value="${k}" ${(r.comment_mode || 'draft') === k ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
+        <button class="btn btn-navy btn-sm" type="submit" style="align-self:flex-start">Save</button></form></div>
+  </section>
+  ${v === 'store' ? `<form class="card ch-form" id="storeForm" novalidate style="margin-top:16px"><div class="card-head"><div><h2>Orders, shipping and returns</h2><p class="small muted" style="margin:4px 0 0">Tilly checks every return request against this policy. ${shop ? 'Order lookups come from Shopify.' : '<b>Connect Shopify</b> in Connections so Tilly can look up orders.'}</p></div>${shop ? '<span class="pill p-green">Shopify connected</span>' : '<button type="button" class="btn btn-ghost btn-sm" data-go="channels">Connect Shopify</button>'}</div>
+    <label class="lab">Returns policy<textarea class="field" name="returns_policy" maxlength="2000" placeholder="Returns within 30 days of delivery. Unopened items: full refund…">${esc(r.returns_policy || '')}</textarea></label>
+    <div class="two">${F('Return window (days)', 'return_window_days', 'number', `min="0" max="365" value="${esc(r.return_window_days ?? 30)}"`)}<label class="lab">Refunds<select class="field" name="refunds_need_approval"><option value="1" ${r.refunds_need_approval !== false ? 'selected' : ''}>Always wait for my OK</option><option value="0" ${r.refunds_need_approval === false ? 'selected' : ''}>Tilly can approve returns inside the policy</option></select></label></div>
+    <label class="lab">Shipping info<textarea class="field" name="shipping_info" maxlength="1500" placeholder="Free shipping over $80. Australia 2–5 business days…" style="min-height:70px">${esc(r.shipping_info || '')}</textarea></label>
+    <button class="btn btn-navy" type="submit" style="align-self:flex-start">Save</button></form>` : ''}`;
+};
+
+VIEWS.money = function () {
+  const d = state.data, L = d.leads || [], X = d.chases || [], xero = (d.ints || []).find((x) => x.provider === 'xero');
+  const quotes = L.filter((l) => l.quoted_at && !['won', 'lost', 'booked'].includes(l.status));
+  const won = L.filter((l) => l.status === 'won' && l.source !== 'Xero invoice' && sinceDays(l.created_at, 30));
+  const chasing = X.filter((x) => !x.stopped && (x.step ?? 0) < 3), over = X.filter((x) => x.stopped || (x.step ?? 0) >= 3);
+  const sum = (a, k) => a.reduce((t, x) => t + (+x[k] || 0), 0);
+  return head('Business', 'Money', 'Quotes Tilly is following up, invoices she’s chasing, and what’s come in.') + `
+  <section class="grid g4">
+    <div class="card kpi"><span class="lab">Quotes being followed up</span><span class="val">${money0(sum(quotes, 'value'))}</span><span class="delta muted">${quotes.length} quote${quotes.length === 1 ? '' : 's'}</span></div>
+    <div class="card kpi"><span class="lab">Overdue invoices being chased</span><span class="val">${money0(sum(chasing, 'amount_due'))}</span><span class="delta muted">${chasing.length} invoice${chasing.length === 1 ? '' : 's'}</span></div>
+    <div class="card kpi"><span class="lab">Over to you</span><span class="val">${money0(sum(over, 'amount_due'))}</span><span class="delta muted">All reminders sent</span></div>
+    <div class="card kpi"><span class="lab">Won in 30 days</span><span class="val">${money0(sum(won, 'value'))}</span><span class="delta muted">${won.length} ${VW().thing}${won.length === 1 ? '' : 's'}</span></div>
+  </section>
+  <section class="grid g2" style="margin-top:16px;align-items:start">
+    <article class="card"><div class="card-head"><h2>Overdue invoices</h2>${xero ? '<span class="pill p-green">Xero connected</span>' : '<button class="btn btn-ghost btn-sm" data-go="channels">Connect Xero</button>'}</div>
+      ${X.length ? `<div class="tbl-wrap"><table><thead><tr><th scope="col">Customer</th><th scope="col">Invoice</th><th scope="col">Amount</th><th scope="col">Due</th><th scope="col">Reminders</th></tr></thead><tbody>${X.map((x) => `<tr><td><b>${esc(x.contact_name || '')}</b>${x.note ? `<div class="small muted">${esc(x.note)}</div>` : ''}</td><td class="muted">${esc(x.invoice_number || '')}</td><td>${money(x.amount_due)}</td><td class="muted">${fmtDate(x.due_date)}</td><td>${x.stopped || (x.step ?? 0) >= 3 ? pill('needs_you') : `<span class="small">${x.step || 0} of 3 sent</span>`}</td></tr>`).join('')}</tbody></table></div>` : `<p class="empty">${xero ? 'No overdue invoices. Nice.' : 'Connect Xero and Tilly will chase overdue invoices with friendly reminders 1, 7 and 14 days after they’re due.'}</p>`}
+    </article>
+    <article class="card"><div class="card-head"><h2>Quotes being followed up</h2><button class="btn btn-ghost btn-sm" data-go="leads">${esc(VW().leads)}</button></div>
+      ${quotes.length ? `<ul class="list">${quotes.map((l) => `<li><span><button type="button" class="linkbtn" data-lead-open="${esc(l.id)}">${esc(l.name)}</button> <span class="small muted">${l.value ? money0(l.value) + ' · ' : ''}${l.chase_step || 0} of 3 follow-ups</span></span><span class="small muted">Sent ${fmtDate(l.quoted_at)}</span></li>`).join('')}</ul>` : '<p class="empty">No quotes out. Open a lead and tap “I sent a quote” and Tilly follows it up 2, 5 and 10 days later.</p>'}
+    </article>
+  </section>
+  <section class="card bills" style="margin-top:16px"><div class="row" style="gap:14px;align-items:flex-start"><span class="bills-ic">${ic('cash', 22)}</span><div style="flex:1"><div class="row" style="gap:8px"><h2>Your bills</h2><span class="pill p-violet">Coming soon</span></div><p class="small muted" style="margin:6px 0 0">Tilly will read the bills in your Xero and text you each morning with what’s due and overdue, and flag anything unusual. She never pays anything herself: you approve every payment in your bank.</p></div></div></section>`;
+};
+
+VIEWS.orders = function () {
+  const d = state.data, R = d.returns || [], convs = d.convs || [], r = d.reply || {}, shop = (d.ints || []).find((x) => x.provider === 'shopify');
+  const orderQs = convs.filter((v) => v.topic === 'order' || /order|tracking|deliver|ship/i.test(v.summary || '')).filter((v) => sinceDays(v.last_message_at, 30));
+  const wait = R.filter((x) => x.status === 'requested');
+  return head('Front office', 'Orders & returns', '“Where’s my order?”, returns and exchanges, answered in seconds. Refunds always wait for your OK.', shop ? '<span class="pill p-green" style="align-self:center">Shopify connected</span>' : '<button class="btn btn-pink" data-go="channels">Connect Shopify</button>') + `
+  ${shop ? '' : '<div class="card note-card" style="margin-bottom:16px"><b>Connect your Shopify store</b><p class="small muted" style="margin:4px 0 0">Tilly needs read access to your orders to answer “where’s my order?” with real tracking. Until then she collects the order number and hands it to you.</p></div>'}
+  <section class="grid g4">
+    <div class="card kpi"><span class="lab">Order questions answered</span><span class="val">${orderQs.length}</span><span class="delta muted">Last 30 days</span></div>
+    <div class="card kpi"><span class="lab">Returns requested</span><span class="val">${R.filter((x) => sinceDays(x.created_at, 30)).length}</span><span class="delta muted">Last 30 days</span></div>
+    <div class="card kpi"><span class="lab">Waiting for your OK</span><span class="val">${wait.length}</span><span class="delta muted">${money0(wait.reduce((t, x) => t + (+x.value || 0), 0))} in refunds</span></div>
+    <div class="card kpi"><span class="lab">Return window</span><span class="val">${esc(r.return_window_days ?? 30)} days</span><span class="delta muted"><button type="button" class="linkbtn" data-go="tilly">Edit policy</button></span></div>
+  </section>
+  <section class="card" style="margin-top:16px"><div class="card-head"><h2>Returns & exchanges</h2></div>
+    ${R.length ? `<div class="tbl-wrap"><table><thead><tr><th scope="col">Order</th><th scope="col">Customer</th><th scope="col">Item</th><th scope="col">Reason</th><th scope="col">Value</th><th scope="col">Status</th><th scope="col"><span class="sr">Actions</span></th></tr></thead><tbody>${R.map((x) => `<tr><td><b>${esc(x.order_number || '')}</b><div class="small muted">${fmtDate(x.created_at)}</div></td><td>${esc(x.customer || '')}</td><td class="small">${esc(x.items || '')}</td><td class="small">${esc(x.reason || '')}${x.note ? `<div class="small muted" style="margin-top:4px">Tilly: ${esc(x.note)}</div>` : ''}</td><td>${money0(x.value)}</td><td>${pill(x.status)}${x.status === 'requested' ? `<div class="small" style="margin-top:4px;color:${x.within_policy === false ? 'var(--pinkd)' : 'var(--green)'}">${x.within_policy === false ? 'Outside policy' : 'Within policy'}</div>` : ''}</td><td style="text-align:right;white-space:nowrap">${x.status === 'requested' ? `<button class="btn btn-pink btn-sm" data-ret="${esc(x.id)}" data-dec="approve">Approve</button> <button class="btn btn-ghost btn-sm" data-ret="${esc(x.id)}" data-dec="decline">Decline</button>` : x.status === 'approved' ? `<button class="btn btn-ghost btn-sm" data-ret="${esc(x.id)}" data-dec="refund">Mark refunded</button>` : ''}</td></tr>`).join('')}</tbody></table></div>` : '<p class="empty">No returns yet. When a customer asks, Tilly checks it against your policy and lists it here.</p>'}
+  </section>
+  <section class="grid g2" style="margin-top:16px;align-items:start">
+    <article class="card"><div class="card-head"><h2>Latest order questions</h2><button class="btn btn-ghost btn-sm" data-go="replies">Inbox</button></div>${orderQs.length ? `<ul class="list">${orderQs.slice(0, 6).map((v) => `<li><span><b>${esc(v.lead_name || v.contact)}</b> <span class="small muted">${esc(CHN[v.channel] || v.channel)}</span><div class="small muted">${esc(v.summary || '')}</div></span></li>`).join('')}</ul>` : '<p class="empty">None yet.</p>'}</article>
+    <article class="card"><h2 style="margin-bottom:8px">How Tilly handles orders</h2><ul class="ticks"><li>Looks up the order and tracking in Shopify and replies with the real status</li><li>Checks return requests against your policy and window</li><li>Asks for photos when something arrived damaged</li><li>Never refunds or cancels on her own unless you allow it</li></ul></article>
+  </section>`;
+};
+
+VIEWS.social = function () {
+  const S = state.data.social || [], r = state.data.reply || {}, M = S.filter((m) => sinceDays(m.created_at, 30));
+  const mode = { off: 'Off', draft: 'Drafts for your OK', simple: 'Replies to simple questions', auto: 'Replies to everything' }[r.comment_mode || 'draft'];
+  return head('Front office', 'Social comments', 'Comments on your Facebook and Instagram posts, answered in your voice. Spam is hidden.', `<span class="pill p-violet" style="align-self:center">${esc(mode)}</span><button class="btn btn-ghost" data-go="tilly">Settings</button>`) + `
+  <section class="grid g4">
+    <div class="card kpi"><span class="lab">Comments</span><span class="val">${M.length}</span><span class="delta muted">Last 30 days</span></div>
+    <div class="card kpi"><span class="lab">Replied</span><span class="val">${M.filter((m) => m.status === 'replied').length}</span></div>
+    <div class="card kpi"><span class="lab">Waiting for you</span><span class="val">${M.filter((m) => ['drafted', 'needs_you'].includes(m.status)).length}</span></div>
+    <div class="card kpi"><span class="lab">Spam hidden</span><span class="val">${M.filter((m) => m.status === 'hidden').length}</span></div>
+  </section>
+  <section class="card" style="margin-top:16px"><div class="card-head"><h2>Latest comments</h2></div>
+    ${S.length ? `<ul class="rv">${S.map((m) => `<li><div class="row" style="justify-content:space-between;gap:10px"><div class="row" style="gap:8px"><span class="lg sm"><img src="../assets/logos/${m.platform === 'Facebook' ? 'facebook' : 'instagram'}.svg" alt="${esc(m.platform)}"></span><b>${esc(m.author || '')}</b>${pill(m.status)}</div><span class="small muted">${fmtDT(m.created_at)}</span></div>
+      <p class="small muted" style="margin:6px 0 0">On: ${esc(m.post || '')}</p><p>${esc(m.body || '')}</p>
+      ${m.status === 'replied' ? `<div class="rv-reply"><b>Tilly replied</b> ${esc(m.reply || '')}</div>` : ['drafted', 'needs_you'].includes(m.status) ? `<form class="cmForm" data-cm="${esc(m.id)}" novalidate><label class="sr" for="cm2-${esc(m.id)}">Reply</label><textarea class="field" id="cm2-${esc(m.id)}" name="reply" maxlength="1000" placeholder="Write a reply">${esc(m.reply || '')}</textarea><div class="row" style="gap:8px"><button class="btn btn-pink btn-sm" type="submit">Post reply</button><button type="button" class="btn btn-ghost btn-sm" data-cmskip="${esc(m.id)}">No reply needed</button><button type="button" class="btn btn-ghost btn-sm" data-cmhide="${esc(m.id)}">Hide</button></div></form>` : ''}</li>`).join('')}</ul>` : '<p class="empty">No comments yet. Once your Facebook Page and Instagram are connected, new comments appear here.</p>'}
+  </section>`;
+};
+
+EXTRA_ACTS.editKnow = () => { state.replyTab = 'settings'; go('replies'); };
+function wireFrontos() {
+  $app.querySelectorAll('[data-call]').forEach((b) => b.onclick = async () => { state.callId = b.dataset.call; state.callMsgs = await api.messages(state.callId).catch(() => []); render(); });
+  $app.querySelectorAll('[data-vplay]').forEach((b) => b.onclick = () => { const a = document.getElementById('vAudio'); if (!a) return; if (a.paused) { a.play(); b.classList.add('on'); } else { a.pause(); b.classList.remove('on'); } a.onended = () => b.classList.remove('on'); });
+  const saveR = async (o, msg) => { try { await api.saveReply(state.clientId, { ...(state.data.reply || {}), ...o }); toast(msg || 'Saved'); reload(); } catch (e) { toast(e.message || 'Could not save'); } };
+  $app.querySelectorAll('[data-level]').forEach((b) => b.onclick = () => saveR({ approval_mode: b.dataset.level }, `Automation level: ${LEVELS.find((x) => x[0] === b.dataset.level)[1]}`));
+  $app.querySelectorAll('[data-vert]').forEach((b) => b.onclick = async () => { if (!isAgency()) return; try { await api.updateClient(state.clientId, { vertical: b.dataset.vert }); state.clients = await api.clients(); toast('Business type updated'); reload(); } catch (e) { toast(/column/i.test(e.message || '') ? 'Run the v11 database update first.' : e.message); } });
+  const vf = document.getElementById('voiceForm');
+  vf && (vf.onsubmit = (e) => { e.preventDefault(); const v = vf.voice.value; saveR({ voice_enabled: v !== 'off', voice_mode: v === 'every' ? 'always' : 'missed', forward_phone: vf.forward_phone.value.trim() || null }, 'Phone answering saved'); });
+  const cf = document.getElementById('commentForm');
+  cf && (cf.onsubmit = (e) => { e.preventDefault(); saveR({ comment_mode: cf.comment_mode.value }, 'Comment replies saved'); });
+  const sf = document.getElementById('storeForm');
+  sf && (sf.onsubmit = (e) => { e.preventDefault(); saveR({ returns_policy: sf.returns_policy.value.trim() || null, return_window_days: Math.max(0, Math.min(365, +sf.return_window_days.value || 0)), refunds_need_approval: sf.refunds_need_approval.value === '1', shipping_info: sf.shipping_info.value.trim() || null }, 'Store policy saved'); });
+  $app.querySelectorAll('[data-ret]').forEach((b) => b.onclick = async () => { const dec = b.dataset.dec; if (dec === 'decline' && !confirm('Decline this return? Tilly will let the customer know kindly.')) return; b.disabled = true; try { await api.returnDecision(b.dataset.ret, dec); toast(dec === 'approve' ? 'Approved. Tilly is sending the return steps.' : dec === 'refund' ? 'Marked as refunded.' : 'Declined. Tilly will let them know.'); reload(); } catch (e) { b.disabled = false; toast(e.message); } });
+  $app.querySelectorAll('.cmForm').forEach((f) => f.onsubmit = async (e) => { e.preventDefault(); const t = f.reply.value.trim(); if (!t) return f.reply.focus(); try { await api.commentDecision(f.dataset.cm, 'post', t); toast('Reply posted'); reload(); } catch (err) { toast(err.message); } });
+  $app.querySelectorAll('[data-cmskip]').forEach((b) => b.onclick = async () => { await api.commentDecision(b.dataset.cmskip, 'skip').catch((e) => toast(e.message)); reload(); });
+  $app.querySelectorAll('[data-cmhide]').forEach((b) => b.onclick = async () => { await api.commentDecision(b.dataset.cmhide, 'hide').catch((e) => toast(e.message)); toast('Hidden'); reload(); });
+  const sh = document.getElementById('shopForm');
+  sh && (sh.onsubmit = async (e) => { e.preventDefault(); const f = Object.fromEntries(new FormData(sh)); const shop = (f.shop || '').trim().toLowerCase().replace(/^https?:\/\//, '').replace(/\/.*$/, ''); if (!/^[a-z0-9][a-z0-9-]*\.myshopify\.com$/.test(shop)) return toast('Use the store’s .myshopify.com address.'); const tok = (f.access_token || '').trim(), id = (f.client_id || '').trim(), sec = (f.client_secret || '').trim(); if (!tok && !(id && sec)) return toast('Add the client ID and secret, or an access token.'); try { await api.saveInt(state.clientId, 'shopify', { account_name: shop, config: { shop }, tokens: tok ? { access_token: tok } : { client_id: id, client_secret: sec } }); toast('Shopify saved. Tap Test to check it.'); reload(); } catch (err) { toast(err.message); } });
+}
 
 /* ---------------- partner agencies (white-label resale) ---------------- */
 VIEWS.partners = function () {
@@ -1239,7 +1473,7 @@ function wire() {
   mf && (mf.onsubmit = async (e) => { e.preventDefault(); const f = Object.fromEntries(new FormData(mf)); const id = f.meta_page_id.trim(); if (id && !/^\d{5,25}$/.test(id)) return toast('The Page ID is a number, e.g. 1029384756.'); const o = { meta_page_id: id || null, lead_ads: !!f.lead_ads, dms: !!f.dms }; if (f.meta_page_token.trim()) o.meta_page_token = f.meta_page_token.trim(); try { await api.saveConn(state.clientId, o); toast('Saved. Now click Connect & check.'); reload(); } catch (err) { toast(/duplicate|unique/i.test(err.message) ? 'That Page is already connected to another client.' : err.message); } });
   const ef = document.getElementById('emailForm');
   ef && (ef.onsubmit = async (e) => { e.preventDefault(); const v = ef.inbound_email.value.trim(); if (v && !ef.inbound_email.checkValidity()) return ef.inbound_email.reportValidity(); try { await api.saveConn(state.clientId, { inbound_email: v || null }); toast('Saved'); reload(); } catch (err) { toast(err.message); } });
-  wireBilling(); wirePartners();
+  wireBilling(); wirePartners(); wireFrontos();
   if (state.view === 'overview') fillOverview();
 }
 function scrollMsgs() { const m = document.getElementById('rpMsgs'); if (m) m.scrollTop = m.scrollHeight; }

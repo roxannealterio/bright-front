@@ -293,12 +293,32 @@ dialog.profile form{display:flex;flex-direction:column;gap:14px}
 .wm-img{max-height:34px;max-width:180px;display:block}.wm-p{font-size:24px;letter-spacing:-.02em}
 .bill-k{margin-top:12px;gap:12px}.bill-k>div{display:flex;flex-direction:column;gap:2px;background:var(--bg,#F6F4F1);border-radius:12px;padding:12px 14px}.bill-k b{font-size:22px}
 @media (max-width:900px){.ch-flow{grid-template-columns:1fr}.ch-arrow{transform:rotate(90deg);justify-self:start}}
+.lvl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
+.lvl button{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:4px;padding:18px;border-radius:16px;border:1.5px solid var(--line);background:#fff;transition:border-color .2s,box-shadow .2s}
+.lvl button:hover{border-color:var(--navy)}
+.lvl button:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+.lvl button[aria-checked="true"]{border-color:var(--pink);box-shadow:0 0 0 3px var(--pinkl)}
+.lvl .n{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:13px;background:var(--sand2);margin-bottom:6px}
+.lvl button[aria-checked="true"] .n{background:var(--pink);color:#fff}
+.lvl small{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--pinkd)}
+.lvl b{font-size:16px}
+.seg button[aria-checked="true"]{background:var(--navy);color:#fff}.seg button[disabled]{cursor:default}
+.seg{flex-wrap:wrap}
+.kn{margin:0;display:grid;gap:12px}.kn dt{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}.kn dd{margin:2px 0 0;font-size:14px}
+.voice-card{background:var(--navy);color:#fff;border:0}.voice-card .muted{color:#B8B8D9}
+.vplay{width:48px;height:48px;border-radius:50%;border:0;cursor:pointer;color:#fff;background:linear-gradient(135deg,#FF3D7F,#7B3FF2);display:grid;place-items:center;flex-shrink:0}
+.vplay.on{animation:vp 1.2s infinite}@keyframes vp{50%{box-shadow:0 0 0 10px rgba(255,61,127,.15)}}
+.lg.sm{width:26px;height:26px;border-radius:7px}.lg.sm img{max-width:16px;max-height:16px}
+.ticks{margin:0;padding:0;list-style:none;display:grid;gap:10px}.ticks li{padding-left:26px;position:relative;font-size:14px}.ticks li::before{content:"✓";position:absolute;left:0;top:0;width:18px;height:18px;border-radius:50%;background:var(--greenl);color:var(--green);font-size:11px;font-weight:800;display:grid;place-items:center}
+.note-card{background:var(--amberl);border-color:#F2DDB0}
+.bills{background:linear-gradient(135deg,#fff,var(--violetl))}.bills-ic{width:44px;height:44px;border-radius:12px;background:var(--navy);color:#fff;display:grid;place-items:center;flex-shrink:0}
+@media(max-width:760px){.lvl{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div id="app" aria-live="polite"></div>
 <div class="toast" id="toast" role="status"></div>
 <script src="config.js?v=20261112m"></script>
-<script type="module" src="app.js?v=20261113a"></script>
+<script type="module" src="app.js?v=20261113b"></script>
 </body>
 </html>
