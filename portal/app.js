@@ -907,7 +907,7 @@ const VIEWS = {
       <div class="card" style="display:flex;flex-direction:column;gap:12px"><h2>Connect your lead forms</h2>
         ${r.intake_key ? `<p class="muted small" style="margin:0">Send new leads to this address. Fields: name, email, phone, message, source.</p>
         <label class="lab">Lead address<input class="field" readonly value="${esc(intake)}?key=${esc(r.intake_key)}" onclick="this.select()"></label>
-        <details open><summary class="small" style="font-weight:700;cursor:pointer">“Text us” chat button for your website</summary><p class="small muted">Paste this just before &lt;/body&gt; on your website. It shows a “Text us” button in your colours. Messages land in your Inbox and get an instant reply.</p><pre class="rp-code">${esc(`<script src="https://brightfrontstudio.com/widget.js" data-key="${r.intake_key}" data-name="${r.business_name || ''}" data-color="${r.brand_color || '#0B0B2E'}" async></script>`)}</pre></details>
+        <details open><summary class="small" style="font-weight:700;cursor:pointer">“Text us” chat button for your website</summary><p class="small muted">Paste this just before &lt;/body&gt; on your website. It shows a “Text us” button in your colours. Messages land in your Inbox and get an instant reply.</p><pre class="rp-code">${esc(`<script src="https://autofice.com.au/widget.js" data-key="${r.intake_key}" data-name="${r.business_name || ''}" data-color="${r.brand_color || '#0B0B2E'}" async></script>`)}</pre></details>
         <details><summary class="small" style="font-weight:700;cursor:pointer">Website form code</summary><pre class="rp-code">${esc(`<form action="${intake}?key=${r.intake_key}&redirect=https://YOURSITE/thanks" method="post">
   <input name="name" required>
   <input name="phone" type="tel">
@@ -956,7 +956,7 @@ VIEWS.channels = function () {
       <details><summary class="small" style="font-weight:700;cursor:pointer">Meta app settings (one time, for all clients)</summary><p class="small muted">Webhook callback URL and fields for your Meta app. Subscribe the Page object to <b>leadgen</b>, <b>messages</b> and <b>feed</b>, and the Instagram object to <b>messages</b> and <b>comments</b>.</p>${copy('Callback URL', fn + '/meta')}</details>` : ''}`);
 
   const web = card('Website form & chat button', 'Your website enquiry form and the “Text us” button.', on(L.some((l) => /website|chat/i.test(l.source || ''))),
-    `<details><summary class="small" style="font-weight:700;cursor:pointer">“Text us” chat button</summary><p class="small muted">Paste just before &lt;/body&gt; on the website.</p><pre class="rp-code">${esc(`<script src="https://brightfrontstudio.com/widget.js" data-key="${key}" data-name="${r.business_name || ''}" data-color="${r.brand_color || '#0B0B2E'}" async></script>`)}</pre></details>
+    `<details><summary class="small" style="font-weight:700;cursor:pointer">“Text us” chat button</summary><p class="small muted">Paste just before &lt;/body&gt; on the website.</p><pre class="rp-code">${esc(`<script src="https://autofice.com.au/widget.js" data-key="${key}" data-name="${r.business_name || ''}" data-color="${r.brand_color || '#0B0B2E'}" async></script>`)}</pre></details>
     <details><summary class="small" style="font-weight:700;cursor:pointer">Form address</summary>${copy('Send the website form here', `${fn}/intake?key=${key}`)}</details>`);
 
   const em = card('Email enquiries', 'Forward enquiry emails here. Each one becomes a lead and gets a reply. Website form notifications are read too.', on(!!cs.inbound_email),
@@ -1221,7 +1221,7 @@ function wireAutofice() {
 VIEWS.partners = function () {
   const A = state.data.agencies || [];
   const count = (id) => state.clients.filter((c) => c.agency_id === id).length;
-  const link = (a) => `https://brightfrontstudio.com/portal/?a=${a.slug || ''}`;
+  const link = (a) => `https://autofice.com.au/portal/?a=${a.slug || ''}`;
   if (!isOwner()) {
     const a = A[0];
     if (!a) return head('Partner', 'Your agency', '') + '<div class="card empty">Your agency isn’t set up yet. Contact Autofice.</div>';
