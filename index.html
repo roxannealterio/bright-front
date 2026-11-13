@@ -106,6 +106,7 @@ section{padding:110px 0}
 .hero-trust span{display:inline-flex;gap:8px;align-items:center}.hero-trust svg{color:#4ADE80}
 /* live console */
 .console{position:relative}
+.hvid{border-radius:28px;overflow:hidden;aspect-ratio:16/9;background:#0B0B2E;box-shadow:0 40px 120px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.08)}.hvid video{display:block;width:100%;height:100%;object-fit:cover}
 .cs{background:#fff;color:var(--ink);border-radius:28px;box-shadow:0 40px 120px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.06);overflow:hidden}
 .cs-h{display:flex;align-items:center;gap:12px;padding:18px 20px;border-bottom:1px solid var(--line)}
 .cs-h img{width:42px;height:42px;border-radius:50%;object-fit:cover}
@@ -405,12 +406,7 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
     </div>
     <div class="console" aria-label="Example of Tilly at work">
       <div class="chip c2"><span class="ci">$</span><span>Collected this week<b data-count="4820" data-pre="$">$4,820</b></span></div>
-      <div class="cs">
-        <div class="cs-h"><img src="assets/roxy.webp" alt="" width="42" height="42"><div><b>Tilly · Smith Plumbing</b><span>Working for you right now</span></div><span class="live"><i></i>Live</span></div>
-        <div class="cs-k"><div><b id="k1">61</b><span>Messages answered</span></div><div><b id="k2">9</b><span>Jobs booked</span></div><div><b id="k3">14</b><span>Follow-ups sent</span></div></div>
-        <ul class="feed" id="feed" aria-live="off"></ul>
-        <div class="cs-f"><span class="ex">EXAMPLE DATA</span><span class="ex">TODAY</span></div>
-      </div>
+      <div class="hvid"><video id="heroVid" src="assets/autofice-hero.mp4" poster="assets/autofice-hero-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="Video: Tilly answers a late-night enquiry, books the job and chases an overdue invoice"></video></div>
       <div class="chip c1"><span class="ci">⚡</span><span>Average reply<b>38 seconds</b></span></div>
     </div>
   </div>
@@ -678,12 +674,13 @@ details p{color:var(--muted);margin-top:12px;font-size:16.5px}
     ['📝','Quote Q-1039 accepted','Hot water system · job booked','$2,400']
   ],feed=document.getElementById('feed'),fi=0,c=[61,9,14];
   function row(it,isNew){var li=document.createElement('li');if(isNew)li.className='new';var ic=/\.svg$/.test(it[0])?'<img src="'+L+it[0]+'" alt="">':it[0];li.innerHTML='<span class="fi">'+ic+'</span><span class="ft"><b>'+it[1]+'</b><span>'+it[2]+'</span></span><span class="fm">'+(it[3]?'<b>'+it[3]+'</b>':'')+'now</span>';return li}
-  for(var k=4;k>=0;k--){var r=row(items[k],false);r.querySelector('.fm').lastChild.textContent=(k*3+2)+'m';feed.appendChild(r)}fi=5;
+  if(feed)for(var k=4;k>=0;k--){var r=row(items[k],false);r.querySelector('.fm').lastChild.textContent=(k*3+2)+'m';feed.appendChild(r)}fi=5;
   function tick(){var li=row(items[fi%items.length],true);feed.insertBefore(li,feed.firstChild);fi++;
     [].slice.call(feed.children).forEach(function(n,i){if(i>0){n.classList.remove('new');var m=n.querySelector('.fm');m.lastChild.textContent=(i*2)+'m'}});
     while(feed.children.length>6)feed.removeChild(feed.lastChild);
     c[0]+=1;if(fi%3===0)c[1]+=1;if(fi%2===0)c[2]+=1;document.getElementById('k1').textContent=c[0];document.getElementById('k2').textContent=c[1];document.getElementById('k3').textContent=c[2]}
-  if(!reduce)setInterval(tick,2600);
+  if(feed&&!reduce)setInterval(tick,2600);
+  var hv=document.getElementById('heroVid');if(hv&&reduce){hv.removeAttribute('autoplay');hv.pause()}
   // tabs
   var tabs=document.querySelectorAll('.tabs [role=tab]'),panes=document.querySelectorAll('.pane'),cur=0,auto=reduce?null:setInterval(function(){goTab((cur+1)%tabs.length)},8000);
   function goTab(n,stop){cur=n;tabs.forEach(function(t,i){t.setAttribute('aria-selected',i===n)});panes.forEach(function(p,i){p.classList.toggle('on',i===n)});if(stop&&auto){clearInterval(auto);auto=null}}
