@@ -7,6 +7,6 @@ window.BF_CONFIG = {
   SUPABASE_URL: "https://cupsusqjcgefmfhdznmo.supabase.co",
   SUPABASE_ANON_KEY: "sb_publishable_obYNj6w48N_7KnAllBHy7A_RChYsWoq",
   GOOGLE_LOGIN: true, // set to true once Google sign-in is switched on in Supabase
-  AGENCY_NAME: "brightfront",
-  SUPPORT_EMAIL: "info@brightfrontstudio.com"
+  AGENCY_NAME: "Autofice",
+  SUPPORT_EMAIL: "help@autofice.com.au"
 };
